@@ -225,12 +225,10 @@ import {
   arrowBack,
   add,
   remove,
-  play,
-  pause,
   list,
   grid,
 } from 'ionicons/icons';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, shallowRef } from 'vue';
 
 // Type definitions
 interface Book {
@@ -272,14 +270,14 @@ interface SearchResult {
   subsectionIndex?: number;
 }
 
-// Data
+// Data - use shallowRef for large arrays to avoid deep reactivity overhead
 const books = ref<Book[]>([]);
-const hiraSongs = ref<Song[]>([]);
-const haaSongs = ref<Song[]>([]);
-const salamoPsalms = ref<Psalm[]>([]);
-const litpContents = ref<LitContent[]>([]);
-const litbfContents = ref<LitContent[]>([]);
-const lhfContents = ref<LitContent[]>([]);
+const hiraSongs = shallowRef<Song[]>([]);
+const haaSongs = shallowRef<Song[]>([]);
+const salamoPsalms = shallowRef<Psalm[]>([]);
+const litpContents = shallowRef<LitContent[]>([]);
+const litbfContents = shallowRef<LitContent[]>([]);
+const lhfContents = shallowRef<LitContent[]>([]);
 
 // New refs
 const songViewMode = ref<'grouped' | 'flat'>('grouped');
@@ -306,6 +304,10 @@ const sectionSearchQuery = ref('');
 // Zoom
 const currentFontSize = ref(100);
 
+// Performance: Cache grouped songs to avoid recalculation
+const groupedSongsCache = ref<{ section: string; songs: Song[] }[]>([]);
+const lastGroupedBookId = ref<number | null>(null);
+
 // Computed
 const sections = computed(() => {
   if (!currentBook.value) return [];
@@ -319,41 +321,72 @@ const sections = computed(() => {
 
 const groupedSongs = computed(() => {
   if (!currentBook.value) return [];
+  
+  // Return cached result if book hasn't changed
+  if (lastGroupedBookId.value === currentBook.value.id && groupedSongsCache.value.length > 0) {
+    return groupedSongsCache.value;
+  }
+  
   let songs: Song[] = [];
   if (isHiraBook(currentBook.value)) {
     songs = hiraSongs.value;
   } else if (isHaaBook(currentBook.value)) {
     songs = haaSongs.value;
   }
-  const groups: { [key: string]: Song[] } = {};
+  
+  if (songs.length === 0) return [];
+  
+  // Use Map for faster grouping
+  const groups = new Map<string, Song[]>();
   songs.forEach(song => {
-    if (!groups[song.section]) {
-      groups[song.section] = [];
+    const section = song.section || 'Other';
+    if (!groups.has(section)) {
+      groups.set(section, []);
     }
-    groups[song.section].push(song);
+    groups.get(section)!.push(song);
   });
-  return Object.keys(groups).map(section => ({
-    section,
-    songs: groups[section],
-  }));
+  
+  const result = Array.from(groups).map(([section, songs]) => ({ section, songs }));
+  groupedSongsCache.value = result;
+  lastGroupedBookId.value = currentBook.value.id;
+  
+  return result;
 });
 
 const canGoBack = computed(() => navigationStack.value.length > 0);
 const canGoPrev = computed(() => currentTitleIndex.value > 0);
 const canGoNext = computed(() => currentTitleIndex.value < currentTitlesList.value.length - 1);
 
+// Performance: Cache flat songs
+const flatSongsSorted = ref<any[]>([]);
+const lastFlatBookId = ref<number | null>(null);
+
 // New computed
 const flatSongs = computed(() => {
+  if (!currentBook.value) return [];
+  
+  // Return cached result if book hasn't changed
+  if (lastFlatBookId.value === currentBook.value.id && flatSongsSorted.value.length > 0) {
+    return flatSongsSorted.value;
+  }
+  
   let songs: any[] = [];
   if (isHiraBook(currentBook.value)) songs = hiraSongs.value;
   else if (isHaaBook(currentBook.value)) songs = haaSongs.value;
   else if (isSalamoBook(currentBook.value)) songs = salamoPsalms.value;
-  return songs.sort((a, b) => a.id - b.id);
+  
+  if (songs.length === 0) return [];
+  
+  const sorted = [...songs].sort((a, b) => a.id - b.id);
+  flatSongsSorted.value = sorted;
+  lastFlatBookId.value = currentBook.value.id;
+  
+  return sorted;
 });
 
 const isSalamo = computed(() => isSalamoBook(currentBook.value));
 
-const subsections = computed(() => {
+const subsections = computed<{ subsection: string; content?: string }[]>(() => {
   if (!currentBook.value || !currentSection.value) return [];
   const contents = getBookData(currentBook.value);
   const sectionObj = contents.find((s: any) => s.section === currentSection.value);
@@ -391,6 +424,9 @@ const showBooks = () => {
 };
 
 const navigateToBook = (book: Book) => {
+  // Reset caches when navigating to a new book
+  groupedSongsCache.value = [];
+  flatSongsSorted.value = [];
   navigationStack.value.push(showBooks);
   showSections(book);
 };
@@ -406,14 +442,18 @@ const showSections = (book: Book) => {
   updateHeader(book.name);
   currentScopeBookId.value = book.id;
   showSectionSearch.value = true;
-  if (isLitPBook(book)) {
+  
+  // Pre-compute grouped/flat songs to avoid delay when entering view
+  if (isHiraBook(book) || isHaaBook(book)) {
+    // Force computation of grouped songs
+    void groupedSongs.value;
+    showSongs();
+  } else if (isLitPBook(book)) {
     showLitPSections();
   } else if (isLitBFBook(book) || isLHFBook(book)) {
     showSectionsList();
   } else if (isSalamoBook(book)) {
     showSalamoList();
-  } else {
-    showSongs();
   }
 };
 
@@ -636,7 +676,7 @@ const performSearch = (query: string, scopeBookId: number | null = null) => {
     const book = books.value.find(b => b.name === 'Litorjia Provinsialy');
     if (book) {
       litpContents.value.forEach(section => {
-        if (section.items.some((item: any) => item.content.toLowerCase().includes(normalized))) {
+        if (section.items && section.items.some((item: any) => item.content.toLowerCase().includes(normalized))) {
           searchResults.value.push({
             type: 'litp',
             id: section.section,
@@ -721,22 +761,22 @@ const navigateToSearchResult = (result: SearchResult) => {
     if (book) {
       navigationStack.value.push(showBooks);
       showSections(book);
-      navigateToSection(result.id);
+      navigateToSection(result.id as string);
     }
   } else if (result.type === 'litbf-subsection' || result.type === 'lhf-subsection') {
     const book = books.value.find(b => b.id === result.bookId);
     if (book) {
       navigationStack.value.push(showBooks);
       showSections(book);
-      navigateToSection(result.sectionName);
-      navigateToSubsection(result.subsectionIndex);
+      navigateToSection(result.sectionName!);
+      navigateToSubsection(result.subsectionIndex!);
     }
   } else if (result.type === 'hira' || result.type === 'haa' || result.type === 'salamo') {
     const book = books.value.find(b => b.id === result.bookId);
     if (book) {
       navigationStack.value.push(showBooks);
       showSections(book);
-      navigateToSong({ id: result.id });
+      navigateToSong(result.id as number);
     }
   }
 };
@@ -785,39 +825,62 @@ const doRefresh = (event: any) => {
 
 // Render methods
 const renderSongContent = (song: any) => {
-  let html = '';
-  if (song.intro) html += `<p>${song.intro}</p>`;
-  if (song.headnote) html += `<p>${song.headnote}</p>`;
-  if (song.verses) {
-    song.verses.forEach((verse: any) => {
-      html += '<div class="verse">';
-      verse.lines.forEach((line: any) => {
-        if (line.type === 'chorus') {
-          html += `<p class="chorus">${line.text}</p>`;
-        } else {
-          html += `<p>${line.text}</p>`;
-        }
-      });
-      html += '</div>';
+  const lines: string[] = [];
+
+  if (song.intro) {
+    lines.push(`<div class="note" id="intro">${song.intro}</div>`);
+    lines.push('<hr>');
+  }
+  if (song.headnote) {
+    lines.push(`<div class="note" id="headnote">${song.headnote}</div>`);
+  }
+
+  if (song.verses && song.verses.length > 0) {
+    song.verses.forEach((v: any) => {
+      // Insert chorus after verse 2 if available
+      if (v.verse_number === 2 && song.chorus && song.chorus.length > 0) {
+        lines.push('<div class="verse chorus">');
+        lines.push('<div class="chorus-title">Fiverenana:</div>');
+        lines.push('<p>');
+        lines.push(song.chorus.join('<br />'));
+        lines.push('</p>');
+        lines.push('</div>');
+      }
+
+      lines.push('<div class="verse">');
+      if (isHiraBook(currentBook.value)) {
+        lines.push(`<span><strong>${v.verse_number}.</strong></span>`);
+      }
+      const verseLines = Array.isArray(v.lines) ? v.lines : [v.lines];
+      lines.push('<p>');
+      lines.push(verseLines.join('<br />'));
+      lines.push('</p>');
+      lines.push('</div>');
     });
   }
-  if (song.has_amen) html += '<p>Amen.</p>';
-  if (song.footnote) html += `<p>${song.footnote}</p>`;
-  return html;
+
+  if (song.has_amen) {
+    lines.push('<p style="text-align:center"><em>Amena</em></p>');
+  }
+  if (song.footnote) {
+    lines.push('<hr>');
+    lines.push(`<div class="note" id="footnote">${song.footnote}</div>`);
+  }
+
+  return lines.join('\n');
 };
 
 const renderPsalmContent = (psalm: any) => {
-  let html = '';
-  if (psalm.verses) {
-    psalm.verses.forEach((verse: any) => {
-      html += '<div class="verse">';
-      verse.lines.forEach((line: any) => {
-        html += `<p>${line.text}</p>`;
+  const lines: string[] = [];
+  if (psalm.verses && psalm.verses.length > 0) {
+    psalm.verses.forEach((v: any) => {
+      const verseLines = Array.isArray(v.lines) ? v.lines : [v.lines];
+      verseLines.forEach((line: any) => {
+        lines.push(`<p class="line"><strong>${v.verse_number}.</strong> ${line}</p>`);
       });
-      html += '</div>';
     });
   }
-  return html;
+  return lines.join('\n');
 };
 
 const renderLitPContent = (sectionObj: any) => {
@@ -902,7 +965,7 @@ onMounted(async () => {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.lyrics-content >>> .verse {
+.lyrics-content :deep(.verse) {
   display: grid;
   grid-template-columns: auto 1fr;
   column-gap: 0.5em;
@@ -910,20 +973,48 @@ onMounted(async () => {
   padding: 0.8rem 0;
 }
 
-.lyrics-content >>> .verse p {
+.lyrics-content :deep(.verse p) {
   margin: 0;
   line-height: normal;
 }
 
-.lyrics-content >>> .title {
+.lyrics-content :deep(.verse.chorus) {
+  background: #f5f5f5;
+  padding: 1rem;
+  border-left: 4px solid #007bff;
+  margin: 1rem 0;
+}
+
+.lyrics-content :deep(.chorus-title) {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+
+.lyrics-content :deep(.title) {
   font-size: 1.2rem;
   font-weight: 600;
   text-align: center;
   margin-top: 0.4rem;
 }
 
-.lyrics-content >>> .chorus {
+.lyrics-content :deep(.note) {
   font-style: italic;
-  text-decoration: underline;
+  color: #555;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border-left: 3px solid #ddd;
+  padding-left: 1rem;
+}
+
+.lyrics-content :deep(hr) {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 1.5rem 0;
+}
+
+.lyrics-content :deep(.line) {
+  margin: 0.5rem 0;
+  line-height: 1.6;
 }
 </style>
