@@ -1,0 +1,7 @@
+{
+  "name": "ionBF",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
