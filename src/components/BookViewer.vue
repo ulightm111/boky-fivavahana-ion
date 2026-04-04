@@ -234,55 +234,11 @@ import {
   grid,
 } from 'ionicons/icons';
 import { ref, onMounted, computed, shallowRef } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useBookStore, Book, Song, Psalm, LitContent, SearchResult } from '@/stores/bookStore';
 
-// Type definitions
-interface Book {
-  id: number;
-  name: string;
-}
-
-interface Song {
-  id: number;
-  title: string;
-  section: string;
-  content?: string;
-  verses?: any[];
-  intro?: string;
-  headnote?: string;
-  has_amen?: boolean;
-  footnote?: string;
-}
-
-interface Psalm {
-  id: number;
-  verses?: any[];
-}
-
-interface LitContent {
-  section: string;
-  content?: string;
-  subsections?: Array<{ subsection: string; content?: string }>;
-  items?: Array<{ id: string; content: string }>;
-}
-
-interface SearchResult {
-  type: string;
-  id: number | string;
-  title: string;
-  subtitle?: string;
-  bookId?: number;
-  sectionName?: string;
-  subsectionIndex?: number;
-}
-
-// Data - use shallowRef for large arrays to avoid deep reactivity overhead
-const books = ref<Book[]>([]);
-const hiraSongs = shallowRef<Song[]>([]);
-const haaSongs = shallowRef<Song[]>([]);
-const salamoPsalms = shallowRef<Psalm[]>([]);
-const litpContents = shallowRef<LitContent[]>([]);
-const litbfContents = shallowRef<LitContent[]>([]);
-const lhfContents = shallowRef<LitContent[]>([]);
+const bookStore = useBookStore();
+const { books, hiraSongs, haaSongs, salamoPsalms, litpContents, litbfContents, lhfContents, searchResults } = storeToRefs(bookStore);
 
 // New refs
 const songViewMode = ref<'grouped' | 'flat'>('grouped');
@@ -293,7 +249,6 @@ const currentBook = ref<Book | null>(null);
 const currentSection = ref<string>('');
 const currentGroupedSection = ref<string>('');
 const currentContent = ref<string>('');
-const searchResults = shallowRef<SearchResult[]>([]);
 const currentScopeBookId = ref<number | null>(null);
 const currentTitleIndex = ref<number>(-1);
 const currentTitlesList = shallowRef<any[]>([]);
@@ -310,15 +265,6 @@ const sectionSearchQuery = ref('');
 // Zoom
 const currentFontSize = ref(100);
 
-// Performance: Cache grouped/flat songs — shallowRef avoids deep reactivity on large arrays
-const groupedSongsCache = shallowRef<{ section: string; songs: Song[] }[]>([]);
-const lastGroupedBookId = ref<number | null>(null);
-const flatSongsSorted = shallowRef<any[]>([]);
-const lastFlatBookId = ref<number | null>(null);
-
-// Performance: Pagination for large lists
-const ITEMS_PER_PAGE = 50;
-const currentPage = ref(0);
 
 // Computed
 const sections = computed(() => {
@@ -334,68 +280,19 @@ const sections = computed(() => {
 });
 
 const groupedSongs = computed(() => {
-  if (!currentBook.value) return [];
-  
-  // Return cached result if book hasn't changed
-  if (lastGroupedBookId.value === currentBook.value.id && groupedSongsCache.value.length > 0) {
-    return groupedSongsCache.value;
-  }
-  
-  let songs: Song[] = [];
-  if (isHiraBook(currentBook.value)) {
-    songs = hiraSongs.value;
-  } else if (isHaaBook(currentBook.value)) {
-    songs = haaSongs.value;
-  }
-  
-  if (songs.length === 0) return [];
-  
-  // Use Map for faster grouping
-  const groups = new Map<string, Song[]>();
-  songs.forEach(song => {
-    const section = song.section || 'Other';
-    if (!groups.has(section)) {
-      groups.set(section, []);
-    }
-    groups.get(section)!.push(song);
-  });
-  
-  const result = Array.from(groups).map(([section, songs]) => ({ section, songs }));
-  groupedSongsCache.value = result;
-  lastGroupedBookId.value = currentBook.value.id;
-  
-  return result;
+  return bookStore.getGroupedSongs(currentBook.value);
 });
 
 const canGoBack = computed(() => navigationStack.value.length > 0);
 const canGoPrev = computed(() => currentTitleIndex.value > 0);
 const canGoNext = computed(() => currentTitleIndex.value < currentTitlesList.value.length - 1);
 
-
 const flatSongs = computed(() => {
-  if (!currentBook.value) return [];
-  if (lastFlatBookId.value === currentBook.value.id && flatSongsSorted.value.length > 0) {
-    return flatSongsSorted.value.slice(0, (currentPage.value + 1) * ITEMS_PER_PAGE);
-  }
-  let songs: any[];
-  if (isHiraBook(currentBook.value)) songs = hiraSongs.value;
-  else if (isHaaBook(currentBook.value)) songs = haaSongs.value;
-  else if (isSalamoBook(currentBook.value)) songs = salamoPsalms.value;
-  else return [];
-  // Data is pre-sorted by id in JSON — no spread/sort needed
-  flatSongsSorted.value = songs;
-  lastFlatBookId.value = currentBook.value.id;
-  return songs.slice(0, (currentPage.value + 1) * ITEMS_PER_PAGE);
+  return bookStore.getFlatSongs(currentBook.value);
 });
 
 const hasMoreItems = computed(() => {
-  if (!currentBook.value) return false;
-  let totalSongs: any[];
-  if (isHiraBook(currentBook.value)) totalSongs = hiraSongs.value;
-  else if (isHaaBook(currentBook.value)) totalSongs = haaSongs.value;
-  else if (isSalamoBook(currentBook.value)) totalSongs = salamoPsalms.value;
-  else return false;
-  return flatSongs.value.length < totalSongs.length;
+  return bookStore.hasMoreItems(currentBook.value);
 });
 
 const isSalamo = computed(() => isSalamoBook(currentBook.value));
@@ -413,13 +310,7 @@ const songsInCurrentSection = computed(() => {
 const subsections = shallowRef<{ subsection: string; content?: string }[]>([]);
 const loadData = async () => {
   try {
-    books.value = await fetch('/data/books.json').then(r => r.json());
-    hiraSongs.value = await fetch('/data/HIRA.json').then(r => r.json()).then(d => d.songs || []);
-    haaSongs.value = await fetch('/data/HAA.json').then(r => r.json()).then(d => d.songs || []);
-    salamoPsalms.value = await fetch('/data/SALAMO.json').then(r => r.json()).then(d => d.psalms || []);
-    litpContents.value = await fetch('/data/LitP.json').then(r => r.json()).then(d => d.contents || []);
-    litbfContents.value = await fetch('/data/LitBF.json').then(r => r.json()).then(d => d.sections || []);
-    lhfContents.value = await fetch('/data/LHF.json').then(r => r.json()).then(d => d.sections || []);
+    await bookStore.loadData();
   } catch (error) {
     console.error('Failed to load data:', error);
     const toast = await toastController.create({
@@ -443,13 +334,13 @@ const showBooks = () => {
 };
 
 const loadMore = () => {
-  currentPage.value++;
+  bookStore.currentPage++;
 };
 
 const navigateToBook = (book: Book) => {
-  lastGroupedBookId.value = null;
-  lastFlatBookId.value = null;
-  currentPage.value = 0;
+  bookStore.currentPage = 0;
+  bookStore.lastGroupedBookId = null;
+  bookStore.lastFlatBookId = null;
   navigationStack.value = [...navigationStack.value, showBooks];
   showSections(book);
 };
@@ -483,7 +374,7 @@ const navigateToSection = (section: string) => {
 
 const showSectionContent = (book: Book, sectionName: string) => {
   currentSection.value = sectionName;
-  const contents = getBookData(book);
+  const contents = bookStore.getBookData(book);
   const sectionObj = contents.find((s: any) => s.section === sectionName);
   if (sectionObj) {
     if (isLitPBook(book)) {
@@ -514,7 +405,7 @@ const navigateToSong = (songId: number) => {
 };
 
 const showSong = (book: Book, songId: number) => {
-  const songs = getBookData(book);
+  const songs = bookStore.getBookData(book);
   const songIndex = songs.findIndex((s: any) => s.id === songId);
   if (songIndex === -1) return;
   const song = songs[songIndex];
@@ -530,9 +421,9 @@ const showSong = (book: Book, songId: number) => {
   subsections.value = [];
 
   // Only rebuild titles list if book changed — avoid mapping 500+ songs on every navigation
-  if (lastFlatBookId.value !== book.id) {
+  if (bookStore.lastFlatBookId !== book.id) {
     currentTitlesList.value = songs.map((s: any) => ({ id: s.id }));
-    lastFlatBookId.value = book.id;
+    bookStore.lastFlatBookId = book.id;
   }
   currentTitleIndex.value = songIndex;
 };
@@ -545,15 +436,7 @@ const isLitPBook = (book: Book | null) => book && book.name === 'Litorjia Provin
 const isLitBFBook = (book: Book | null) => book && book.name === 'Litorjia Boky Fivavahana';
 const isLHFBook = (book: Book | null) => book && book.name === 'Lalan\'ny Hazo Fijaliana';
 
-const getBookData = (book: Book | null): any[] => {
-  if (isHiraBook(book)) return hiraSongs.value;
-  if (isHaaBook(book)) return haaSongs.value;
-  if (isSalamoBook(book)) return salamoPsalms.value;
-  if (isLitPBook(book)) return litpContents.value;
-  if (isLitBFBook(book)) return litbfContents.value;
-  if (isLHFBook(book)) return lhfContents.value;
-  return [];
-};
+const getBookData = bookStore.getBookData;
 
 // Navigation
 const goBack = () => {
@@ -642,127 +525,13 @@ const clearSectionSearch = () => {
 const clearSearch = () => {
   globalSearchQuery.value = '';
   sectionSearchQuery.value = '';
-  searchResults.value = [];
+  bookStore.clearSearchResults();
   showGlobalSearch.value = false;
   showSectionSearch.value = false;
 };
 
 const performSearch = (query: string, scopeBookId: number | null = null) => {
-  searchResults.value = [];
-  const normalized = query.toLowerCase().trim();
-  if (!normalized) return;
-
-  const isGlobal = scopeBookId == null;
-  const scopedBook = scopeBookId ? books.value.find(b => b.id === scopeBookId) : null;
-
-  // Search books
-  books.value.forEach(book => {
-    if (!isGlobal && scopedBook && scopedBook.id !== book.id) return;
-    if (book.name.toLowerCase().includes(normalized)) {
-      searchResults.value.push({
-        type: 'book',
-        id: book.id,
-        title: book.name,
-      });
-    }
-  });
-
-  // Search lit style
-  const searchLit = (bookName: string, contents: any[], type: string) => {
-    const book = books.value.find(b => b.name === bookName);
-    if (!book) return;
-    if (!isGlobal && scopedBook && scopedBook.id !== book.id) return;
-    contents.forEach(section => {
-      if (section.section && section.section.toLowerCase().includes(normalized)) {
-        searchResults.value.push({
-          type,
-          id: section.section,
-          title: section.section,
-          bookId: book.id,
-          sectionName: section.section,
-        });
-      }
-      if (section.subsections) {
-        section.subsections.forEach((sub: any, idx: number) => {
-          if (sub.subsection && sub.subsection.toLowerCase().includes(normalized)) {
-            searchResults.value.push({
-              type: `${type}-subsection`,
-              id: idx,
-              title: sub.subsection,
-              bookId: book.id,
-              sectionName: section.section,
-              subsectionIndex: idx,
-            });
-          }
-        });
-      }
-    });
-  };
-
-  searchLit('Litorjia Boky Fivavahana', litbfContents.value, 'litbf');
-  searchLit('Lalan\'ny Hazo Fijaliana', lhfContents.value, 'lhf');
-
-  // Search LitP
-  if (isGlobal || (scopedBook && isLitPBook(scopedBook))) {
-    const book = books.value.find(b => b.name === 'Litorjia Provinsialy');
-    if (book) {
-      litpContents.value.forEach(section => {
-        if (section.section && section.section.toLowerCase().includes(normalized)) {
-          searchResults.value.push({
-            type: 'litp',
-            id: section.section,
-            title: section.section,
-            bookId: book.id,
-          });
-        }
-      });
-    }
-  }
-
-  // Search songs
-  const searchSongs = (bookName: string, data: any[], type: string) => {
-    const book = books.value.find(b => b.name === bookName);
-    if (!book) return;
-    if (!isGlobal && scopedBook && scopedBook.id !== book.id) return;
-    data.forEach(song => {
-      let match = false;
-      // Search by ID
-      if (String(song.id).toLowerCase().includes(normalized)) match = true;
-      // Search by title
-      if (!match && song.title && song.title.toLowerCase().includes(normalized)) match = true;
-      if (match) {
-        searchResults.value.push({
-          type,
-          id: song.id,
-          title: `${song.id} - ${song.title}`,
-          subtitle: `${bookName}${song.section ? ' → ' + song.section : ''}`,
-          bookId: book.id,
-        });
-      }
-    });
-  };
-
-  searchSongs('Fihirana', hiraSongs.value, 'hira');
-  searchSongs('Hanandratra Anao Aho', haaSongs.value, 'haa');
-
-  // Search Salamo
-  const salamoBook = books.value.find(b => b.name === 'Salamo');
-  if ((isGlobal || (scopedBook && scopedBook.id === salamoBook?.id)) && salamoBook) {
-    salamoPsalms.value.forEach(psalm => {
-      let match = false;
-      // Search by ID
-      if (String(psalm.id).toLowerCase().includes(normalized)) match = true;
-      if (match) {
-        searchResults.value.push({
-          type: 'salamo',
-          id: psalm.id,
-          title: `Salamo ${psalm.id}`,
-          bookId: salamoBook.id,
-        });
-      }
-    });
-  }
-
+  bookStore.performSearch(query, scopeBookId);
   showSearchResults();
 };
 
