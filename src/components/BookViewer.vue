@@ -25,9 +25,6 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
 
       <!-- Content Area -->
       <div id="content" class="content-area">
@@ -58,8 +55,22 @@
         </ion-list>
 
         <!-- Songs List -->
+        <!-- Song Sections (hierarchical view for grouped songs) -->
+        <ion-list v-if="currentView === 'songSections'">
+          <ion-item
+            v-for="section in songSectionsList"
+            :key="section"
+            button
+            @click="selectGroupedSection(section)"
+            lines="none"
+          >
+            <ion-label>{{ section }}</ion-label>
+          </ion-item>
+        </ion-list>
+
+        <!-- Songs List -->
         <ion-list v-if="currentView === 'songs'">
-          <template v-if="isSalamo || songViewMode === 'flat'">
+          <template v-if="isSalamo || songViewMode === 'flat' || currentGroupedSection === ''">
             <ion-item
               v-for="song in flatSongs"
               :key="song.id"
@@ -71,25 +82,23 @@
             </ion-item>
           </template>
           <template v-else>
-            <ion-item-group v-for="group in groupedSongs" :key="group.section">
-              <ion-item-divider sticky>
-                <ion-label>{{ group.section }}</ion-label>
-              </ion-item-divider>
-              <ion-item
-                v-for="song in group.songs"
-                :key="song.id"
-                button
-                @click="navigateToSong(song.id)"
-                lines="none"
-              >
-                <ion-label>
-                  <h3>{{ song.id }} - {{ song.title }}</h3>
-                  <p>{{ group.section }}</p>
-                </ion-label>
-              </ion-item>
-            </ion-item-group>
+            <ion-item
+              v-for="song in songsInCurrentSection"
+              :key="song.id"
+              button
+              @click="navigateToSong(song.id)"
+              lines="none"
+            >
+              <ion-label>
+                <h3>{{ song.id }} - {{ song.title }}</h3>
+              </ion-label>
+            </ion-item>
           </template>
         </ion-list>
+
+        <ion-button v-if="hasMoreItems && currentView === 'songs'" expand="block" @click="loadMore">
+          Load More
+        </ion-button>
 
         <!-- Search Results -->
         <ion-list v-if="currentView === 'search'">
@@ -204,8 +213,6 @@ import {
   IonSearchbar,
   IonList,
   IonItem,
-  IonItemGroup,
-  IonItemDivider,
   IonLabel,
   IonFab,
   IonFabButton,
@@ -213,8 +220,6 @@ import {
   IonFooter,
   IonButton,
   IonModal,
-  IonRefresher,
-  IonRefresherContent,
   toastController,
 } from '@ionic/vue';
 import {
@@ -286,11 +291,12 @@ const navigationStack = ref<(() => void)[]>([]);
 const currentView = ref<string>('books');
 const currentBook = ref<Book | null>(null);
 const currentSection = ref<string>('');
+const currentGroupedSection = ref<string>('');
 const currentContent = ref<string>('');
-const searchResults = ref<SearchResult[]>([]);
+const searchResults = shallowRef<SearchResult[]>([]);
 const currentScopeBookId = ref<number | null>(null);
 const currentTitleIndex = ref<number>(-1);
-const currentTitlesList = ref<any[]>([]);
+const currentTitlesList = shallowRef<any[]>([]);
 
 // UI State
 const headerTitle = ref('Boky Fivavahana');
@@ -304,9 +310,15 @@ const sectionSearchQuery = ref('');
 // Zoom
 const currentFontSize = ref(100);
 
-// Performance: Cache grouped songs to avoid recalculation
-const groupedSongsCache = ref<{ section: string; songs: Song[] }[]>([]);
+// Performance: Cache grouped/flat songs — shallowRef avoids deep reactivity on large arrays
+const groupedSongsCache = shallowRef<{ section: string; songs: Song[] }[]>([]);
 const lastGroupedBookId = ref<number | null>(null);
+const flatSongsSorted = shallowRef<any[]>([]);
+const lastFlatBookId = ref<number | null>(null);
+
+// Performance: Pagination for large lists
+const ITEMS_PER_PAGE = 50;
+const currentPage = ref(0);
 
 // Computed
 const sections = computed(() => {
@@ -315,6 +327,8 @@ const sections = computed(() => {
     return litbfContents.value.map(s => s.section);
   } else if (isLHFBook(currentBook.value)) {
     return lhfContents.value.map(s => s.section);
+  } else if (isLitPBook(currentBook.value)) {
+    return litpContents.value.map(s => s.section);
   }
   return [];
 });
@@ -357,41 +371,46 @@ const canGoBack = computed(() => navigationStack.value.length > 0);
 const canGoPrev = computed(() => currentTitleIndex.value > 0);
 const canGoNext = computed(() => currentTitleIndex.value < currentTitlesList.value.length - 1);
 
-// Performance: Cache flat songs
-const flatSongsSorted = ref<any[]>([]);
-const lastFlatBookId = ref<number | null>(null);
 
-// New computed
 const flatSongs = computed(() => {
   if (!currentBook.value) return [];
-  
-  // Return cached result if book hasn't changed
   if (lastFlatBookId.value === currentBook.value.id && flatSongsSorted.value.length > 0) {
-    return flatSongsSorted.value;
+    return flatSongsSorted.value.slice(0, (currentPage.value + 1) * ITEMS_PER_PAGE);
   }
-  
-  let songs: any[] = [];
+  let songs: any[];
   if (isHiraBook(currentBook.value)) songs = hiraSongs.value;
   else if (isHaaBook(currentBook.value)) songs = haaSongs.value;
   else if (isSalamoBook(currentBook.value)) songs = salamoPsalms.value;
-  
-  if (songs.length === 0) return [];
-  
-  const sorted = [...songs].sort((a, b) => a.id - b.id);
-  flatSongsSorted.value = sorted;
+  else return [];
+  // Data is pre-sorted by id in JSON — no spread/sort needed
+  flatSongsSorted.value = songs;
   lastFlatBookId.value = currentBook.value.id;
-  
-  return sorted;
+  return songs.slice(0, (currentPage.value + 1) * ITEMS_PER_PAGE);
+});
+
+const hasMoreItems = computed(() => {
+  if (!currentBook.value) return false;
+  let totalSongs: any[];
+  if (isHiraBook(currentBook.value)) totalSongs = hiraSongs.value;
+  else if (isHaaBook(currentBook.value)) totalSongs = haaSongs.value;
+  else if (isSalamoBook(currentBook.value)) totalSongs = salamoPsalms.value;
+  else return false;
+  return flatSongs.value.length < totalSongs.length;
 });
 
 const isSalamo = computed(() => isSalamoBook(currentBook.value));
 
-const subsections = computed<{ subsection: string; content?: string }[]>(() => {
-  if (!currentBook.value || !currentSection.value) return [];
-  const contents = getBookData(currentBook.value);
-  const sectionObj = contents.find((s: any) => s.section === currentSection.value);
-  return sectionObj?.subsections || [];
+const songSectionsList = computed(() => {
+  return groupedSongs.value.map(g => g.section);
 });
+
+const songsInCurrentSection = computed(() => {
+  if (!currentGroupedSection.value) return [];
+  const group = groupedSongs.value.find(g => g.section === currentGroupedSection.value);
+  return group ? group.songs : [];
+});
+
+const subsections = shallowRef<{ subsection: string; content?: string }[]>([]);
 const loadData = async () => {
   try {
     books.value = await fetch('/data/books.json').then(r => r.json());
@@ -423,11 +442,15 @@ const showBooks = () => {
   showSectionSearch.value = false;
 };
 
+const loadMore = () => {
+  currentPage.value++;
+};
+
 const navigateToBook = (book: Book) => {
-  // Reset caches when navigating to a new book
-  groupedSongsCache.value = [];
-  flatSongsSorted.value = [];
-  navigationStack.value.push(showBooks);
+  lastGroupedBookId.value = null;
+  lastFlatBookId.value = null;
+  currentPage.value = 0;
+  navigationStack.value = [...navigationStack.value, showBooks];
   showSections(book);
 };
 
@@ -438,16 +461,11 @@ const navigateToBookFromMenu = (book: Book) => {
 
 const showSections = (book: Book) => {
   currentBook.value = book;
-  currentView.value = 'sections';
-  updateHeader(book.name);
   currentScopeBookId.value = book.id;
   showSectionSearch.value = true;
-  
-  // Pre-compute grouped/flat songs to avoid delay when entering view
+
   if (isHiraBook(book) || isHaaBook(book)) {
-    // Force computation of grouped songs
-    void groupedSongs.value;
-    showSongs();
+    showSectionsView();
   } else if (isLitPBook(book)) {
     showLitPSections();
   } else if (isLitBFBook(book) || isLHFBook(book)) {
@@ -455,6 +473,7 @@ const showSections = (book: Book) => {
   } else if (isSalamoBook(book)) {
     showSalamoList();
   }
+  updateHeader(book.name);
 };
 
 const navigateToSection = (section: string) => {
@@ -471,12 +490,15 @@ const showSectionContent = (book: Book, sectionName: string) => {
       currentContent.value = renderLitPContent(sectionObj);
       currentTitlesList.value = litpContents.value.map(s => ({ id: s.section }));
       currentTitleIndex.value = litpContents.value.findIndex(s => s.section === sectionName);
+      subsections.value = [];
     } else {
       currentContent.value = sectionObj.content || '';
       if (sectionObj.subsections && sectionObj.subsections.length > 0) {
+        subsections.value = sectionObj.subsections;
         currentTitlesList.value = sectionObj.subsections.map((_: any, idx: number) => ({ id: idx }));
         currentTitleIndex.value = -1;
       } else {
+        subsections.value = [];
         currentTitlesList.value = contents.map((s: any, idx: number) => ({ id: idx }));
         currentTitleIndex.value = contents.findIndex((s: any) => s.section === sectionName);
       }
@@ -487,25 +509,32 @@ const showSectionContent = (book: Book, sectionName: string) => {
 };
 
 const navigateToSong = (songId: number) => {
-  navigationStack.value.push(() => showSections(currentBook.value!));
+  navigationStack.value = [...navigationStack.value, () => showSections(currentBook.value!)];
   showSong(currentBook.value!, songId);
 };
 
 const showSong = (book: Book, songId: number) => {
   const songs = getBookData(book);
-  const song = songs.find((s: any) => s.id === songId);
-  if (song) {
-    if (isSalamoBook(book)) {
-      currentContent.value = renderPsalmContent(song);
-      updateHeader(`Salamo ${song.id}`, book.name);
-    } else {
-      currentContent.value = renderSongContent(song);
-      updateHeader(`${song.id} - ${song.title}`, book.name);
-    }
-    currentView.value = 'content';
-    currentTitlesList.value = songs.map((s: any) => ({ id: s.id }));
-    currentTitleIndex.value = songs.findIndex((s: any) => s.id === songId);
+  const songIndex = songs.findIndex((s: any) => s.id === songId);
+  if (songIndex === -1) return;
+  const song = songs[songIndex];
+
+  if (isSalamoBook(book)) {
+    currentContent.value = renderPsalmContent(song);
+    updateHeader(`Salamo ${song.id}`, book.name);
+  } else {
+    currentContent.value = renderSongContent(song);
+    updateHeader(`${song.id} - ${song.title}`, book.name);
   }
+  currentView.value = 'content';
+  subsections.value = [];
+
+  // Only rebuild titles list if book changed — avoid mapping 500+ songs on every navigation
+  if (lastFlatBookId.value !== book.id) {
+    currentTitlesList.value = songs.map((s: any) => ({ id: s.id }));
+    lastFlatBookId.value = book.id;
+  }
+  currentTitleIndex.value = songIndex;
 };
 
 // Helper functions
@@ -528,14 +557,16 @@ const getBookData = (book: Book | null): any[] => {
 
 // Navigation
 const goBack = () => {
-  const previous = navigationStack.value.pop();
-  if (previous) {
-    clearSearch();
-    currentContent.value = '';
-    currentTitleIndex.value = -1;
-    currentTitlesList.value = [];
-    previous();
-  }
+  const stack = navigationStack.value;
+  if (stack.length === 0) return;
+  const previous = stack[stack.length - 1];
+  navigationStack.value = stack.slice(0, -1);
+  clearSearch();
+  currentContent.value = '';
+  currentTitleIndex.value = -1;
+  currentTitlesList.value = [];
+  currentGroupedSection.value = '';
+  previous();
 };
 
 const navigatePrev = () => {
@@ -642,7 +673,7 @@ const performSearch = (query: string, scopeBookId: number | null = null) => {
     if (!book) return;
     if (!isGlobal && scopedBook && scopedBook.id !== book.id) return;
     contents.forEach(section => {
-      if (section.content && section.content.toLowerCase().includes(normalized)) {
+      if (section.section && section.section.toLowerCase().includes(normalized)) {
         searchResults.value.push({
           type,
           id: section.section,
@@ -653,7 +684,7 @@ const performSearch = (query: string, scopeBookId: number | null = null) => {
       }
       if (section.subsections) {
         section.subsections.forEach((sub: any, idx: number) => {
-          if (sub.content && sub.content.toLowerCase().includes(normalized)) {
+          if (sub.subsection && sub.subsection.toLowerCase().includes(normalized)) {
             searchResults.value.push({
               type: `${type}-subsection`,
               id: idx,
@@ -676,7 +707,7 @@ const performSearch = (query: string, scopeBookId: number | null = null) => {
     const book = books.value.find(b => b.name === 'Litorjia Provinsialy');
     if (book) {
       litpContents.value.forEach(section => {
-        if (section.items && section.items.some((item: any) => item.content.toLowerCase().includes(normalized))) {
+        if (section.section && section.section.toLowerCase().includes(normalized)) {
           searchResults.value.push({
             type: 'litp',
             id: section.section,
@@ -695,19 +726,16 @@ const performSearch = (query: string, scopeBookId: number | null = null) => {
     if (!isGlobal && scopedBook && scopedBook.id !== book.id) return;
     data.forEach(song => {
       let match = false;
-      if (song.title && song.title.toLowerCase().includes(normalized)) match = true;
-      if (song.verses) {
-        song.verses.forEach((verse: any) => {
-          verse.lines.forEach((line: any) => {
-            if (line.text.toLowerCase().includes(normalized)) match = true;
-          });
-        });
-      }
+      // Search by ID
+      if (String(song.id).toLowerCase().includes(normalized)) match = true;
+      // Search by title
+      if (!match && song.title && song.title.toLowerCase().includes(normalized)) match = true;
       if (match) {
         searchResults.value.push({
           type,
           id: song.id,
-          title: song.title || `${type} ${song.id}`,
+          title: `${song.id} - ${song.title}`,
+          subtitle: `${bookName}${song.section ? ' → ' + song.section : ''}`,
           bookId: book.id,
         });
       }
@@ -722,13 +750,8 @@ const performSearch = (query: string, scopeBookId: number | null = null) => {
   if ((isGlobal || (scopedBook && scopedBook.id === salamoBook?.id)) && salamoBook) {
     salamoPsalms.value.forEach(psalm => {
       let match = false;
-      if (psalm.verses) {
-        psalm.verses.forEach((verse: any) => {
-          verse.lines.forEach((line: any) => {
-            if (line.text.toLowerCase().includes(normalized)) match = true;
-          });
-        });
-      }
+      // Search by ID
+      if (String(psalm.id).toLowerCase().includes(normalized)) match = true;
       if (match) {
         searchResults.value.push({
           type: 'salamo',
@@ -753,20 +776,20 @@ const navigateToSearchResult = (result: SearchResult) => {
   if (result.type === 'book') {
     const book = books.value.find(b => b.id === result.id);
     if (book) {
-      navigationStack.value.push(showBooks);
+      navigationStack.value = [showBooks];
       showSections(book);
     }
   } else if (result.type === 'litbf' || result.type === 'lhf' || result.type === 'litp') {
     const book = books.value.find(b => b.id === result.bookId);
     if (book) {
-      navigationStack.value.push(showBooks);
+      navigationStack.value = [showBooks, () => showSections(book)];
       showSections(book);
       navigateToSection(result.id as string);
     }
   } else if (result.type === 'litbf-subsection' || result.type === 'lhf-subsection') {
     const book = books.value.find(b => b.id === result.bookId);
     if (book) {
-      navigationStack.value.push(showBooks);
+      navigationStack.value = [showBooks, () => showSections(book)];
       showSections(book);
       navigateToSection(result.sectionName!);
       navigateToSubsection(result.subsectionIndex!);
@@ -774,7 +797,7 @@ const navigateToSearchResult = (result: SearchResult) => {
   } else if (result.type === 'hira' || result.type === 'haa' || result.type === 'salamo') {
     const book = books.value.find(b => b.id === result.bookId);
     if (book) {
-      navigationStack.value.push(showBooks);
+      navigationStack.value = [showBooks, () => showSections(book)];
       showSections(book);
       navigateToSong(result.id as number);
     }
@@ -815,13 +838,6 @@ const showAbout = () => {
   currentTitleIndex.value = -1;
 };
 
-
-const doRefresh = (event: any) => {
-  // Handle refresh
-  setTimeout(() => {
-    event.target.complete();
-  }, 2000);
-};
 
 // Render methods
 const renderSongContent = (song: any) => {
@@ -894,10 +910,19 @@ const renderLitPContent = (sectionObj: any) => {
 // New methods
 const toggleSongView = () => {
   songViewMode.value = songViewMode.value === 'grouped' ? 'flat' : 'grouped';
+  if (songViewMode.value === 'flat') {
+    // When switching to flat mode, show all songs
+    currentGroupedSection.value = '';
+    currentView.value = 'songs';
+  } else {
+    // When switching to grouped mode, show sections
+    currentGroupedSection.value = '';
+    showSectionsView();
+  }
 };
 
 const navigateToSubsection = (index: number) => {
-  navigationStack.value.push(() => showSectionContent(currentBook.value!, currentSection.value));
+  navigationStack.value = [...navigationStack.value, () => showSectionContent(currentBook.value!, currentSection.value)];
   showSubsectionContent(currentBook.value!, currentSection.value, index);
 };
 
@@ -916,6 +941,23 @@ const showSongs = () => {
   currentView.value = 'songs';
   updateHeader(currentBook.value!.name);
   showToggle.value = true;
+};
+
+const showSectionsView = () => {
+  if (songViewMode.value === 'grouped' && (isHiraBook(currentBook.value) || isHaaBook(currentBook.value))) {
+    currentView.value = 'songSections';
+    updateHeader(currentBook.value!.name);
+    showToggle.value = true;
+  } else {
+    showSongs();
+  }
+};
+
+const selectGroupedSection = (sectionName: string) => {
+  currentGroupedSection.value = sectionName;
+  currentView.value = 'songs';
+  updateHeader(currentBook.value!.name, sectionName);
+  navigationStack.value = [...navigationStack.value, showSectionsView];
 };
 
 const showSalamoList = () => {
