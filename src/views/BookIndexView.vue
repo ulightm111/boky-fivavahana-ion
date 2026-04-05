@@ -104,8 +104,31 @@ const sections = computed(() => {
 });
 
 const songSections = computed(() => bookStore.getGroupedSongs(book.value || null).map(g => g.section));
-const flatSongs = computed(() => bookStore.getFlatSongs(book.value || null));
-const hasMoreItems = computed(() => bookStore.hasMoreItems(book.value || null));
+const allFlatSongs = computed<any[]>(() => {
+  if (!book.value) return [];
+  if (bookStore.isHiraBook(book.value)) return bookStore.hiraSongs;
+  if (bookStore.isHaaBook(book.value)) return bookStore.haaSongs;
+  if (bookStore.isSalamoBook(book.value)) return bookStore.salamoPsalms;
+  return [];
+});
+
+const filteredAllFlatSongs = computed(() => {
+  if (!sectionSearchQuery.value) return allFlatSongs.value;
+  const q = sectionSearchQuery.value.toLowerCase().trim();
+  return allFlatSongs.value.filter((song: any) => {
+    const title = song.title ? song.title.toLowerCase() : `salamo ${song.id}`;
+    const section = song.section ? song.section.toLowerCase() : '';
+    return String(song.id).includes(q) || title.includes(q) || section.includes(q);
+  });
+});
+
+const flatSongs = computed(() => {
+  return filteredAllFlatSongs.value.slice(0, (bookStore.currentPage + 1) * 50);
+});
+
+const hasMoreItems = computed(() => {
+  return ((bookStore.currentPage + 1) * 50) < filteredAllFlatSongs.value.length;
+});
 const canToggleView = computed(() => book.value && (bookStore.isHiraBook(book.value) || bookStore.isHaaBook(book.value)));
 
 const checkDisplayMode = () => {
@@ -150,6 +173,10 @@ const toggleToFlatSongs = () => {
 };
 
 const onSectionSearchSubmit = () => {
+  if (displayMode.value === 'songs') {
+    // If we're displaying flat songs, search acts as a local filter.
+    return;
+  }
   const query = sectionSearchQuery.value.toLowerCase().trim();
   if (query !== '') {
     router.push({ path: '/search', query: { q: query, scope: bookId.value } });

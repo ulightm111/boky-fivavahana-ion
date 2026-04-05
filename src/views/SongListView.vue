@@ -14,7 +14,7 @@
       <div class="content-area">
         <ion-list>
           <ion-item
-            v-for="song in songs"
+            v-for="song in filteredSongs"
             :key="song.id"
             button
             @click="navigateToSong(song.id)"
@@ -57,6 +57,15 @@ const songs = computed(() => {
   return group ? group.songs : [];
 });
 
+const filteredSongs = computed(() => {
+  if (!sectionSearchQuery.value) return songs.value;
+  const q = sectionSearchQuery.value.toLowerCase().trim();
+  return songs.value.filter(song => {
+    const title = song.title ? song.title.toLowerCase() : '';
+    return String(song.id).includes(q) || title.includes(q);
+  });
+});
+
 onMounted(async () => {
   if (bookStore.books.length === 0) await bookStore.loadData();
 });
@@ -66,10 +75,7 @@ const navigateToSong = (songId: number) => {
 };
 
 const onSectionSearchSubmit = () => {
-  const query = sectionSearchQuery.value.toLowerCase().trim();
-  if (query !== '') {
-    router.push({ path: '/search', query: { q: query, scope: bookId.value } });
-  }
+  // In specific song lists, search acts as a local filter. We don't navigate on submit.
 };
 
 const clearSectionSearch = () => {

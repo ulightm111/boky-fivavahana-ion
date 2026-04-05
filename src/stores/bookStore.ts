@@ -232,13 +232,23 @@ export const useBookStore = defineStore('book', () => {
   };
 
   const loadData = async () => {
-    books.value = await fetch('/data/books.json').then(r => r.json());
-    hiraSongs.value = await fetch('/data/HIRA.json').then(r => r.json()).then(d => d.songs || []);
-    haaSongs.value = await fetch('/data/HAA.json').then(r => r.json()).then(d => d.songs || []);
-    salamoPsalms.value = await fetch('/data/SALAMO.json').then(r => r.json()).then(d => d.psalms || []);
-    litpContents.value = await fetch('/data/LitP.json').then(r => r.json()).then(d => d.contents || []);
-    litbfContents.value = await fetch('/data/LitBF.json').then(r => r.json()).then(d => d.sections || []);
-    lhfContents.value = await fetch('/data/LHF.json').then(r => r.json()).then(d => d.sections || []);
+    const [booksRes, hiraRes, haaRes, salamoRes, litpRes, litbfRes, lhfRes] = await Promise.all([
+      fetch('/data/books.json').then(r => r.json()),
+      fetch('/data/HIRA.json').then(r => r.json()),
+      fetch('/data/HAA.json').then(r => r.json()),
+      fetch('/data/SALAMO.json').then(r => r.json()),
+      fetch('/data/LitP.json').then(r => r.json()),
+      fetch('/data/LitBF.json').then(r => r.json()),
+      fetch('/data/LHF.json').then(r => r.json())
+    ]);
+
+    books.value = booksRes;
+    hiraSongs.value = hiraRes.songs || [];
+    haaSongs.value = haaRes.songs || [];
+    salamoPsalms.value = salamoRes.psalms || [];
+    litpContents.value = litpRes.contents || [];
+    litbfContents.value = litbfRes.sections || [];
+    lhfContents.value = lhfRes.sections || [];
   };
 
   return {
