@@ -8,7 +8,31 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/books',
-    component: () => import ('../components/BookViewer.vue')
+    component: () => import('../views/BooksView.vue')
+  },
+  {
+    path: '/search',
+    component: () => import('../views/SearchResultsView.vue')
+  },
+  {
+    path: '/books/:bookId',
+    component: () => import('../views/BookIndexView.vue')
+  },
+  {
+    path: '/books/:bookId/group/:groupName',
+    component: () => import('../views/SongListView.vue')
+  },
+  {
+    path: '/books/:bookId/song/:songId',
+    component: () => import('../views/ContentView.vue')
+  },
+  {
+    path: '/books/:bookId/section/:sectionName',
+    component: () => import('../views/ContentView.vue')
+  },
+  {
+    path: '/books/:bookId/section/:sectionName/subsection/:subIndex',
+    component: () => import('../views/ContentView.vue')
   }
 ]
 
