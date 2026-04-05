@@ -2,7 +2,6 @@
   <ion-page>
     <app-header
       title="Search Results"
-      :show-back-button="true"
       :show-searchbar="true"
       v-model:searchQuery="query"
       @search-input="onSearchInput"

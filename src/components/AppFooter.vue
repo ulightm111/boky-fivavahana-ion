@@ -2,105 +2,122 @@
   <ion-footer>
     <ion-toolbar>
       <ion-buttons>
-        <ion-button @click="showMenuModal = true" fill="clear">
-          <ion-icon :icon="menu"></ion-icon>
-          <ion-label>Menu</ion-label>
-        </ion-button>
-        <ion-button @click="$emit('prev')" :disabled="!canGoPrev" fill="clear">
-          <ion-icon :icon="chevronBack"></ion-icon>
-          <ion-label>Prev</ion-label>
-        </ion-button>
-        <ion-button @click="$emit('next')" :disabled="!canGoNext" fill="clear">
-          <ion-icon :icon="chevronForward"></ion-icon>
-          <ion-label>Next</ion-label>
-        </ion-button>
-        <ion-button @click="gotoSearch" fill="clear">
-          <ion-icon :icon="search"></ion-icon>
-          <ion-label>Search</ion-label>
-        </ion-button>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button @click="openMenu" fill="clear">
+                <ion-icon :icon="menu"></ion-icon>
+                <ion-label>Menu</ion-label>
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button
+                @click="$emit('prev')"
+                :disabled="!canGoPrev"
+                fill="clear"
+              >
+                <ion-icon :icon="chevronBack"></ion-icon>
+                <ion-label>Prev</ion-label>
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button
+                @click="$emit('next')"
+                :disabled="!canGoNext"
+                fill="clear"
+              >
+                <ion-icon :icon="chevronForward"></ion-icon>
+                <ion-label>Next</ion-label>
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button @click="gotoSearch" fill="clear">
+                <ion-icon :icon="search"></ion-icon>
+                <ion-label>Search</ion-label>
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-back-button
+                :default-href="backButtonDefaultHref"
+                fill="clear"
+                text="Back"
+                :icon="caretBack"
+              >
+              </ion-back-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-buttons>
     </ion-toolbar>
-
-    <ion-modal :is-open="showMenuModal" @didDismiss="showMenuModal = false">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Menu</ion-title>
-          <ion-buttons slot="end">
-            <ion-button @click="showMenuModal = false">Close</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list>
-          <ion-item
-            v-for="book in books"
-            :key="book.id"
-            button
-            @click="navigateToBookFromMenu(book)"
-            lines="none"
-          >
-            <ion-label>{{ book.name }}</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-modal>
   </ion-footer>
 </template>
 
 <script setup lang="ts">
 import {
-  IonFooter, IonToolbar, IonButtons, IonButton, IonIcon, IonLabel,
-  IonModal, IonHeader, IonTitle, IonContent, IonList, IonItem
-} from '@ionic/vue';
-import { menu, chevronBack, chevronForward, search } from 'ionicons/icons';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useBookStore } from '@/stores/bookStore';
+  IonFooter,
+  IonToolbar,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonButtons,
+  IonButton,
+  IonBackButton,
+  IonIcon,
+  IonLabel,
+  menuController,
+} from "@ionic/vue";
+import {
+  menu,
+  chevronBack,
+  chevronForward,
+  search,
+  caretBack,
+} from "ionicons/icons";
+import { useRouter } from "vue-router";
 
 defineProps({
   canGoPrev: {
     type: Boolean,
-    default: false
+    default: false,
   },
   canGoNext: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
+  backButtonDefaultHref: {
+    type: String,
+    default: "/books",
+  },
 });
 
-defineEmits(['prev', 'next']);
+defineEmits(["prev", "next"]);
 
 const router = useRouter();
-const bookStore = useBookStore();
-const { books } = storeToRefs(bookStore);
-const showMenuModal = ref(false);
 
 const gotoSearch = (event?: Event) => {
-  showMenuModal.value = false;
-  
   let searchbar = null;
   if (event && event.target) {
-    const page = (event.target as HTMLElement).closest('.ion-page');
+    const page = (event.target as HTMLElement).closest(".ion-page");
     if (page) {
-      searchbar = page.querySelector('ion-searchbar');
+      searchbar = page.querySelector("ion-searchbar");
     }
   }
-  
+
   if (!searchbar) {
     // Fallback: try to find a searchbar on the active page
-    searchbar = document.querySelector('.ion-page:not(.ion-page-hidden) ion-searchbar') || document.querySelector('ion-searchbar');
+    searchbar =
+      document.querySelector(".ion-page:not(.ion-page-hidden) ion-searchbar") ||
+      document.querySelector("ion-searchbar");
   }
 
   if (searchbar) {
     (searchbar as any).setFocus();
   } else {
-    router.push('/search');
+    router.push("/search");
   }
 };
 
-const navigateToBookFromMenu = (book: any) => {
-  showMenuModal.value = false;
-  router.push(`/books/${book.id}`);
+const openMenu = async () => {
+  await menuController.open("main-menu");
 };
 </script>

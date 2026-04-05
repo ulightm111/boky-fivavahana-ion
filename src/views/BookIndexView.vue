@@ -2,7 +2,6 @@
   <ion-page>
     <app-header
       :title="book?.name || ''"
-      :show-back-button="true"
       :show-searchbar="true"
       :search-placeholder="`Hitady @${book?.name || ''}...`"
       v-model:searchQuery="sectionSearchQuery"

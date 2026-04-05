@@ -1,6 +1,33 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <!-- LEFT SIDE MENU -->
+    <ion-menu
+      menu-id="main-menu"
+      side="start"
+      content-id="main-content"
+      type="overlay"
+    >
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-list>
+          <ion-item
+            v-for="book in books"
+            :key="book.id"
+            button
+            @click="navigateToBook(book)"
+          >
+            <ion-label>{{ book.name }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <!-- MAIN CONTENT -->
+    <ion-router-outlet id="main-content" />
     <div class="global-spinner-container" v-if="isLoading">
       <ion-spinner name="circular" color="primary"></ion-spinner>
     </div>
@@ -8,11 +35,34 @@
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonRouterOutlet, IonSpinner } from '@ionic/vue';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import {
+  IonApp,
+  IonRouterOutlet,
+  IonSpinner,
+  IonMenu,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  menuController,
+} from "@ionic/vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useBookStore } from "@/stores/bookStore";
 
 const router = useRouter();
+const bookStore = useBookStore();
+const { books } = storeToRefs(bookStore);
+
+const navigateToBook = async (book: any) => {
+  await menuController.close("main-menu");
+  router.push(`/books/${book.id}`);
+};
+
 const isLoading = ref(false);
 
 router.beforeEach((to, from, next) => {
@@ -42,9 +92,7 @@ router.afterEach(() => {
   background: rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);
   border-radius: 50%;
   padding: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   pointer-events: none;
 }
 </style>
-
-

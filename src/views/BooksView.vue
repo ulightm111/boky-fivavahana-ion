@@ -2,7 +2,6 @@
   <ion-page>
     <app-header
       title="Boky Fivavahana"
-      :show-back-button="false"
       :show-searchbar="true"
       v-model:searchQuery="globalSearchQuery"
       @search-submit="onGlobalSearchSubmit"

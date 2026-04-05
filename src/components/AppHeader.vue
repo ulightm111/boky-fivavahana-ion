@@ -1,9 +1,6 @@
 <template>
   <ion-header :translucent="true">
     <ion-toolbar>
-      <ion-buttons v-if="showBackButton" slot="start">
-        <ion-back-button :default-href="backButtonDefaultHref"></ion-back-button>
-      </ion-buttons>
       <ion-title>
         <slot name="title">{{ title }}</slot>
         <span v-if="subtitle" class="subtitle">- {{ subtitle }}</span>
@@ -23,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonSearchbar } from '@ionic/vue';
+import { IonHeader, IonToolbar, IonTitle, IonSearchbar } from '@ionic/vue';
 
 const props = defineProps({
   title: {

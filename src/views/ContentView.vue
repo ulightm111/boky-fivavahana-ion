@@ -3,7 +3,6 @@
     <app-header
       :title="title"
       :subtitle="subtitle"
-      :show-back-button="true"
     />
 
     <ion-content :fullscreen="true">
