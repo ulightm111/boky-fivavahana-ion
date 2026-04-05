@@ -235,10 +235,10 @@ import {
 } from 'ionicons/icons';
 import { ref, onMounted, computed, shallowRef } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useBookStore, Book, Song, Psalm, LitContent, SearchResult } from '@/stores/bookStore';
+import { useBookStore, Book, SearchResult } from '@/stores/bookStore';
 
 const bookStore = useBookStore();
-const { books, hiraSongs, haaSongs, salamoPsalms, litpContents, litbfContents, lhfContents, searchResults } = storeToRefs(bookStore);
+const { books, litpContents, litbfContents, lhfContents, searchResults } = storeToRefs(bookStore);
 
 // New refs
 const songViewMode = ref<'grouped' | 'flat'>('grouped');

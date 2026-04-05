@@ -192,16 +192,11 @@ export const useBookStore = defineStore('book', () => {
       if (!book) return;
       if (!isGlobal && scopedBook && scopedBook.id !== book.id) return;
       data.forEach(song => {
-        let match = false;
-        if (String(song.id).toLowerCase().includes(normalized)) match = true;
-        if (!match && song.title && song.title.toLowerCase().includes(normalized)) match = true;
-        if (!match && song.verses) {
-          song.verses.forEach((verse: any) => {
-            verse.lines.forEach((line: any) => {
-              if (line.text.toLowerCase().includes(normalized)) match = true;
-            });
-          });
-        }
+        const normalizedTitle = song.title ? song.title.toLowerCase() : '';
+        const normalizedSection = song.section ? song.section.toLowerCase() : '';
+        const match = String(song.id).toLowerCase().includes(normalized)
+          || normalizedTitle.includes(normalized)
+          || normalizedSection.includes(normalized);
         if (match) {
           searchResults.value.push({
             type,
@@ -220,16 +215,7 @@ export const useBookStore = defineStore('book', () => {
     const salamoBook = books.value.find(b => b.name === 'Salamo');
     if ((isGlobal || (scopedBook && scopedBook.id === salamoBook?.id)) && salamoBook) {
       salamoPsalms.value.forEach(psalm => {
-        let match = false;
-        if (String(psalm.id).toLowerCase().includes(normalized)) match = true;
-        if (!match && psalm.verses) {
-          psalm.verses.forEach((verse: any) => {
-            verse.lines.forEach((line: any) => {
-              if (line.text.toLowerCase().includes(normalized)) match = true;
-            });
-          });
-        }
-        if (match) {
+        if (String(psalm.id).toLowerCase().includes(normalized)) {
           searchResults.value.push({
             type: 'salamo',
             id: psalm.id,
