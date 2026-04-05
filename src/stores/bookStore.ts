@@ -41,6 +41,12 @@ export interface SearchResult {
   subsectionIndex?: number;
 }
 
+// Internal structure for fast searching
+interface IndexedSearchItem {
+  searchKey: string;   // lowercased, concatenated searchable fields
+  result: SearchResult;
+}
+
 export const useBookStore = defineStore('book', () => {
   const books = ref<Book[]>([]);
   const hiraSongs = shallowRef<Song[]>([]);
@@ -55,6 +61,123 @@ export const useBookStore = defineStore('book', () => {
   const flatSongsSorted = shallowRef<any[]>([]);
   const lastFlatBookId = ref<number | null>(null);
   const currentPage = ref(0);
+
+  // Search indexes (built once after data load)
+  const hiraSearchIndex = shallowRef<IndexedSearchItem[]>([]);
+  const haaSearchIndex = shallowRef<IndexedSearchItem[]>([]);
+  const litbfSearchIndex = shallowRef<IndexedSearchItem[]>([]);
+  const lhfSearchIndex = shallowRef<IndexedSearchItem[]>([]);
+  const litpSearchIndex = shallowRef<IndexedSearchItem[]>([]);
+  const salamoSearchIndex = shallowRef<IndexedSearchItem[]>([]);
+
+  // Helper: build index for songs (Hira / HAA)
+  function buildSongIndex(
+    songs: Song[],
+    bookName: string,
+    bookId: number,
+    type: string
+  ): IndexedSearchItem[] {
+    return songs.map(song => {
+      const searchKey = `${song.id} ${song.title || ''} ${song.section || ''}`.toLowerCase();
+      const result: SearchResult = {
+        type,
+        id: song.id,
+        title: `${song.id} - ${song.title}`,
+        subtitle: `${bookName}${song.section ? ' → ' + song.section : ''}`,
+        bookId,
+      };
+      return { searchKey, result };
+    });
+  }
+
+  // Helper: build index for liturgical books (sections + subsections)
+  function buildLitIndex(
+    contents: LitContent[],
+    bookName: string,
+    bookId: number,
+    typePrefix: string
+  ): IndexedSearchItem[] {
+    const items: IndexedSearchItem[] = [];
+    for (const section of contents) {
+      // Section itself
+      const sectionKey = section.section.toLowerCase();
+      items.push({
+        searchKey: sectionKey,
+        result: {
+          type: typePrefix,
+          id: section.section,
+          title: section.section,
+          subtitle: bookName,
+          bookId,
+        },
+      });
+
+      // Subsections
+      if (section.subsections) {
+        for (let idx = 0; idx < section.subsections.length; idx++) {
+          const sub = section.subsections[idx];
+          const subKey = sub.subsection.toLowerCase();
+          items.push({
+            searchKey: subKey,
+            result: {
+              type: `${typePrefix}-subsection`,
+              id: idx,
+              title: sub.subsection,
+              subtitle: section.section,
+              bookId,
+              sectionName: section.section,
+              subsectionIndex: idx,
+            },
+          });
+        }
+      }
+    }
+    return items;
+  }
+
+  // Build all search indexes after data is loaded
+  function buildSearchIndexes() {
+    const hiraBook = books.value.find(b => b.name === 'Fihirana');
+    if (hiraBook) {
+      hiraSearchIndex.value = buildSongIndex(hiraSongs.value, 'Fihirana', hiraBook.id, 'hira');
+    }
+    const haaBook = books.value.find(b => b.name === 'Hanandratra Anao Aho');
+    if (haaBook) {
+      haaSearchIndex.value = buildSongIndex(haaSongs.value, 'Hanandratra Anao Aho', haaBook.id, 'haa');
+    }
+    const litbfBook = books.value.find(b => b.name === 'Litorjia Boky Fivavahana');
+    if (litbfBook) {
+      litbfSearchIndex.value = buildLitIndex(litbfContents.value, 'Litorjia Boky Fivavahana', litbfBook.id, 'litbf');
+    }
+    const lhfBook = books.value.find(b => b.name === "Lalan'ny Hazo Fijaliana");
+    if (lhfBook) {
+      lhfSearchIndex.value = buildLitIndex(lhfContents.value, "Lalan'ny Hazo Fijaliana", lhfBook.id, 'lhf');
+    }
+    const litpBook = books.value.find(b => b.name === 'Litorjia Provinsialy');
+    if (litpBook) {
+      litpSearchIndex.value = buildLitIndex(litpContents.value, 'Litorjia Provinsialy', litpBook.id, 'litp');
+    }
+    const salamoBook = books.value.find(b => b.name === 'Salamo');
+    if (salamoBook) {
+      salamoSearchIndex.value = salamoPsalms.value.map(psalm => ({
+        searchKey: String(psalm.id).toLowerCase(),
+        result: {
+          type: 'salamo',
+          id: psalm.id,
+          title: `Salamo ${psalm.id}`,
+          bookId: salamoBook.id,
+        },
+      }));
+    }
+  }
+
+  // Helper: search within a specific index
+  function searchIndex(index: IndexedSearchItem[], query: string): SearchResult[] {
+    if (!index.length) return [];
+    const normalized = query.toLowerCase().trim();
+    if (!normalized) return [];
+    return index.filter(item => item.searchKey.includes(normalized)).map(item => item.result);
+  }
 
   const isHiraBook = (book: Book | null) => book?.name === 'Fihirana';
   const isHaaBook = (book: Book | null) => book?.name === 'Hanandratra Anao Aho';
@@ -88,9 +211,7 @@ export const useBookStore = defineStore('book', () => {
     const groups = new Map<string, Song[]>();
     songs.forEach(song => {
       const section = song.section || 'Other';
-      if (!groups.has(section)) {
-        groups.set(section, []);
-      }
+      if (!groups.has(section)) groups.set(section, []);
       groups.get(section)!.push(song);
     });
 
@@ -125,106 +246,55 @@ export const useBookStore = defineStore('book', () => {
     if (isHiraBook(book)) totalSongs = hiraSongs.value;
     else if (isHaaBook(book)) totalSongs = haaSongs.value;
     else if (isSalamoBook(book)) totalSongs = salamoPsalms.value;
-    return ((currentPage.value + 1) * pageSize) < totalSongs.length;
+    return (currentPage.value + 1) * pageSize < totalSongs.length;
   };
 
   const performSearch = (query: string, scopeBookId: number | null = null) => {
     searchResults.value = [];
-    const normalized = query.toLowerCase().trim();
+    const normalized = query.trim();
     if (!normalized) return;
+
     const isGlobal = scopeBookId == null;
     const scopedBook = scopeBookId ? books.value.find(b => b.id === scopeBookId) : null;
 
-    const searchLit = (bookName: string, contents: any[], type: string) => {
-      const book = books.value.find(b => b.name === bookName);
-      if (!book) return;
-      if (!isGlobal && scopedBook && scopedBook.id !== book.id) return;
-      contents.forEach(section => {
-        if (section.section.toLowerCase().includes(normalized)) {
-          searchResults.value.push({
-            type,
-            id: section.section,
-            title: section.section,
-            subtitle: bookName,
-            bookId: book.id,
-          });
-        }
-        if (section.subsections) {
-          section.subsections.forEach((sub: any, idx: number) => {
-            if (sub.subsection.toLowerCase().includes(normalized)) {
-              searchResults.value.push({
-                type: `${type}-subsection`,
-                id: idx,
-                title: sub.subsection,
-                subtitle: section.section,
-                bookId: book.id,
-                sectionName: section.section,
-                subsectionIndex: idx,
-              });
-            }
-          });
-        }
-      });
-    };
+    const results: SearchResult[] = [];
 
-    searchLit('Litorjia Boky Fivavahana', litbfContents.value, 'litbf');
-    searchLit('Lalan\'ny Hazo Fijaliana', lhfContents.value, 'lhf');
-
-    if (isGlobal || (scopedBook && isLitPBook(scopedBook))) {
-      const book = books.value.find(b => b.name === 'Litorjia Provinsialy');
-      if (book) {
-        litpContents.value.forEach(section => {
-          if (section.section.toLowerCase().includes(normalized)) {
-            searchResults.value.push({
-              type: 'litp',
-              id: section.section,
-              title: section.section,
-              subtitle: book.name,
-              bookId: book.id,
-            });
-          }
-        });
+    // Helper to add results from an index if the book matches
+    const addFromIndex = (index: IndexedSearchItem[], bookId: number) => {
+      if (isGlobal || (scopedBook && scopedBook.id === bookId)) {
+        results.push(...searchIndex(index, normalized));
       }
-    }
-
-    const searchSongs = (bookName: string, data: any[], type: string) => {
-      const book = books.value.find(b => b.name === bookName);
-      if (!book) return;
-      if (!isGlobal && scopedBook && scopedBook.id !== book.id) return;
-      data.forEach(song => {
-        const normalizedTitle = song.title ? song.title.toLowerCase() : '';
-        const normalizedSection = song.section ? song.section.toLowerCase() : '';
-        const match = String(song.id).toLowerCase().includes(normalized)
-          || normalizedTitle.includes(normalized)
-          || normalizedSection.includes(normalized);
-        if (match) {
-          searchResults.value.push({
-            type,
-            id: song.id,
-            title: `${song.id} - ${song.title}`,
-            subtitle: `${bookName}${song.section ? ' → ' + song.section : ''}`,
-            bookId: book.id,
-          });
-        }
-      });
     };
 
-    searchSongs('Fihirana', hiraSongs.value, 'hira');
-    searchSongs('Hanandratra Anao Aho', haaSongs.value, 'haa');
+    // Fihirana
+    const hiraBook = books.value.find(b => b.name === 'Fihirana');
+    if (hiraBook) addFromIndex(hiraSearchIndex.value, hiraBook.id);
 
-    const salamoBook = books.value.find(b => b.name === 'Salamo');
-    if ((isGlobal || (scopedBook && scopedBook.id === salamoBook?.id)) && salamoBook) {
-      salamoPsalms.value.forEach(psalm => {
-        if (String(psalm.id).toLowerCase().includes(normalized)) {
-          searchResults.value.push({
-            type: 'salamo',
-            id: psalm.id,
-            title: `Salamo ${psalm.id}`,
-            bookId: salamoBook.id,
-          });
-        }
-      });
+    // Hanandratra Anao Aho
+    const haaBook = books.value.find(b => b.name === 'Hanandratra Anao Aho');
+    if (haaBook) addFromIndex(haaSearchIndex.value, haaBook.id);
+
+    // Litorjia Boky Fivavahana
+    const litbfBook = books.value.find(b => b.name === 'Litorjia Boky Fivavahana');
+    if (litbfBook) addFromIndex(litbfSearchIndex.value, litbfBook.id);
+
+    // Lalan'ny Hazo Fijaliana
+    const lhfBook = books.value.find(b => b.name === "Lalan'ny Hazo Fijaliana");
+    if (lhfBook) addFromIndex(lhfSearchIndex.value, lhfBook.id);
+
+    // Litorjia Provinsialy
+    const litpBook = books.value.find(b => b.name === 'Litorjia Provinsialy');
+    if (litpBook && (isGlobal || (scopedBook && scopedBook.id === litpBook.id))) {
+      results.push(...searchIndex(litpSearchIndex.value, normalized));
     }
+
+    // Salamo
+    const salamoBook = books.value.find(b => b.name === 'Salamo');
+    if (salamoBook && (isGlobal || (scopedBook && scopedBook.id === salamoBook.id))) {
+      results.push(...searchIndex(salamoSearchIndex.value, normalized));
+    }
+
+    searchResults.value = results;
   };
 
   const clearSearchResults = () => {
@@ -249,6 +319,9 @@ export const useBookStore = defineStore('book', () => {
     litpContents.value = litpRes.contents || [];
     litbfContents.value = litbfRes.sections || [];
     lhfContents.value = lhfRes.sections || [];
+
+    // Build search indexes after data is loaded
+    buildSearchIndexes();
   };
 
   return {
