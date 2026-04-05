@@ -40,31 +40,44 @@
         <!-- Flat Songs for Salamo -->
         <ion-list v-else-if="displayMode === 'songs'">
           <template v-for="(song, index) in flatSongs" :key="song.id">
-            <ion-item-divider 
-              v-if="song.section && (index === 0 || song.section !== flatSongs[index - 1].section)" 
-              color="light" 
+            <ion-item-divider
+              v-if="
+                song.section &&
+                (index === 0 || song.section !== flatSongs[index - 1].section)
+              "
+              color="light"
               sticky
             >
               <ion-label>{{ song.section }}</ion-label>
             </ion-item-divider>
-            <ion-item
-              button
-              @click="navigateToSong(song.id)"
-              lines="none"
-            >
-              <ion-label>{{ song.id }} - {{ song.title || `Salamo ${song.id}` }}</ion-label>
+            <ion-item button @click="navigateToSong(song.id)" lines="none">
+              <ion-label>{{ song.title || `Salamo ${song.id}` }}</ion-label>
             </ion-item>
           </template>
         </ion-list>
-        
-        <ion-infinite-scroll v-if="displayMode === 'songs'" @ionInfinite="onIonInfinite" :disabled="!hasMoreItems">
-          <ion-infinite-scroll-content loading-text="Loading..." loading-spinner="bubbles"></ion-infinite-scroll-content>
+
+        <ion-infinite-scroll
+          v-if="displayMode === 'songs'"
+          @ionInfinite="onIonInfinite"
+          :disabled="!hasMoreItems"
+        >
+          <ion-infinite-scroll-content
+            loading-text="Loading..."
+            loading-spinner="bubbles"
+          ></ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </div>
-      
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed" v-if="canToggleView">
+
+      <ion-fab
+        vertical="bottom"
+        horizontal="end"
+        slot="fixed"
+        v-if="canToggleView"
+      >
         <ion-fab-button @click="toggleToFlatSongs">
-          <ion-icon :icon="displayMode === 'songSections' ? listIcon : folderIcon"></ion-icon>
+          <ion-icon
+            :icon="displayMode === 'songSections' ? listIcon : folderIcon"
+          ></ion-icon>
         </ion-fab-button>
       </ion-fab>
     </ion-content>
@@ -74,35 +87,49 @@
 
 <script setup lang="ts">
 import {
-  IonPage, IonContent, IonList, IonItem, IonLabel, IonFab, IonFabButton, IonIcon,
-  IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider
-} from '@ionic/vue';
-import { list as listIcon, folderOutline as folderIcon } from 'ionicons/icons';
-import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useBookStore } from '@/stores/bookStore';
-import AppHeader from '@/components/AppHeader.vue';
-import AppFooter from '@/components/AppFooter.vue';
+  IonPage,
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonItemDivider,
+} from "@ionic/vue";
+import { list as listIcon, folderOutline as folderIcon } from "ionicons/icons";
+import { ref, computed, onMounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useBookStore } from "@/stores/bookStore";
+import AppHeader from "@/components/AppHeader.vue";
+import AppFooter from "@/components/AppFooter.vue";
 
 const route = useRoute();
 const router = useRouter();
 const bookStore = useBookStore();
 
 const bookId = computed(() => Number(route.params.bookId));
-const book = computed(() => bookStore.books.find(b => b.id === bookId.value));
+const book = computed(() => bookStore.books.find((b) => b.id === bookId.value));
 
-const sectionSearchQuery = ref('');
-const displayMode = ref<'sections' | 'songSections' | 'songs'>('sections');
+const sectionSearchQuery = ref("");
+const displayMode = ref<"sections" | "songSections" | "songs">("sections");
 
 const sections = computed(() => {
   if (!book.value) return [];
-  if (bookStore.isLitBFBook(book.value)) return bookStore.litbfContents.map(s => s.section);
-  if (bookStore.isLHFBook(book.value)) return bookStore.lhfContents.map(s => s.section);
-  if (bookStore.isLitPBook(book.value)) return bookStore.litpContents.map(s => s.section);
+  if (bookStore.isLitBFBook(book.value))
+    return bookStore.litbfContents.map((s) => s.section);
+  if (bookStore.isLHFBook(book.value))
+    return bookStore.lhfContents.map((s) => s.section);
+  if (bookStore.isLitPBook(book.value))
+    return bookStore.litpContents.map((s) => s.section);
   return [];
 });
 
-const songSections = computed(() => bookStore.getGroupedSongs(book.value || null).map(g => g.section));
+const songSections = computed(() =>
+  bookStore.getGroupedSongs(book.value || null).map((g) => g.section),
+);
 const allFlatSongs = computed<any[]>(() => {
   if (!book.value) return [];
   if (bookStore.isHiraBook(book.value)) return bookStore.hiraSongs;
@@ -116,8 +143,10 @@ const filteredAllFlatSongs = computed(() => {
   const q = sectionSearchQuery.value.toLowerCase().trim();
   return allFlatSongs.value.filter((song: any) => {
     const title = song.title ? song.title.toLowerCase() : `salamo ${song.id}`;
-    const section = song.section ? song.section.toLowerCase() : '';
-    return String(song.id).includes(q) || title.includes(q) || section.includes(q);
+    const section = song.section ? song.section.toLowerCase() : "";
+    return (
+      String(song.id).includes(q) || title.includes(q) || section.includes(q)
+    );
   });
 });
 
@@ -126,16 +155,24 @@ const flatSongs = computed(() => {
 });
 
 const hasMoreItems = computed(() => {
-  return ((bookStore.currentPage + 1) * 50) < filteredAllFlatSongs.value.length;
+  return (bookStore.currentPage + 1) * 50 < filteredAllFlatSongs.value.length;
 });
-const canToggleView = computed(() => book.value && (bookStore.isHiraBook(book.value) || bookStore.isHaaBook(book.value)));
+const canToggleView = computed(
+  () =>
+    book.value &&
+    (bookStore.isHiraBook(book.value) || bookStore.isHaaBook(book.value)),
+);
 
 const checkDisplayMode = () => {
   if (!book.value) return;
-  if (bookStore.isHiraBook(book.value) || bookStore.isHaaBook(book.value) || bookStore.isSalamoBook(book.value)) {
-    displayMode.value = 'songs';
+  if (
+    bookStore.isHiraBook(book.value) ||
+    bookStore.isHaaBook(book.value) ||
+    bookStore.isSalamoBook(book.value)
+  ) {
+    displayMode.value = "songs";
   } else {
-    displayMode.value = 'sections';
+    displayMode.value = "sections";
   }
 };
 
@@ -151,7 +188,9 @@ watch(book, () => {
 });
 
 const navigateToSection = (sectionName: string) => {
-  router.push(`/books/${bookId.value}/section/${encodeURIComponent(sectionName)}`);
+  router.push(
+    `/books/${bookId.value}/section/${encodeURIComponent(sectionName)}`,
+  );
 };
 
 const navigateToSongGroup = (groupName: string) => {
@@ -168,22 +207,22 @@ const onIonInfinite = (event: any) => {
 };
 
 const toggleToFlatSongs = () => {
-  displayMode.value = displayMode.value === 'songs' ? 'songSections' : 'songs';
+  displayMode.value = displayMode.value === "songs" ? "songSections" : "songs";
 };
 
 const onSectionSearchSubmit = () => {
-  if (displayMode.value === 'songs') {
+  if (displayMode.value === "songs") {
     // If we're displaying flat songs, search acts as a local filter.
     return;
   }
   const query = sectionSearchQuery.value.toLowerCase().trim();
-  if (query !== '') {
-    router.push({ path: '/search', query: { q: query, scope: bookId.value } });
+  if (query !== "") {
+    router.push({ path: "/search", query: { q: query, scope: bookId.value } });
   }
 };
 
 const clearSectionSearch = () => {
-  sectionSearchQuery.value = '';
+  sectionSearchQuery.value = "";
 };
 </script>
 
