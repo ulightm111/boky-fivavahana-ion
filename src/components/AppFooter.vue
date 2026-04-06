@@ -1,14 +1,17 @@
 <template>
   <ion-footer>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
       <ion-buttons>
         <ion-grid>
           <ion-row>
             <ion-col>
-              <ion-button @click="openMenu" fill="clear">
-                <ion-icon :icon="menu"></ion-icon>
-                <ion-label>Menu</ion-label>
-              </ion-button>
+              <ion-back-button
+                :default-href="backButtonDefaultHref"
+                fill="clear"
+                text=" "
+                :icon="caretBack"
+              >
+              </ion-back-button>
             </ion-col>
             <ion-col>
               <ion-button
@@ -17,7 +20,6 @@
                 fill="clear"
               >
                 <ion-icon :icon="chevronBack"></ion-icon>
-                <ion-label>Prev</ion-label>
               </ion-button>
             </ion-col>
             <ion-col>
@@ -27,23 +29,17 @@
                 fill="clear"
               >
                 <ion-icon :icon="chevronForward"></ion-icon>
-                <ion-label>Next</ion-label>
               </ion-button>
             </ion-col>
             <ion-col>
               <ion-button @click="gotoSearch" fill="clear">
                 <ion-icon :icon="search"></ion-icon>
-                <ion-label>Search</ion-label>
               </ion-button>
             </ion-col>
             <ion-col>
-              <ion-back-button
-                :default-href="backButtonDefaultHref"
-                fill="clear"
-                text="Back"
-                :icon="caretBack"
-              >
-              </ion-back-button>
+              <ion-button @click="openMenu" fill="clear">
+                <ion-icon :icon="menu"></ion-icon>
+              </ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -63,7 +59,6 @@ import {
   IonButton,
   IonBackButton,
   IonIcon,
-  IonLabel,
   menuController,
 } from "@ionic/vue";
 import {

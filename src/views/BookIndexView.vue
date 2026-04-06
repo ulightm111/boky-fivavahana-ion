@@ -10,63 +10,61 @@
     />
 
     <ion-content :fullscreen="true">
-      <div class="content-area">
-        <!-- Sections for LitBF, LitP, LHF -->
-        <ion-list v-if="displayMode === 'sections'">
-          <ion-item
-            v-for="section in sections"
-            :key="section"
-            button
-            @click="navigateToSection(section)"
-            lines="none"
-          >
-            <ion-label>{{ section }}</ion-label>
-          </ion-item>
-        </ion-list>
-
-        <!-- Song Groups for Hira and HAA -->
-        <ion-list v-else-if="displayMode === 'songSections'">
-          <ion-item
-            v-for="section in songSections"
-            :key="section"
-            button
-            @click="navigateToSongGroup(section)"
-            lines="none"
-          >
-            <ion-label>{{ section }}</ion-label>
-          </ion-item>
-        </ion-list>
-
-        <!-- Flat Songs for Salamo -->
-        <ion-list v-else-if="displayMode === 'songs'">
-          <template v-for="(song, index) in flatSongs" :key="song.id">
-            <ion-item-divider
-              v-if="
-                song.section &&
-                (index === 0 || song.section !== flatSongs[index - 1].section)
-              "
-              color="light"
-              sticky
-            >
-              <ion-label>{{ song.section }}</ion-label>
-            </ion-item-divider>
-            <ion-item button @click="navigateToSong(song.id)" lines="none">
-              <ion-label>{{ song.title || `Salamo ${song.id}` }}</ion-label>
-            </ion-item>
-          </template>
-        </ion-list>
-
-        <ion-infinite-scroll
-          v-if="displayMode === 'songs'"
-          @ionInfinite="onIonInfinite"
-          :disabled="!hasMoreItems"
+      <!-- Sections for LitBF, LitP, LHF -->
+      <ion-list :inset="true" v-if="displayMode === 'sections'">
+        <ion-item
+          v-for="section in sections"
+          :key="section"
+          button
+          @click="navigateToSection(section)"
         >
-          <ion-infinite-scroll-content
-            loading-text="Loading..."
-            loading-spinner="bubbles"
-          ></ion-infinite-scroll-content>
-        </ion-infinite-scroll>
-      </div>
+          <ion-label>{{ section }}</ion-label>
+        </ion-item>
+      </ion-list>
+
+      <!-- Song Groups for Hira and HAA -->
+      <ion-list :inset="true" v-else-if="displayMode === 'songSections'">
+        <ion-item
+          v-for="section in songSections"
+          :key="section"
+          button
+          @click="navigateToSongGroup(section)"
+        >
+          <ion-label>{{ section }}</ion-label>
+        </ion-item>
+      </ion-list>
+
+      <!-- Flat Songs for Salamo -->
+      <ion-list :inset="true" v-else-if="displayMode === 'songs'">
+        <template v-for="(song, index) in flatSongs" :key="song.id">
+          <ion-item-divider
+            v-if="
+              song.section &&
+              (index === 0 || song.section !== flatSongs[index - 1].section)
+            "
+            color="light"
+            sticky
+          >
+            <ion-label>{{ song.section }}</ion-label>
+          </ion-item-divider>
+          <ion-item button @click="navigateToSong(song.id)">
+            <ion-label>{{
+              song.title ? `${song.id} - ${song.title}` : `Salamo ${song.id}`
+            }}</ion-label>
+          </ion-item>
+        </template>
+      </ion-list>
+
+      <ion-infinite-scroll
+        v-if="displayMode === 'songs'"
+        @ionInfinite="onIonInfinite"
+        :disabled="!hasMoreItems"
+      >
+        <ion-infinite-scroll-content
+          loading-text="Loading..."
+          loading-spinner="bubbles"
+        ></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
 
       <ion-fab
         vertical="bottom"

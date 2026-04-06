@@ -33,6 +33,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/books/:bookId/section/:sectionName/subsection/:subIndex',
     component: () => import('../views/ContentView.vue')
+  },
+  {
+    path: '/about',
+    component: () => import('../views/AboutView.vue')
   }
 ]
 

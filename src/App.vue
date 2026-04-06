@@ -3,13 +3,13 @@
     <!-- LEFT SIDE MENU -->
     <ion-menu
       menu-id="main-menu"
-      side="start"
+      side="end"
       content-id="main-content"
       type="overlay"
     >
       <ion-header>
         <ion-toolbar>
-          <ion-title>Menu</ion-title>
+          <ion-title>Menio</ion-title>
         </ion-toolbar>
       </ion-header>
 
@@ -23,11 +23,14 @@
           >
             <ion-label>{{ book.name }}</ion-label>
           </ion-item>
+          <ion-item button @click="about">
+            <ion-label>Mombamonba</ion-label>
+          </ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>
     <!-- MAIN CONTENT -->
-    <ion-router-outlet id="main-content" />
+    <ion-router-outlet id="main-content" :animated="false" />
     <div class="global-spinner-container" v-if="isLoading">
       <ion-spinner name="circular" color="primary"></ion-spinner>
     </div>
@@ -61,6 +64,11 @@ const { books } = storeToRefs(bookStore);
 const navigateToBook = async (book: any) => {
   await menuController.close("main-menu");
   router.push(`/books/${book.id}`);
+};
+
+const about = async () => {
+  await menuController.close("main-menu");
+  router.push("/about");
 };
 
 const isLoading = ref(false);
