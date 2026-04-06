@@ -11,6 +11,7 @@
         <ion-searchbar
           :value="searchQuery"
           :placeholder="searchPlaceholder"
+          :debounce="debounce"
           @ionInput="onInput"
           @ionClear="onClear"
         ></ion-searchbar>
@@ -51,6 +52,10 @@ const props = defineProps({
     type: String,
     default: "Hitady...",
   },
+  debounce: {
+    type: Number,
+    default: 250, // milliseconds
+  },
 });
 
 const emit = defineEmits([
@@ -61,7 +66,8 @@ const emit = defineEmits([
 ]);
 
 const onInput = (event: any) => {
-  emit("update:searchQuery", event.target.value);
+  const value = event.target.value || "";
+  emit("update:searchQuery", value);
   emit("search-input", event);
 };
 

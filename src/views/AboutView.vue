@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page :key="$route.fullPath">
     <app-header title="Mombamonba" :show-searchbar="false" />
 
     <ion-content :fullscreen="true">

@@ -1,10 +1,11 @@
 <template>
   <div class="lyrics-content">
     <template v-if="isLitP">
-      <p v-for="item in sortedItems" :key="item.id">
-        <strong>{{ item.id }}</strong>
-        <span v-html="formatContent(item.content)"></span>
-      </p>
+      <div
+        v-for="item in sortedItems"
+        :key="item.id"
+        v-html="formatContent(item)"
+      ></div>
     </template>
     <template v-else-if="isLHF">
       <h2 class="title">{{ title }}</h2>
@@ -32,11 +33,23 @@ const sortedItems = computed(() => {
   return [...props.items].sort((a: any, b: any) => Number(a.id) - Number(b.id));
 });
 
-const formatContent = (content: string) => {
+const formatContent = (item: { id: string; content: string }) => {
+  const { id, content } = item;
   if (!content) return "";
-  return content.replace(
-    /<br\s*\/?>/g,
-    '<br><span style="margin-left:2rem; display:inline-block;"></span>',
+  return (
+    `<p class="lit"><span style="display: inline-block; width: 2em;">
+            <strong>${id}-</strong></span>` +
+    content
+      .replace(
+        /<br\s*\/?>/g,
+        '<br><span style="margin-left:2em; display:inline-block;"></span>',
+      )
+      .slice(3)
   );
 };
 </script>
+<style scoped>
+:deep(p:not(.text-center)) {
+  text-indent: 2em;
+}
+</style>

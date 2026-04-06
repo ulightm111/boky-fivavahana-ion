@@ -89,31 +89,31 @@ defineProps({
 .lyrics-content :deep(.verse.chorus) {
   display: block;
   background: hsl(39, 77%, 93%);
-  padding: 1rem;
+  padding: 1em;
   border-left: 4px solid wheat;
-  margin: 1rem 0;
+  margin: 1em 0;
 }
 
 .lyrics-content :deep(.chorus-title) {
   font-family: "Charis SIL Bold Italic", serif;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5em;
   text-decoration: underline;
 }
 
 .lyrics-content :deep(.note) {
   text-align: center;
   color: #695958;
-  margin: 1rem 0;
-  padding: 0.5rem;
+  margin: 1em 0;
+  padding: 0.5em;
 }
 
 .lyrics-content :deep(hr) {
   border: none;
   border-top: 1px solid #ccc;
-  margin: 1rem 0;
+  margin: 1em 0;
 }
 
 .verses :nth-child(even of .verse) {
-  margin-left: 3rem;
+  margin-left: 3em;
 }
 </style>

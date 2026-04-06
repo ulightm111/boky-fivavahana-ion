@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
-import { ref, shallowRef } from 'vue';
+import { ref, shallowRef, markRaw } from 'vue';
 
 export interface Book {
   id: number;
   name: string;
+  description: string;
 }
 
 export interface Song {
@@ -313,12 +314,12 @@ export const useBookStore = defineStore('book', () => {
     ]);
 
     books.value = booksRes;
-    hiraSongs.value = hiraRes.songs || [];
-    haaSongs.value = haaRes.songs || [];
-    salamoPsalms.value = salamoRes.psalms || [];
-    litpContents.value = litpRes.contents || [];
-    litbfContents.value = litbfRes.sections || [];
-    lhfContents.value = lhfRes.sections || [];
+    hiraSongs.value = (hiraRes.songs || []).map(song => markRaw(song));
+    haaSongs.value = (haaRes.songs || []).map(song => markRaw(song));
+    salamoPsalms.value = (salamoRes.psalms || []).map(psalms => markRaw(psalms));
+    litpContents.value = (litpRes.contents || []).map(content => markRaw(content));
+    litbfContents.value = (litbfRes.sections || []).map(section => markRaw(section));
+    lhfContents.value = (lhfRes.sections || []).map(section => markRaw(section));
 
     // Build search indexes after data is loaded
     buildSearchIndexes();

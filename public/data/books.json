@@ -1,26 +1,32 @@
 [
   {
     "id": 1,
-    "name": "Litorjia Boky Fivavahana"
+    "name": "Litorjia Boky Fivavahana",
+    "description": "Fomba fivavahana mirindra fanao eo anivon'ny Eklesia."
   },
   {
     "id": 2,
-    "name": "Salamo"
+    "name": "Salamo",
+    "description": "Ny bokin'ny Salamo araka ny Baiboly, hiraina amin'ny Litorjia."
   },
   {
     "id": 3,
-    "name": "Fihirana"
+    "name": "Fihirana",
+    "description": "Hira Anglikana fanao mandritra ny fotoam-pivavahana."
   },
   {
     "id": 4,
-    "name": "Litorjia Provinsialy"
+    "name": "Litorjia Provinsialy",
+    "description": "Litorjia fomba faharoa amin'ny Komoniona Masina."
   },
   {
     "id": 5,
-    "name": "Hanandratra Anao Aho"
+    "name": "Hanandratra Anao Aho",
+    "description": "Hira fiderana an'Andriamanitra."
   },
   {
     "id": 6,
-    "name": "Lalan'ny Hazo Fijaliana"
+    "name": "Lalan'ny Hazo Fijaliana",
+    "description": "Fisaintsainana ny fijalian'i Kristy teo amin'ny Hazo Fijaliana."
   }
 ]

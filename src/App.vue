@@ -52,12 +52,13 @@ import {
   IonLabel,
   menuController,
 } from "@ionic/vue";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, watch, onUnmounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
 
 const router = useRouter();
+const route = useRoute();
 const bookStore = useBookStore();
 const { books } = storeToRefs(bookStore);
 
@@ -72,19 +73,33 @@ const about = async () => {
 };
 
 const isLoading = ref(false);
+let loadingTimeout: ReturnType<typeof setTimeout> | null = null;
 
-router.beforeEach((to, from, next) => {
-  if (to.path !== from.path) {
-    isLoading.value = true;
+// Watch route changes to show/hide loading spinner
+watch(
+  () => route.fullPath,
+  (newPath, oldPath) => {
+    if (newPath !== oldPath) {
+      // Clear any pending timeout to prevent memory leak
+      if (loadingTimeout) {
+        clearTimeout(loadingTimeout);
+        loadingTimeout = null;
+      }
+      isLoading.value = true;
+      // Hide spinner after a short delay (navigation usually completes)
+      loadingTimeout = setTimeout(() => {
+        isLoading.value = false;
+        loadingTimeout = null;
+      }, 100);
+    }
+  },
+);
+
+// Clean up on component unmount
+onUnmounted(() => {
+  if (loadingTimeout) {
+    clearTimeout(loadingTimeout);
   }
-  next();
-});
-
-router.afterEach(() => {
-  // Give a small delay to let logic and rendering finish
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 100);
 });
 </script>
 

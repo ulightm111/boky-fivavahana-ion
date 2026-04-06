@@ -1,20 +1,14 @@
 <template>
-  <ion-page>
+  <ion-page :key="$route.fullPath">
     <app-header
       :title="title"
       :subtitle="displayMode === 'psalm' ? '' : subtitle"
     />
 
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" :style="contentStyle">
       <!-- Render depending on what data we have -->
       <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
       <ion-list :inset="true" v-if="displayMode === 'subsections'">
-        <ion-item v-if="itemObj.content">
-          <ion-label
-            :innerHTML="itemObj.content"
-            class="subContent"
-          ></ion-label>
-        </ion-item>
         <ion-item
           v-for="(sub, index) in itemObj.subsections"
           :key="index"
@@ -107,7 +101,12 @@ const isSalamo = computed(() => bookStore.isSalamoBook(book.value || null));
 const isLitP = computed(() => bookStore.isLitPBook(book.value || null));
 const isLHF = computed(() => bookStore.isLHFBook(book.value || null));
 
-const currentFontSize = ref(100);
+const currentFontSize = ref(100); // percentage
+
+// CSS variable that will be applied to ion-content (or a wrapper)
+const contentStyle = computed(() => ({
+  "--lyrics-font-size": `${currentFontSize.value}%`,
+}));
 
 const displayMode = ref("");
 const itemObj = ref<any>(null);
@@ -202,7 +201,6 @@ onMounted(async () => {
   const saved = localStorage.getItem("fontSizePercentage");
   if (saved) {
     currentFontSize.value = parseInt(saved);
-    applyFontSize();
   }
   loadContent();
 });
@@ -256,19 +254,13 @@ const zoomOut = () => {
 };
 
 const applyFontSize = () => {
-  document.documentElement.style.fontSize =
-    16 * (currentFontSize.value / 100) + "px";
   localStorage.setItem("fontSizePercentage", currentFontSize.value.toString());
 };
 </script>
 
 <style scoped>
-.subContent * {
-  color: #020122 !important;
-  font-size: 1rem;
-  font-family: "Charis SIL", serif;
-}
-.subContent em {
-  font-family: "Charis SIL Italic", serif;
+/* Apply font scaling only to elements with class "lyrics-content" */
+:deep(.lyrics-content) {
+  font-size: var(--lyrics-font-size, 100%);
 }
 </style>

@@ -1,8 +1,9 @@
 <template>
   <ion-page>
     <app-header
-      title="Fikarohana"
+      title="Search Results"
       :show-searchbar="true"
+      :debounce="250"
       v-model:searchQuery="query"
       @search-input="onSearchInput"
       @search-clear="clearSearch"
@@ -39,8 +40,7 @@ import { IonPage, IonContent, IonList, IonItem, IonLabel } from "@ionic/vue";
 import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useBookStore } from "@/stores/bookStore";
-import { SearchResult } from "@/stores/bookStore";
+import { useBookStore, SearchResult } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
@@ -60,6 +60,32 @@ const performSearch = () => {
   }
 };
 
+const updateRoute = () => {
+  router.replace({
+    path: "/search",
+    query: {
+      q: query.value || undefined,
+      scope: scope.value || undefined,
+    },
+  });
+};
+
+// Called after debounce (user stopped typing)
+const onSearchInput = () => {
+  performSearch();
+  updateRoute();
+};
+
+const clearSearch = () => {
+  query.value = "";
+  bookStore.clearSearchResults();
+  if (scope.value) {
+    router.replace({ path: `/books/${scope.value}` });
+  } else {
+    router.replace({ path: "/books" });
+  }
+};
+
 onMounted(async () => {
   if (bookStore.books.length === 0) await bookStore.loadData();
 
@@ -72,39 +98,22 @@ onMounted(async () => {
   performSearch();
 });
 
+// Sync with URL changes (back/forward buttons)
 watch(
   () => route.query,
   (newQuery) => {
-    if (newQuery.q !== query.value) {
-      query.value = (newQuery.q as string) || "";
+    const newQ = (newQuery.q as string) || "";
+    if (newQ !== query.value) {
+      query.value = newQ;
+      performSearch();
     }
-    if (
-      Number(newQuery.scope) !== scope.value &&
-      newQuery.scope !== undefined
-    ) {
-      scope.value = Number(newQuery.scope);
+    const newScope = newQuery.scope ? Number(newQuery.scope) : null;
+    if (newScope !== scope.value) {
+      scope.value = newScope;
     }
-    performSearch();
   },
+  { deep: true },
 );
-
-const onSearchInput = (event: any) => {
-  query.value = event.target.value.toLowerCase().trim();
-  router.replace({
-    path: "/search",
-    query: { q: query.value, scope: scope.value || undefined },
-  });
-};
-
-const clearSearch = () => {
-  query.value = "";
-  bookStore.clearSearchResults();
-  if (scope.value) {
-    router.replace({ path: `/books/${scope.value}` });
-  } else {
-    router.replace({ path: "/books" });
-  }
-};
 
 const navigateToSearchResult = (result: SearchResult) => {
   if (result.type === "book") {
@@ -137,7 +146,7 @@ const navigateToSearchResult = (result: SearchResult) => {
 <style scoped>
 .no-results {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 2em;
   color: #666;
   font-style: italic;
 }
