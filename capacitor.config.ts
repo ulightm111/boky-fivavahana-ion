@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ionBF',
+  appId: 'com.uli.bokyfivavahana2',
+  appName: 'Boky Fivavahana Anglikana',
   webDir: 'dist'
 };
 

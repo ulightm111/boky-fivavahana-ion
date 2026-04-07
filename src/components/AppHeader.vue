@@ -1,7 +1,15 @@
 <template>
   <ion-header :translucent="true">
     <ion-toolbar color="primary">
-      <ion-title>
+      <ion-icon
+        id="home-icon"
+        slot="start"
+        :icon="book"
+        size="large"
+        color="light"
+        @click="home"
+      ></ion-icon>
+      <ion-title slot="start">
         <div v-if="subtitle" class="subtitle">{{ subtitle }}</div>
         <div class="title">{{ title }}</div>
       </ion-title>
@@ -21,7 +29,21 @@
 </template>
 
 <script setup lang="ts">
-import { IonHeader, IonToolbar, IonTitle, IonSearchbar } from "@ionic/vue";
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonSearchbar,
+  IonIcon,
+  useIonRouter,
+} from "@ionic/vue";
+import { book } from "ionicons/icons";
+
+const router = useIonRouter();
+
+const home = () => {
+  router.push("/books");
+};
 
 const props = defineProps({
   title: {
@@ -82,6 +104,15 @@ const onClear = (event: any) => {
 </script>
 
 <style scoped>
+#home-icon {
+  padding-left: 5px;
+  cursor: pointer;
+}
+
+ion-title {
+  padding-left: 10px;
+}
+
 .title {
   font-family: "Cinzel-Bold", serif;
   font-size: 1em;

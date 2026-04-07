@@ -51,42 +51,41 @@ import {
   IonItem,
   IonLabel,
   menuController,
+  useBackButton,
+  useIonRouter,
+  toastController,
 } from "@ionic/vue";
 import { ref, watch, onUnmounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
+import { App } from "@capacitor/app";
 
-const router = useRouter();
 const route = useRoute();
 const bookStore = useBookStore();
 const { books } = storeToRefs(bookStore);
+const ionRouter = useIonRouter();
 
 const navigateToBook = async (book: any) => {
   await menuController.close("main-menu");
-  router.push(`/books/${book.id}`);
+  ionRouter.push(`/books/${book.id}`);
 };
 
 const about = async () => {
   await menuController.close("main-menu");
-  router.push("/about");
+  ionRouter.push("/about");
 };
 
+// Loading spinner logic
 const isLoading = ref(false);
 let loadingTimeout: ReturnType<typeof setTimeout> | null = null;
 
-// Watch route changes to show/hide loading spinner
 watch(
   () => route.fullPath,
   (newPath, oldPath) => {
     if (newPath !== oldPath) {
-      // Clear any pending timeout to prevent memory leak
-      if (loadingTimeout) {
-        clearTimeout(loadingTimeout);
-        loadingTimeout = null;
-      }
+      if (loadingTimeout) clearTimeout(loadingTimeout);
       isLoading.value = true;
-      // Hide spinner after a short delay (navigation usually completes)
       loadingTimeout = setTimeout(() => {
         isLoading.value = false;
         loadingTimeout = null;
@@ -95,11 +94,38 @@ watch(
   },
 );
 
-// Clean up on component unmount
 onUnmounted(() => {
-  if (loadingTimeout) {
-    clearTimeout(loadingTimeout);
+  if (loadingTimeout) clearTimeout(loadingTimeout);
+});
+
+// ---------- Android Back Button Handling (with double‑click exit) ----------
+let backPressedOnce = false;
+let backTimer: ReturnType<typeof setTimeout> | null = null;
+
+useBackButton(-1, async () => {
+  if (route.path === "/books") {
+    if (!backPressedOnce) {
+      backPressedOnce = true;
+      const toast = await toastController.create({
+        message: "Tsindrio ihany raha iala",
+        duration: 2000,
+        position: "bottom",
+      });
+      await toast.present();
+      backTimer = setTimeout(() => {
+        backPressedOnce = false;
+      }, 2000);
+    } else {
+      // Second press – exit the app
+      if (backTimer) clearTimeout(backTimer);
+      await App.exitApp();
+    }
   }
+});
+
+// Clean up timer on unmount (optional)
+onUnmounted(() => {
+  if (backTimer) clearTimeout(backTimer);
 });
 </script>
 

@@ -28,15 +28,22 @@
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonContent, IonList, IonItem, IonLabel } from "@ionic/vue";
+import {
+  IonPage,
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  useIonRouter,
+} from "@ionic/vue";
 import { ref, computed, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 const route = useRoute();
-const router = useRouter();
+const router = useIonRouter();
 const bookStore = useBookStore();
 
 const sectionSearchQuery = ref("");

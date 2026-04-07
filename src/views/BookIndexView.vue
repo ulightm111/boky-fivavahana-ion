@@ -96,16 +96,17 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonItemDivider,
+  useIonRouter,
 } from "@ionic/vue";
 import { list as listIcon, folderOutline as folderIcon } from "ionicons/icons";
 import { ref, computed, onMounted, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 const route = useRoute();
-const router = useRouter();
+const router = useIonRouter();
 const bookStore = useBookStore();
 
 const bookId = computed(() => Number(route.params.bookId));

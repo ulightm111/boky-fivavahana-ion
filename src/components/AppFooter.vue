@@ -1,5 +1,5 @@
 <template>
-  <ion-footer>
+  <ion-footer :translucent="true">
     <ion-toolbar color="primary">
       <ion-buttons>
         <ion-grid>
@@ -60,6 +60,7 @@ import {
   IonBackButton,
   IonIcon,
   menuController,
+  useIonRouter,
 } from "@ionic/vue";
 import {
   menu,
@@ -68,7 +69,6 @@ import {
   search,
   caretBack,
 } from "ionicons/icons";
-import { useRouter } from "vue-router";
 
 defineProps({
   canGoPrev: {
@@ -87,7 +87,7 @@ defineProps({
 
 defineEmits(["prev", "next"]);
 
-const router = useRouter();
+const router = useIonRouter();
 
 const gotoSearch = (event?: Event) => {
   let searchbar = null;

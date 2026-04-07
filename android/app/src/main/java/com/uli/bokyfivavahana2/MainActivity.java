@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.uli.bokyfivavahana2;
 
 import com.getcapacitor.BridgeActivity;
 
