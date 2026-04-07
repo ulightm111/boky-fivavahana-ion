@@ -123,9 +123,7 @@ const navigateToSearchResult = (result: SearchResult) => {
     result.type === "lhf" ||
     result.type === "litp"
   ) {
-    router.push(
-      `/books/${result.bookId}/section/${encodeURIComponent(result.id as string)}`,
-    );
+    router.push(`/books/${result.bookId}/section/${result.id}`);
   } else if (
     result.type === "litbf-subsection" ||
     result.type === "lhf-subsection"

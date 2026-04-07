@@ -29,12 +29,12 @@ export interface LitContent {
   section: string;
   content?: string;
   subsections?: Array<{ subsection: string; content?: string }>;
-  items?: Array<{ id: string; content: string }>;
+  items?: Array<{ id: number; content: string }>;
 }
 
 export interface SearchResult {
   type: string;
-  id: number | string;
+  id: number;
   title: string;
   subtitle?: string;
   bookId?: number;
@@ -99,6 +99,7 @@ export const useBookStore = defineStore('book', () => {
     typePrefix: string
   ): IndexedSearchItem[] {
     const items: IndexedSearchItem[] = [];
+    let idc = 0;
     for (const section of contents) {
       // Section itself
       const sectionKey = section.section.toLowerCase();
@@ -106,12 +107,13 @@ export const useBookStore = defineStore('book', () => {
         searchKey: sectionKey,
         result: {
           type: typePrefix,
-          id: section.section,
+          id: idc,
           title: section.section,
           subtitle: bookName,
           bookId,
         },
       });
+      idc++;
 
       // Subsections
       if (section.subsections) {
