@@ -1,6 +1,6 @@
-# Boky Fivavahana (Ion/Vue)
+# Boky Fivavahana (Ionic Vue)
 
-**Boky Fivavahana Anglikana** — A modern Anglican Common Prayer Book app for Madagascar.
+**Boky Fivavahana Anglikana** — A modern Anglican Common Prayer Book app in Malagasy.
 
 > _"Voninahitra ho an'Andriamanitra irery ihany."_
 
@@ -45,7 +45,7 @@ The app is written in **Ionic Vue**, offering a native-feeling experience with s
 
 ## 📲 Installation
 
-1.  Download the latest `boky-fivavahana.apk` from the [Releases](https://github.com/ulightm111/boky-fivavahana-ion/releases/latest) page.
+1.  Download the latest `boky-fivavahana2.apk` from the [Releases](https://github.com/ulightm111/boky-fivavahana-ion/releases/latest) page.
 2.  Ensure "Install from unknown sources" is enabled in your Android settings.
 3.  Open the APK to install.
     - _Compatible with Android 7.0 (Nougat) up to Android 16._
@@ -86,9 +86,9 @@ npx cap run android
 
 ## 📸 Screenshots
 
-| Books View                                         | Song List                                          | Content View                                       |
-| :------------------------------------------------- | :------------------------------------------------- | :------------------------------------------------- |
-| \<img src="images/Screenshot_1.jpg" width="200"/\> | \<img src="images/Screenshot_2.jpg" width="200"/\> | \<img src="images/Screenshot_3.jpg" width="200"/\> |
+| Books View                                       | Song List                                        | Content View                                     |
+| :----------------------------------------------- | :----------------------------------------------- | :----------------------------------------------- |
+| <img src="images/Screenshot_1.jpg" width="200"/> | <img src="images/Screenshot_2.jpg" width="200"/> | <img src="images/Screenshot_3.jpg" width="200"/> |
 
 ---
 

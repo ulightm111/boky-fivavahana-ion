@@ -11,12 +11,13 @@
           />
         </div>
         <h2>Boky Fivavahana Anglikana</h2>
-        <p class="motto">"Voninahitra ho an'Andriamanitra irery ihany."</p>
+        <p class="motto">Kristy no lohan'ny Eklesia</p>
       </div>
 
       <ion-card mode="ios">
         <ion-card-content>
           <p class="description">
+            Voninahitra ho an'Andriamanitra irery ihany.<br />
             Natao hampiasaina amin'ny litorjia sy hira anglikana raha sendra tsy
             eo ny boky.
           </p>
@@ -25,11 +26,12 @@
 
       <ion-list-header>
         <ion-label
-          >Fifandraisana raha misy fanamarihana, olana, soso-kevitra</ion-label
+          >Fifandraisana raha misy fanamarihana, olana,
+          sosokevitra...</ion-label
         >
       </ion-list-header>
 
-      <ion-list :inset="true" mode="ios">
+      <ion-list :inset="true" mode="ios" id="contacts">
         <ion-item button @click="openEmail">
           <ion-icon :icon="mailOutline" slot="start" color="primary"></ion-icon>
           <ion-label>
@@ -204,16 +206,16 @@ const showToast = async (message: string, color = "dark") => {
 <style scoped>
 .about-header {
   text-align: center;
-  padding: 30px 20px;
+  padding: 10px 20px;
   background: var(--ion-color-light);
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .logo-container {
   width: 80px;
   height: 80px;
   background: white;
-  border-radius: 20px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,8 +237,7 @@ const showToast = async (message: string, color = "dark") => {
 }
 
 .motto {
-  font-style: italic;
-  font-size: 0.9em;
+  font-family: "Charis SIL Italic";
   color: var(--ion-color-medium);
   margin-top: 5px;
 }
@@ -247,8 +248,12 @@ const showToast = async (message: string, color = "dark") => {
   margin: 0;
 }
 
+#contacts {
+  margin-block: 8px;
+}
+
 .version-section {
-  padding: 20px;
+  padding: 10px;
   text-align: center;
 }
 
