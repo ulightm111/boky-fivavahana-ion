@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <app-header
-      title="Search Results"
+      title="Fikarohana"
       :show-searchbar="true"
       :debounce="250"
       v-model:searchQuery="query"
@@ -136,7 +136,9 @@ const navigateToSearchResult = (result: SearchResult) => {
     result.type === "lhf-subsection"
   ) {
     router.push(
-      `/books/${result.bookId}/section/${encodeURIComponent(result.sectionName!)}/subsection/${result.subsectionIndex}`,
+      `/books/${result.bookId}/section/${encodeURIComponent(
+        result.sectionName!,
+      )}/subsection/${result.subsectionIndex}`,
     );
   } else if (
     result.type === "hira" ||

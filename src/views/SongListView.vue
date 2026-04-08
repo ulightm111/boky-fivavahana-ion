@@ -11,16 +11,11 @@
 
     <ion-content :fullscreen="true">
       <ion-list :inset="true">
-        <ion-item
-          v-for="song in filteredSongs"
-          :key="song.id"
-          button
-          @click="navigateToSong(song.id)"
-        >
-          <ion-label>
-            <h3>{{ song.id }} - {{ song.title }}</h3>
-          </ion-label>
-        </ion-item>
+        <template v-for="song in filteredSongs" :key="song.id">
+          <ion-item button @click="navigateToSong(song.id)">
+            <ion-label> {{ song.id }} - {{ song.title }} </ion-label>
+          </ion-item>
+        </template>
       </ion-list>
     </ion-content>
     <app-footer />

@@ -39,11 +39,11 @@
         :is-hira="isHira"
       />
 
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button @click="zoomIn">
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="zoom-fab">
+        <ion-fab-button @click="zoomIn" class="translucent-btn">
           <ion-icon :icon="add"></ion-icon>
         </ion-fab-button>
-        <ion-fab-button @click="zoomOut">
+        <ion-fab-button @click="zoomOut" class="translucent-btn">
           <ion-icon :icon="remove"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -102,9 +102,8 @@ const isSalamo = computed(() => bookStore.isSalamoBook(book.value || null));
 const isLitP = computed(() => bookStore.isLitPBook(book.value || null));
 const isLHF = computed(() => bookStore.isLHFBook(book.value || null));
 
-const currentFontSize = ref(100); // percentage
+const currentFontSize = ref(100);
 
-// CSS variable that will be applied to ion-content (or a wrapper)
 const contentStyle = computed(() => ({
   "--lyrics-font-size": `${currentFontSize.value}%`,
 }));
@@ -143,18 +142,10 @@ const loadContent = () => {
         : `${itemObj.value.id} - ${itemObj.value.title}`;
       subtitle.value = book.value.name;
 
-      if (bookStore.lastFlatBookId !== book.value.id) {
-        currentTitlesList.value = data.map((s: any) => ({
-          id: s.id,
-          type: "song",
-        }));
-        bookStore.lastFlatBookId = book.value.id;
-      } else {
-        currentTitlesList.value = data.map((s: any) => ({
-          id: s.id,
-          type: "song",
-        }));
-      }
+      currentTitlesList.value = data.map((s: any) => ({
+        id: s.id,
+        type: "song",
+      }));
       currentTitleIndex.value = songIndex;
     }
   } else if (routeSectionName.value !== null) {
@@ -212,7 +203,9 @@ watch([routeSongId, routeSectionName, routeSubIndex], () => {
 
 const navigateToSubsection = (index: number) => {
   router.push(
-    `/books/${bookId.value}/section/${encodeURIComponent(routeSectionName.value as string)}/subsection/${index}`,
+    `/books/${bookId.value}/section/${encodeURIComponent(
+      routeSectionName.value as string,
+    )}/subsection/${index}`,
   );
 };
 
@@ -239,7 +232,9 @@ const navigateByItem = (itemObjRef: any) => {
     );
   } else if (itemObjRef.type === "subsection") {
     router.push(
-      `/books/${bookId.value}/section/${encodeURIComponent(itemObjRef.section)}/subsection/${itemObjRef.id}`,
+      `/books/${bookId.value}/section/${encodeURIComponent(
+        itemObjRef.section,
+      )}/subsection/${itemObjRef.id}`,
     );
   }
 };
@@ -260,8 +255,20 @@ const applyFontSize = () => {
 </script>
 
 <style scoped>
-/* Apply font scaling only to elements with class "lyrics-content" */
 :deep(.lyrics-content) {
   font-size: var(--lyrics-font-size, 100%);
+}
+
+.zoom-fab {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.translucent-btn {
+  --background: rgba(var(--ion-color-primary-rgb), 0.4);
+  --background-activated: rgba(var(--ion-color-primary-rgb), 0.6);
+  --background-focused: rgba(var(--ion-color-primary-rgb), 0.6);
+  --color: var(--ion-color-primary-contrast);
+  margin-top: 10px;
 }
 </style>
