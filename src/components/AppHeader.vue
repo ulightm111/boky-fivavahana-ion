@@ -9,7 +9,7 @@
         color="light"
         @click="home"
       ></ion-icon>
-      <ion-title slot="start">
+      <ion-title>
         <div v-if="subtitle" class="subtitle">{{ subtitle }}</div>
         <div class="title">{{ title }}</div>
       </ion-title>
@@ -42,7 +42,7 @@ import { book } from "ionicons/icons";
 const router = useIonRouter();
 
 const home = () => {
-  router.push("/books");
+  router.navigate("/books", "root", "replace");
 };
 
 const props = defineProps({

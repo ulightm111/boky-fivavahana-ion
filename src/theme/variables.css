@@ -54,10 +54,20 @@ http://ionicframework.com/docs/theming/ */
     local("Charis SIL Bold Italic"),
     url("../assets/CharisSILBI.woff") format("woff");
 }
+@font-face {
+  font-family: "Tahoma";
+  font-style: normal;
+  font-weight: normal;
+  src:
+    local("Tahoma"),
+    url("../assets/Tahoma.woff") format("woff");
+}
+
 
 ion-content {
   --background: wheat;
 }
+
 ion-list {
   border-radius: 12px !important;
 }
@@ -65,7 +75,7 @@ ion-item {
   --border-radius: 8px;
 }
 ion-label {
-  font-family: Roboto, sans-serif !important;
+  font-family: Tahoma, Roboto, sans-serif !important;
   font-size: 1.1em;
   color: #020122 !important;
 }

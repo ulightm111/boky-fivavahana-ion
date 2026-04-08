@@ -1,5 +1,5 @@
 <template>
-  <ion-page :key="$route.fullPath">
+  <ion-page>
     <app-header
       :title="book?.name || ''"
       :show-searchbar="true"

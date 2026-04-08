@@ -24,7 +24,7 @@
             <ion-label>{{ book.name }}</ion-label>
           </ion-item>
           <ion-item button @click="about">
-            <ion-label>Mombamonba</ion-label>
+            <ion-label>Mombamomba</ion-label>
           </ion-item>
         </ion-list>
       </ion-content>
@@ -130,6 +130,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+ion-content {
+  --background: white;
+}
+
 .global-spinner-container {
   position: absolute;
   top: 12px;

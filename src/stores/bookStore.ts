@@ -316,13 +316,14 @@ export const useBookStore = defineStore('book', () => {
     ]);
 
     books.value = booksRes;
-    hiraSongs.value = (hiraRes.songs || []).map(song => markRaw(song));
-    haaSongs.value = (haaRes.songs || []).map(song => markRaw(song));
-    salamoPsalms.value = (salamoRes.psalms || []).map(psalms => markRaw(psalms));
-    litpContents.value = (litpRes.contents || []).map(content => markRaw(content));
-    litbfContents.value = (litbfRes.sections || []).map(section => markRaw(section));
-    lhfContents.value = (lhfRes.sections || []).map(section => markRaw(section));
-
+    // Mass-apply markRaw to prevent reactivity overhead
+    hiraSongs.value = markRaw(hiraRes.songs || []);
+    haaSongs.value = markRaw(haaRes.songs || []);
+    salamoPsalms.value = markRaw(salamoRes.psalms || []);
+    litpContents.value = markRaw(litpRes.contents || []);
+    litbfContents.value = markRaw(litbfRes.sections || []);
+    lhfContents.value = markRaw(lhfRes.sections || []);
+    
     // Build search indexes after data is loaded
     buildSearchIndexes();
   };
