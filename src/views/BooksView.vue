@@ -124,7 +124,7 @@ const clearGlobalSearch = () => {
 .card-content-wrapper {
   display: flex;
   align-items: center;
-  padding: 4px;
+  padding: 2px;
 }
 
 .icon-section {
