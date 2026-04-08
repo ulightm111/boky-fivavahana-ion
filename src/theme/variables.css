@@ -5,8 +5,7 @@ http://ionicframework.com/docs/theming/ */
   font-family: "Cinzel-Regular";
   font-style: normal;
   font-weight: normal;
-  src:
-    local("Cinzel-Regular"),
+  src: local("Cinzel-Regular"),
     url("../assets/Cinzel-Regular.woff") format("woff");
 }
 
@@ -14,26 +13,21 @@ http://ionicframework.com/docs/theming/ */
   font-family: "Cinzel-Bold";
   font-style: normal;
   font-weight: normal;
-  src:
-    local("Cinzel-Bold"),
-    url("../assets/Cinzel-Bold.woff") format("woff");
+  src: local("Cinzel-Bold"), url("../assets/Cinzel-Bold.woff") format("woff");
 }
 
 @font-face {
   font-family: "Charis SIL";
   font-style: normal;
   font-weight: normal;
-  src:
-    local("Charis SIL"),
-    url("../assets/CharisSILR.woff") format("woff");
+  src: local("Charis SIL"), url("../assets/CharisSILR.woff") format("woff");
 }
 
 @font-face {
   font-family: "Charis SIL Italic";
   font-style: normal;
   font-weight: normal;
-  src:
-    local("Charis SIL Italic"),
+  src: local("Charis SIL Italic"),
     url("../assets/CharisSILI.woff") format("woff");
 }
 
@@ -41,28 +35,27 @@ http://ionicframework.com/docs/theming/ */
   font-family: "Charis SIL Bold";
   font-style: normal;
   font-weight: normal;
-  src:
-    local("Charis SIL Bold"),
-    url("../assets/CharisSILB.woff") format("woff");
+  src: local("Charis SIL Bold"), url("../assets/CharisSILB.woff") format("woff");
 }
 
 @font-face {
   font-family: "Charis SIL Bold Italic";
   font-style: normal;
   font-weight: normal;
-  src:
-    local("Charis SIL Bold Italic"),
+  src: local("Charis SIL Bold Italic"),
     url("../assets/CharisSILBI.woff") format("woff");
 }
 @font-face {
   font-family: "Tahoma";
   font-style: normal;
   font-weight: normal;
-  src:
-    local("Tahoma"),
-    url("../assets/Tahoma.woff") format("woff");
+  src: local("Tahoma"), url("../assets/Tahoma.woff") format("woff");
 }
 
+:root {
+  --ion-color-primary: #002f98;
+  --ion-color-secondaryy: #002f98;
+}
 
 ion-content {
   --background: wheat;
