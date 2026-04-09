@@ -18,6 +18,12 @@
           button
           @click="navigateToSection(section)"
         >
+          <ion-icon
+            :icon="ellipse"
+            slot="start"
+            size="small"
+            class="bullet-icon"
+          />
           <ion-label>{{ section }}</ion-label>
         </ion-item>
       </ion-list>
@@ -30,11 +36,17 @@
           button
           @click="navigateToSongGroup(section)"
         >
+          <ion-icon
+            :icon="ellipse"
+            slot="start"
+            size="small"
+            class="bullet-icon"
+          />
           <ion-label>{{ section }}</ion-label>
         </ion-item>
       </ion-list>
 
-      <!-- Flat Songs for Salamo -->
+      <!-- Flat Songs and Salamo -->
       <ion-list :inset="true" v-else-if="displayMode === 'songs'">
         <template v-for="(song, index) in flatSongs" :key="song.id">
           <ion-item-divider
@@ -48,9 +60,12 @@
             <ion-label>{{ song.section }}</ion-label>
           </ion-item-divider>
           <ion-item button @click="navigateToSong(song.id)">
-            <ion-label>{{
-              song.title ? `${song.id} - ${song.title}` : `Salamo ${song.id}`
-            }}</ion-label>
+            <ion-label v-if="song.title"
+              >{{ song.id }} - {{ song.title }}</ion-label
+            >
+            <ion-label v-else class="salamo-list">
+              Salamo {{ song.id }}
+            </ion-label>
           </ion-item>
         </template>
       </ion-list>
@@ -98,7 +113,11 @@ import {
   IonItemDivider,
   useIonRouter,
 } from "@ionic/vue";
-import { list as listIcon, folderOutline as folderIcon } from "ionicons/icons";
+import {
+  list as listIcon,
+  folderOutline as folderIcon,
+  ellipse,
+} from "ionicons/icons";
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
@@ -230,5 +249,13 @@ const clearSectionSearch = () => {
   padding: 16px;
   max-width: 900px;
   margin: 0 auto;
+}
+.bullet-icon {
+  margin-right: 1em;
+  color: wheat;
+}
+.salamo-list {
+  text-align: center;
+  text-transform: uppercase;
 }
 </style>
