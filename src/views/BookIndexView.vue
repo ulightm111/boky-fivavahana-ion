@@ -63,9 +63,7 @@
             <ion-label v-if="song.title"
               >{{ song.id }} - {{ song.title }}</ion-label
             >
-            <ion-label v-else class="salamo-list">
-              Salamo {{ song.id }}
-            </ion-label>
+            <ion-label v-else> Salamo {{ song.id }} </ion-label>
           </ion-item>
         </template>
       </ion-list>
@@ -253,9 +251,5 @@ const clearSectionSearch = () => {
 .bullet-icon {
   margin-right: 1em;
   color: wheat;
-}
-.salamo-list {
-  text-align: center;
-  text-transform: uppercase;
 }
 </style>
