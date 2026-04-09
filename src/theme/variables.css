@@ -74,6 +74,7 @@ ion-label {
 }
 .lyrics-content {
   font-family: "Charis SIL", serif;
+  text-align: justify;
   color: #020122;
   background: hsla(39, 77%, 100%);
   padding: 16px;
