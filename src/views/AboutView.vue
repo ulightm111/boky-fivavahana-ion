@@ -11,7 +11,11 @@
           />
         </div>
         <h2>Boky Fivavahana Anglikana</h2>
-        <p class="motto">Kristy no lohan'ny Eklesia</p>
+        <p class="motto">
+          "Ary toy izany ihany koa ianareo: raha fatra-paniry ny zava-panahy,
+          dia izay hampandroso ny fiangonana no tadiavo indrindra."<br />
+          — I Korintiana 14 : 12
+        </p>
       </div>
 
       <ion-card mode="ios">
