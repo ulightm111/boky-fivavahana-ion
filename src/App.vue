@@ -55,11 +55,13 @@ import {
   useIonRouter,
   toastController,
 } from "@ionic/vue";
-import { ref, watch, onUnmounted } from "vue";
+import { ref, watch, onUnmounted, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
 import { App } from "@capacitor/app";
+import { StatusBar, Style } from "@capacitor/status-bar";
+import { Device } from "@capacitor/device";
 
 const route = useRoute();
 const bookStore = useBookStore();
@@ -94,10 +96,6 @@ watch(
   },
 );
 
-onUnmounted(() => {
-  if (loadingTimeout) clearTimeout(loadingTimeout);
-});
-
 // ---------- Android Back Button Handling (with double‑click exit) ----------
 let backPressedOnce = false;
 let backTimer: ReturnType<typeof setTimeout> | null = null;
@@ -125,7 +123,19 @@ useBackButton(-1, async () => {
 
 // Clean up timer on unmount (optional)
 onUnmounted(() => {
+  if (loadingTimeout) clearTimeout(loadingTimeout);
   if (backTimer) clearTimeout(backTimer);
+});
+
+onMounted(async () => {
+  const info = await Device.getInfo();
+  const androidVersion = parseInt(info.osVersion);
+  if (androidVersion < 15) {
+    setTimeout(async () => {
+      await StatusBar.setBackgroundColor({ color: "#002f98" });
+      await StatusBar.setStyle({ style: Style.Dark });
+    }, 300);
+  }
 });
 </script>
 
