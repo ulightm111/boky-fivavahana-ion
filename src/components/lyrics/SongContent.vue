@@ -73,6 +73,10 @@ defineProps({
 </script>
 
 <style scoped>
+.lyrics-content {
+  text-align: left;
+}
+
 .lyrics-content :deep(.verse) {
   display: grid;
   grid-template-columns: auto 1fr;
