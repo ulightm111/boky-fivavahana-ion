@@ -15,6 +15,7 @@
           button
           @click="navigateToSubsection(Number(index))"
         >
+          <ion-icon :icon="ellipse" slot="start" class="bullet-icon" />
           <ion-label>{{ sub.subsection }}</ion-label>
         </ion-item>
       </ion-list>
@@ -39,7 +40,13 @@
         :is-hira="isHira"
       />
 
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="zoom-fab">
+      <ion-fab
+        v-if="displayMode != 'subsections'"
+        vertical="bottom"
+        horizontal="end"
+        slot="fixed"
+        class="zoom-fab"
+      >
         <ion-fab-button @click="zoomIn" class="translucent-btn">
           <ion-icon :icon="add"></ion-icon>
         </ion-fab-button>
@@ -69,7 +76,7 @@ import {
   IonLabel,
   useIonRouter,
 } from "@ionic/vue";
-import { add, remove } from "ionicons/icons";
+import { add, ellipse, remove } from "ionicons/icons";
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
@@ -270,5 +277,10 @@ const applyFontSize = () => {
   --background-focused: rgba(var(--ion-color-primary-rgb), 0.6);
   --color: var(--ion-color-primary-contrast);
   margin-top: 10px;
+}
+.bullet-icon {
+  font-size: x-small;
+  margin-right: 1.4em;
+  color: wheat;
 }
 </style>

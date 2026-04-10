@@ -60,6 +60,12 @@
             <ion-label>{{ song.section }}</ion-label>
           </ion-item-divider>
           <ion-item button @click="navigateToSong(song.id)">
+            <ion-icon
+              v-if="!song.title"
+              :icon="ellipse"
+              slot="start"
+              class="bullet-icon"
+            />
             <ion-label v-if="song.title"
               >{{ song.id }} - {{ song.title }}</ion-label
             >
@@ -249,7 +255,8 @@ const clearSectionSearch = () => {
   margin: 0 auto;
 }
 .bullet-icon {
-  margin-right: 1em;
+  font-size: x-small;
+  margin-right: 1.4em;
   color: wheat;
 }
 </style>
