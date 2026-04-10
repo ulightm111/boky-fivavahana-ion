@@ -145,7 +145,7 @@ const loadContent = () => {
       itemObj.value = data[songIndex];
       displayMode.value = isSalamo.value ? "psalm" : "song";
       title.value = isSalamo.value
-        ? `Salamo ${itemObj.value.id}`
+        ? `Salamo - ${itemObj.value.id}`
         : `${itemObj.value.id} - ${itemObj.value.title}`;
       subtitle.value = book.value.name;
 

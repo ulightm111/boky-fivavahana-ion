@@ -163,11 +163,11 @@ export const useBookStore = defineStore('book', () => {
     const salamoBook = books.value.find(b => b.name === 'Salamo');
     if (salamoBook) {
       salamoSearchIndex.value = salamoPsalms.value.map(psalm => ({
-        searchKey: String(psalm.id).toLowerCase(),
+        searchKey: String(psalm.id),
         result: {
           type: 'salamo',
           id: psalm.id,
-          title: `Salamo ${psalm.id}`,
+          title: `Salamo - ${psalm.id}`,
           bookId: salamoBook.id,
         },
       }));
