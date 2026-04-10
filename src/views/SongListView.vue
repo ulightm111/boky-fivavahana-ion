@@ -15,7 +15,7 @@
           <ion-item button @click="navigateToSong(song.id)">
             <ion-label class="song-label">
               <span class="song-id">{{ song.id }}</span>
-              <ion-icon :icon="ellipse" class="bullet-icon" />
+              <ion-icon :icon="line" class="bullet-icon line" />
               <span class="song-title">{{ song.title }}</span>
             </ion-label>
           </ion-item>
@@ -35,12 +35,15 @@ import {
   IonLabel,
   useIonRouter,
 } from "@ionic/vue";
-import { ellipse } from "ionicons/icons";
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
+
+const line =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\
+  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" d="M5 12h14"/></svg>';
 
 const route = useRoute();
 const router = useIonRouter();

@@ -72,10 +72,13 @@
             />
             <ion-label v-if="song.title" class="song-label">
               <span class="song-id">{{ song.id }}</span>
-              <ion-icon :icon="ellipse" class="bullet-icon" />
+              <ion-icon :icon="line" class="bullet-icon line" />
               <span class="song-title">{{ song.title }}</span>
             </ion-label>
-            <ion-label v-else> Salamo {{ song.id }} </ion-label>
+            <ion-label v-else>
+              Salamo<ion-icon :icon="line" class="bullet-icon line" />
+              <span style="margin-left: 0">{{ song.id }}</span>
+            </ion-label>
           </ion-item>
         </template>
       </ion-list>
@@ -143,6 +146,10 @@ const book = computed(() => bookStore.books.find((b) => b.id === bookId.value));
 
 const sectionSearchQuery = ref("");
 const displayMode = ref<"sections" | "songSections" | "songs">("sections");
+
+const line =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\
+  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" d="M5 12h14"/></svg>';
 
 const sections = computed(() => {
   if (!book.value) return [];

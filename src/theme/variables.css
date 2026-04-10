@@ -117,11 +117,16 @@ em {
   margin-left: 0.8em;
   margin-right: 1.6em;
 }
+.line {
+  color: #02012280;
+  margin-right: 1em;
+}
 .song-label {
   display: grid !important;
   grid-template-columns: 2em 1.6em auto;
   align-items: center;
 }
 .song-id {
+  font-weight: 600;
   text-align: right;
 }
