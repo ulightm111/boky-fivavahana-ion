@@ -38,6 +38,7 @@
         v-else-if="displayMode === 'song'"
         :song="itemObj"
         :is-hira="isHira"
+        :is-alternated="isAlternated"
       />
 
       <ion-fab
@@ -47,6 +48,12 @@
         slot="fixed"
         class="zoom-fab"
       >
+        <ion-fab-button
+          @click="toggleIndent"
+          :class="isAlternated ? 'translucent-btn disabled' : 'translucent-btn'"
+        >
+          <ion-icon :icon="reorderThreeOutline"></ion-icon>
+        </ion-fab-button>
         <ion-fab-button @click="zoomIn" class="translucent-btn">
           <ion-icon :icon="add"></ion-icon>
         </ion-fab-button>
@@ -76,7 +83,7 @@ import {
   IonLabel,
   useIonRouter,
 } from "@ionic/vue";
-import { add, ellipse, remove } from "ionicons/icons";
+import { add, ellipse, remove, reorderThreeOutline } from "ionicons/icons";
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
@@ -109,6 +116,7 @@ const isSalamo = computed(() => bookStore.isSalamoBook(book.value || null));
 const isLitP = computed(() => bookStore.isLitPBook(book.value || null));
 const isLHF = computed(() => bookStore.isLHFBook(book.value || null));
 
+const isAlternated = ref(true);
 const currentFontSize = ref(100);
 
 const contentStyle = computed(() => ({
@@ -197,12 +205,21 @@ const loadContent = () => {
 
 onMounted(async () => {
   if (bookStore.books.length === 0) await bookStore.loadData();
-  const saved = localStorage.getItem("fontSizePercentage");
-  if (saved) {
-    currentFontSize.value = parseInt(saved);
+  const savedFontSize = localStorage.getItem("fontSizePercentage");
+  if (savedFontSize) {
+    currentFontSize.value = parseInt(savedFontSize);
+  }
+  const savedIndent = localStorage.getItem("isAlternatedLayout");
+  if (savedIndent !== null) {
+    isAlternated.value = savedIndent === "true";
   }
   loadContent();
 });
+
+const toggleIndent = () => {
+  isAlternated.value = !isAlternated.value;
+  localStorage.setItem("isAlternatedLayout", isAlternated.value.toString());
+};
 
 watch([routeSongId, routeSectionName, routeSubIndex], () => {
   loadContent();
@@ -277,5 +294,13 @@ const applyFontSize = () => {
   --background-focused: rgba(var(--ion-color-primary-rgb), 0.6);
   --color: var(--ion-color-primary-contrast);
   margin-top: 10px;
+  width: 48px;
+  height: 48px;
+}
+.disabled {
+  --background: rgba(var(--ion-color-medium-rgb), 0.4);
+  --background-activated: rgba(var(--ion-color-medium-rgb), 0.6);
+  --background-focused: rgba(var(--ion-color-medium-rgb), 0.6);
+  --color: var(--ion-color-medium-contrast);
 }
 </style>

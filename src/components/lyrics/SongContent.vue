@@ -8,7 +8,7 @@
     </div>
 
     <template v-if="song.verses && song.verses.length > 0">
-      <div class="verses">
+      <div class="verses" :class="{ 'alternate-layout': isAlternated }">
         <template v-for="(v, index) in song.verses" :key="index">
           <div
             class="verse chorus"
@@ -69,6 +69,10 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  isAlternated: {
+    type: Boolean,
+    default: true,
+  },
 });
 </script>
 
@@ -117,7 +121,11 @@ defineProps({
   margin: 1em 0;
 }
 
-.verses :nth-child(even of .verse) {
+.verses.alternate-layout :nth-child(even of .verse) {
   margin-left: 3em;
+}
+
+.verse {
+  transition: margin-left 0.3s ease;
 }
 </style>
