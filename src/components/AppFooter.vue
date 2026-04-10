@@ -28,9 +28,16 @@
               </ion-button>
             </ion-col>
             <ion-col>
-              <ion-button @click="gotoSearch" fill="clear">
-                <ion-icon :icon="search"></ion-icon>
-              </ion-button>
+              <template v-if="!showAutoscroll">
+                <ion-button @click="gotoSearch" fill="clear">
+                  <ion-icon :icon="search"></ion-icon>
+                </ion-button>
+              </template>
+              <template v-else>
+                <ion-button @click="$emit('autoscroll')" fill="clear">
+                  <ion-icon :icon="isScrolling ? pause : play"></ion-icon>
+                </ion-button>
+              </template>
             </ion-col>
             <ion-col>
               <ion-button @click="openMenu" fill="clear">
@@ -64,6 +71,8 @@ import {
   chevronForward,
   search,
   caretBack,
+  play,
+  pause,
 } from "ionicons/icons";
 import { useRoute } from "vue-router";
 import { App } from "@capacitor/app";
@@ -73,9 +82,11 @@ defineProps({
   canGoPrev: { type: Boolean, default: false },
   canGoNext: { type: Boolean, default: false },
   backButtonDefaultHref: { type: String, default: "/books" },
+  showAutoscroll: { type: Boolean, default: false },
+  isScrolling: { type: Boolean, default: false },
 });
 
-defineEmits(["prev", "next"]);
+defineEmits(["prev", "next", "autoscroll"]);
 
 const router = useIonRouter();
 const route = useRoute();

@@ -100,7 +100,7 @@
         slot="fixed"
         v-if="canToggleView"
       >
-        <ion-fab-button @click="toggleToFlatSongs">
+        <ion-fab-button @click="toggleToFlatSongs" size="small">
           <ion-icon
             :icon="displayMode === 'songSections' ? listIcon : folderIcon"
           ></ion-icon>

@@ -5,7 +5,7 @@
       :subtitle="displayMode === 'psalm' ? '' : subtitle"
     />
 
-    <ion-content :fullscreen="true" :style="contentStyle">
+    <ion-content ref="contentRef" :fullscreen="true" :style="contentStyle">
       <!-- Render depending on what data we have -->
       <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
       <ion-list :inset="true" v-if="displayMode === 'subsections'">
@@ -49,15 +49,17 @@
         class="zoom-fab"
       >
         <ion-fab-button
+          v-if="displayMode === 'song'"
           @click="toggleIndent"
           :class="isAlternated ? 'translucent-btn disabled' : 'translucent-btn'"
+          size="small"
         >
           <ion-icon :icon="reorderThreeOutline"></ion-icon>
         </ion-fab-button>
-        <ion-fab-button @click="zoomIn" class="translucent-btn">
+        <ion-fab-button @click="zoomIn" class="translucent-btn" size="small">
           <ion-icon :icon="add"></ion-icon>
         </ion-fab-button>
-        <ion-fab-button @click="zoomOut" class="translucent-btn">
+        <ion-fab-button @click="zoomOut" class="translucent-btn" size="small">
           <ion-icon :icon="remove"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -65,8 +67,11 @@
     <app-footer
       @prev="navigatePrev"
       @next="navigateNext"
+      @autoscroll="toggleAutoscroll"
       :can-go-prev="canGoPrev"
       :can-go-next="canGoNext"
+      :show-autoscroll="true"
+      :is-scrolling="isScrolling"
     />
   </ion-page>
 </template>
@@ -84,7 +89,7 @@ import {
   useIonRouter,
 } from "@ionic/vue";
 import { add, ellipse, remove, reorderThreeOutline } from "ionicons/icons";
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
@@ -203,6 +208,59 @@ const loadContent = () => {
   }
 };
 
+const contentRef = ref<any>(null);
+const isScrolling = ref(false);
+
+const toggleAutoscroll = async () => {
+  if (isScrolling.value) {
+    isScrolling.value = false;
+  } else {
+    const el = await contentRef.value.$el.getScrollElement();
+    isScrolling.value = true;
+
+    const stopOnInteraction = () => {
+      if (isScrolling.value) {
+        isScrolling.value = false;
+        el.removeEventListener("pointerdown", stopOnInteraction);
+      }
+    };
+    el.addEventListener("pointerdown", stopOnInteraction);
+
+    const speed = 10; // Azonao ovana ity: 20 = miadana, 50 = haingana
+    let lastTime = performance.now();
+    let currentPos = el.scrollTop;
+
+    const step = (currentTime: number) => {
+      if (!isScrolling.value) return;
+
+      const deltaTime = (currentTime - lastTime) / 1000;
+      lastTime = currentTime;
+
+      currentPos += speed * deltaTime;
+      el.scrollTop = currentPos;
+
+      if (currentPos + el.clientHeight < el.scrollHeight - 1) {
+        requestAnimationFrame(step);
+      } else {
+        isScrolling.value = false;
+        el.removeEventListener("pointerdown", stopOnInteraction);
+      }
+    };
+
+    requestAnimationFrame(step);
+  }
+};
+
+// Atsahatra ny scroll raha miala amin'ny pejy na miova hira
+watch([routeSongId, routeSectionName, routeSubIndex], () => {
+  isScrolling.value = false;
+  loadContent();
+});
+
+onUnmounted(() => {
+  isScrolling.value = false;
+});
+
 onMounted(async () => {
   if (bookStore.books.length === 0) await bookStore.loadData();
   const savedFontSize = localStorage.getItem("fontSizePercentage");
@@ -285,7 +343,7 @@ const applyFontSize = () => {
 
 .zoom-fab {
   margin-bottom: 10px;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .translucent-btn {
@@ -294,8 +352,6 @@ const applyFontSize = () => {
   --background-focused: rgba(var(--ion-color-primary-rgb), 0.6);
   --color: var(--ion-color-primary-contrast);
   margin-top: 10px;
-  width: 48px;
-  height: 48px;
 }
 .disabled {
   --background: rgba(var(--ion-color-medium-rgb), 0.4);
