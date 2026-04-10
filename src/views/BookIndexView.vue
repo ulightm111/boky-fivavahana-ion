@@ -21,7 +21,7 @@
           <ion-icon
             :icon="ellipse"
             slot="start"
-            size="small"
+            size="x-small"
             class="bullet-icon"
           />
           <ion-label>{{ section }}</ion-label>
@@ -39,7 +39,7 @@
           <ion-icon
             :icon="ellipse"
             slot="start"
-            size="small"
+            size="x-small"
             class="bullet-icon"
           />
           <ion-label>{{ section }}</ion-label>
@@ -47,7 +47,11 @@
       </ion-list>
 
       <!-- Flat Songs and Salamo -->
-      <ion-list :inset="true" v-else-if="displayMode === 'songs'">
+      <ion-list
+        :inset="true"
+        v-else-if="displayMode === 'songs'"
+        class="song-section"
+      >
         <template v-for="(song, index) in flatSongs" :key="song.id">
           <ion-item-divider
             v-if="
@@ -66,12 +70,11 @@
               slot="start"
               class="bullet-icon"
             />
-            <ion-label v-if="song.title"
-              ><span>{{ song.id }}</span
-              ><ion-icon :icon="ellipse" class="bullet-icon" />{{
-                song.title
-              }}</ion-label
-            >
+            <ion-label v-if="song.title" class="song-label">
+              <span class="song-id">{{ song.id }}</span>
+              <ion-icon :icon="ellipse" class="bullet-icon" />
+              <span class="song-title">{{ song.title }}</span>
+            </ion-label>
             <ion-label v-else> Salamo {{ song.id }} </ion-label>
           </ion-item>
         </template>
@@ -257,15 +260,7 @@ const clearSectionSearch = () => {
   max-width: 900px;
   margin: 0 auto;
 }
-ion-label span {
-  display: inline-block;
-  width: 2em;
-  margin-right: 0.8em;
-  text-align: right;
-}
-.bullet-icon {
-  font-size: x-small;
-  margin-right: 1.4em;
-  color: wheat;
+.song-section {
+  overflow: visible;
 }
 </style>

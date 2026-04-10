@@ -278,9 +278,4 @@ const applyFontSize = () => {
   --color: var(--ion-color-primary-contrast);
   margin-top: 10px;
 }
-.bullet-icon {
-  font-size: x-small;
-  margin-right: 1.4em;
-  color: wheat;
-}
 </style>

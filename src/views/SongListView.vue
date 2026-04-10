@@ -13,7 +13,11 @@
       <ion-list :inset="true">
         <template v-for="song in filteredSongs" :key="song.id">
           <ion-item button @click="navigateToSong(song.id)">
-            <ion-label> {{ song.id }} - {{ song.title }} </ion-label>
+            <ion-label class="song-label">
+              <span class="song-id">{{ song.id }}</span>
+              <ion-icon :icon="ellipse" class="bullet-icon" />
+              <span class="song-title">{{ song.title }}</span>
+            </ion-label>
           </ion-item>
         </template>
       </ion-list>
@@ -31,6 +35,7 @@ import {
   IonLabel,
   useIonRouter,
 } from "@ionic/vue";
+import { ellipse } from "ionicons/icons";
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
