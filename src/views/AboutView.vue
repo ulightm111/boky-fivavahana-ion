@@ -80,6 +80,7 @@
 
         <div class="button-group">
           <ion-button
+            v-if="!updateUrl"
             expand="block"
             fill="outline"
             shape="round"
@@ -96,7 +97,7 @@
           </ion-button>
 
           <ion-button
-            v-if="updateUrl"
+            v-else
             expand="block"
             color="success"
             shape="round"
