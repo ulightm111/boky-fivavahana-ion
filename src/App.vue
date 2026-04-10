@@ -31,9 +31,6 @@
     </ion-menu>
     <!-- MAIN CONTENT -->
     <ion-router-outlet id="main-content" :animated="false" />
-    <div class="global-spinner-container" v-if="isLoading">
-      <ion-spinner name="circular" color="primary"></ion-spinner>
-    </div>
   </ion-app>
 </template>
 
@@ -41,7 +38,6 @@
 import {
   IonApp,
   IonRouterOutlet,
-  IonSpinner,
   IonMenu,
   IonHeader,
   IonToolbar,
@@ -55,7 +51,7 @@ import {
   useIonRouter,
   toastController,
 } from "@ionic/vue";
-import { ref, watch, onUnmounted, onMounted } from "vue";
+import { onUnmounted, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
@@ -78,24 +74,6 @@ const about = async () => {
   ionRouter.push("/about");
 };
 
-// Loading spinner logic
-const isLoading = ref(false);
-let loadingTimeout: ReturnType<typeof setTimeout> | null = null;
-
-watch(
-  () => route.fullPath,
-  (newPath, oldPath) => {
-    if (newPath !== oldPath) {
-      if (loadingTimeout) clearTimeout(loadingTimeout);
-      isLoading.value = true;
-      loadingTimeout = setTimeout(() => {
-        isLoading.value = false;
-        loadingTimeout = null;
-      }, 100);
-    }
-  },
-);
-
 // ---------- Android Back Button Handling (with double‑click exit) ----------
 let backPressedOnce = false;
 let backTimer: ReturnType<typeof setTimeout> | null = null;
@@ -108,6 +86,7 @@ useBackButton(-1, async () => {
         message: "Tsindrio ihany raha iala",
         duration: 2000,
         position: "bottom",
+        positionAnchor: "footer",
       });
       await toast.present();
       backTimer = setTimeout(() => {
@@ -123,7 +102,6 @@ useBackButton(-1, async () => {
 
 // Clean up timer on unmount (optional)
 onUnmounted(() => {
-  if (loadingTimeout) clearTimeout(loadingTimeout);
   if (backTimer) clearTimeout(backTimer);
 });
 
@@ -152,7 +130,7 @@ ion-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(var(--ion-background-color-rgb, 255, 255, 255), 0.8);
+  background: transparent;
   border-radius: 50%;
   padding: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
