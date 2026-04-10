@@ -67,7 +67,10 @@
               class="bullet-icon"
             />
             <ion-label v-if="song.title"
-              >{{ song.id }} - {{ song.title }}</ion-label
+              ><span>{{ song.id }}</span
+              ><ion-icon :icon="ellipse" class="bullet-icon" />{{
+                song.title
+              }}</ion-label
             >
             <ion-label v-else> Salamo {{ song.id }} </ion-label>
           </ion-item>
@@ -253,6 +256,12 @@ const clearSectionSearch = () => {
   padding: 16px;
   max-width: 900px;
   margin: 0 auto;
+}
+ion-label span {
+  display: inline-block;
+  width: 2em;
+  margin-right: 0.8em;
+  text-align: right;
 }
 .bullet-icon {
   font-size: x-small;
