@@ -2,7 +2,7 @@
 
 **Boky Fivavahana Anglikana** — A modern Anglican Common Prayer Book app in Malagasy.
 
-> _"Voninahitra ho an'Andriamanitra irery ihany."_
+> _"Ary toy izany ihany koa ianareo: raha fatra-paniry ny zava-panahy, dia izay hampandroso ny fiangonana no tadiavo indrindra." — I Korintiana 14 : 12_
 
 ---
 
@@ -76,10 +76,10 @@ npm install
 npm run build
 
 # 4. Sync the web assets to the Android platform
-npx cap sync android
+npx ionic cap sync android
 
 # 5. Build and Run on a device/emulator
-npx cap run android
+npx ionic cap run android
 ```
 
 ---
