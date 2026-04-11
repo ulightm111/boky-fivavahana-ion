@@ -58,7 +58,7 @@
               song.section &&
               (index === 0 || song.section !== flatSongs[index - 1].section)
             "
-            color="light"
+            class="sticky-label"
             sticky
           >
             <ion-label>{{ song.section }}</ion-label>
@@ -269,5 +269,9 @@ const clearSectionSearch = () => {
 }
 .song-section {
   overflow: visible;
+}
+.sticky-label {
+  color: var(--ion-text-color);
+  font-weight: 600;
 }
 </style>

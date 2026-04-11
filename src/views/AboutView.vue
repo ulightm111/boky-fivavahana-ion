@@ -18,7 +18,7 @@
         </p>
       </div>
 
-      <ion-card mode="ios">
+      <ion-card>
         <ion-card-content>
           <p class="description">
             Natao hampiasaina amin'ny litorjia sy hira anglikana raha sendra tsy
@@ -33,7 +33,7 @@
         </ion-label>
       </ion-list-header>
 
-      <ion-list :inset="true" mode="ios" id="contacts">
+      <ion-list :inset="true" id="contacts">
         <ion-item button @click="openEmail">
           <ion-icon :icon="mailOutline" slot="start" color="primary" />
           <ion-label>
@@ -76,6 +76,7 @@
           <ion-button
             v-if="!updateUrl"
             expand="block"
+            color="secondary"
             fill="outline"
             shape="round"
             @click="checkForUpdate"
@@ -205,14 +206,14 @@ const showToast = async (message: string, color = "dark") => {
 .about-header {
   text-align: center;
   padding: 10px 20px;
-  background: var(--ion-color-light);
+  background: var(--ion-background-color);
   margin-bottom: 5px;
 }
 
 .logo-container {
   width: 80px;
   height: 80px;
-  background: white;
+  background: var(--iion-background-color);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -244,6 +245,7 @@ const showToast = async (message: string, color = "dark") => {
   line-height: 1.5;
   text-align: center;
   margin: 0;
+  color: var(--ion-text-color);
 }
 
 #contacts {

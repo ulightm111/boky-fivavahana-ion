@@ -96,10 +96,10 @@ defineProps({
 
 .lyrics-content :deep(.verse.chorus) {
   display: block;
-  background: hsl(39, 77%, 93%);
   padding: 1em;
-  border-left: 4px solid wheat;
+  border-left: 4px solid var(--app-bg-color);
   margin: 1em 0;
+  background: var(--chorus-bg-color);
 }
 
 .lyrics-content :deep(.chorus-title) {
@@ -110,14 +110,14 @@ defineProps({
 
 .lyrics-content :deep(.note) {
   text-align: center;
-  color: #695958;
+  color: var(--note-text-color);
   margin: 1em 0;
   padding: 0.5em;
 }
 
 .lyrics-content :deep(hr) {
   border: none;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--ion-color-medium);
   margin: 1em 0;
 }
 

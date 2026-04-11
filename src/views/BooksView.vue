@@ -145,6 +145,10 @@ const clearGlobalSearch = () => {
   flex: 1;
 }
 
+ion-card-title {
+  color: var(--ion-text-color);
+}
+
 .book-card:active {
   transform: scale(0.98);
 }

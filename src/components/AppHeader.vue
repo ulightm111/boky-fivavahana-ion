@@ -14,7 +14,7 @@
         <div class="title">{{ title }}</div>
       </ion-title>
     </ion-toolbar>
-    <ion-toolbar color="secondary" v-if="showSearchbar">
+    <ion-toolbar color="primary" v-if="showSearchbar">
       <form action="." @submit.prevent="onSubmit">
         <ion-searchbar
           :value="searchQuery"
@@ -104,6 +104,9 @@ const onClear = (event: any) => {
 </script>
 
 <style scoped>
+ion-searchbar {
+  color: var(--ion-text-color);
+}
 #home-icon {
   padding-left: 5px;
   cursor: pointer;
@@ -111,6 +114,7 @@ const onClear = (event: any) => {
 
 ion-title {
   padding-left: 10px;
+  color: var(--ion-color-white);
 }
 
 .title {
@@ -121,6 +125,5 @@ ion-title {
 .subtitle {
   font-size: 0.7em;
   font-weight: normal;
-  color: var(--ion-color-white);
 }
 </style>

@@ -154,7 +154,7 @@ const navigateToSearchResult = (result: SearchResult) => {
 .no-results {
   text-align: center;
   margin-top: 2em;
-  color: #666;
+  color: var(--ion-color-medium);
   font-style: italic;
 }
 </style>

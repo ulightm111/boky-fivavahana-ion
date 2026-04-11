@@ -127,7 +127,7 @@ onMounted(async () => {
 
 <style scoped>
 ion-content {
-  --background: white;
+  --background: var(--ion-background-color);
 }
 
 .global-spinner-container {
