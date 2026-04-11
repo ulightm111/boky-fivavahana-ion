@@ -7,7 +7,7 @@
           :key="lIndex"
           class="line"
         >
-          <strong>{{ v.verse_number }}.</strong> {{ line }}
+          <span class="verse-id">{{ v.verse_number }}.</span>{{ line }}
         </p>
       </template>
     </template>
@@ -25,3 +25,12 @@ defineProps({
   },
 });
 </script>
+<style scoped>
+.verse-id {
+  display: inline-block;
+  width: 2em;
+  font-weight: 600;
+  text-align: right;
+  margin-right: 0.3em;
+}
+</style>
