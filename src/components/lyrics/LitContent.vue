@@ -8,7 +8,7 @@
       ></div>
     </template>
     <template v-else-if="isLHF">
-      <h2 class="title">{{ title }}</h2>
+      <h2 class="title">{{ title?.toUpperCase() }}</h2>
       <div v-html="htmlContent"></div>
     </template>
     <template v-else>

@@ -5,7 +5,7 @@
         <ion-grid>
           <ion-row>
             <ion-col>
-              <ion-button @click="handleBack" fill="clear">
+              <ion-button @click="handleBack" fill="clear" expand="block">
                 <ion-icon :icon="caretBack"></ion-icon>
               </ion-button>
             </ion-col>
@@ -14,6 +14,7 @@
                 @click="$emit('prev')"
                 :disabled="!canGoPrev"
                 fill="clear"
+                expand="block"
               >
                 <ion-icon :icon="chevronBack"></ion-icon>
               </ion-button>
@@ -23,24 +24,29 @@
                 @click="$emit('next')"
                 :disabled="!canGoNext"
                 fill="clear"
+                expand="block"
               >
                 <ion-icon :icon="chevronForward"></ion-icon>
               </ion-button>
             </ion-col>
             <ion-col>
               <template v-if="!showAutoscroll">
-                <ion-button @click="gotoSearch" fill="clear">
+                <ion-button @click="gotoSearch" fill="clear" expand="block">
                   <ion-icon :icon="search"></ion-icon>
                 </ion-button>
               </template>
               <template v-else>
-                <ion-button @click="$emit('autoscroll')" fill="clear">
+                <ion-button
+                  @click="$emit('autoscroll')"
+                  fill="clear"
+                  expand="block"
+                >
                   <ion-icon :icon="isScrolling ? pause : play"></ion-icon>
                 </ion-button>
               </template>
             </ion-col>
             <ion-col>
-              <ion-button @click="openMenu" fill="clear">
+              <ion-button @click="openMenu" fill="clear" expand="block">
                 <ion-icon :icon="menu"></ion-icon>
               </ion-button>
             </ion-col>
