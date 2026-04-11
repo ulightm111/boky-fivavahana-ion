@@ -1038,6 +1038,15 @@
             "Aoka tsy hitsahatra ianao hidera an'i Jehovah",
             "Fa tokim-pahasoavana mahery ho anao"
           ]
+        },
+        {
+          "verse_number": 2,
+          "lines": [
+            "Fitiavany no nanolorany an'i Kristy",
+            "Fitiavany no namonjeny antsika rehetra nania",
+            "Fitiavan-dehibe tsy hadino",
+            "Tokim-pitahiana tsy miova antsika mpino"
+          ]
         }
       ],
       "chorus": [
@@ -1179,18 +1188,25 @@
         {
           "verse_number": 1,
           "lines": [
-            "Misaotra Anao 'zahay ry Ray noho ny fitiavanao",
-            "Ny aizin-kitroka nisy ahy indro fa nidiranao",
-            "He hazavana lehibe no indro fa naposakao",
-            "Ka ravoravo ery ny fo izay midera Anao"
+            "Misaotra Anao 'zahay ry Ray",
+            "noho ny fitiavanao",
+            "Ny aizin-kitroka nisy ahy",
+            "indro fa nidiranao",
+            "He hazavana lehibe",
+            "no indro fa naposakao",
+            "Ka ravoravo ery ny fo",
+            "izay midera Anao"
           ]
         },
         {
           "verse_number": 2,
           "lines": [
-            "Na dia tsy mendrika ry Ray ireto te-hidera Anao",
-            "Dia notoloranao anay ny fanavotan-dehibe",
-            "Na dia mahantra aza re dia novidian'ny Zanakao",
+            "Na dia tsy mendrika ry Ray",
+            "ireto te-hidera Anao",
+            "Dia notoloranao anay",
+            "ny fanavotan-dehibe",
+            "Na dia mahantra aza re",
+            "dia novidian'ny Zanakao",
             "Tamin'ny rany izay madio",
             "Mba ho isan'ny anao"
           ]
@@ -1201,15 +1217,21 @@
             "He menatra tokoa ry Ray",
             "Hifanatrika Aminao",
             "Kanefa noho ny zanakao",
-            "Indro fa manatona aho"
+            "Indro fa manatona aho",
+            "Manery ahy izany foko",
+            "Resin'ny fitiavanao",
+            "'Lay fo maniry mafy Anao",
+            "Ka indro anjakao"
           ]
         }
       ],
       "chorus": [
         "Inona ary no havaliko Anao",
         "Noho ireo soa efa narotsakao",
-        "He hazavana lehibe no indro fa naposakao",
-        "Ka ravoravo ery ny fo izay midera Anao"
+        "He hazavana lehibe",
+        "no indro fa naposakao",
+        "Ka ravoravo ery ny fo",
+        "izay midera Anao"
       ]
     },
     {
@@ -1430,7 +1452,11 @@
             "Rainay ô! Be fitiavana",
             "Anao irery mandrakizay ny deranay",
             "He hobio. derao anio.",
-            "'Lay Tompo soa"
+            "'Lay Tompo soa",
+            "Ndeha re hanandra-peo",
+            "Hiantso ny fo",
+            "Rainay o! Mpanjaka tokana,",
+            "Anao irery mandrakizay ny deranay"
           ]
         }
       ],
@@ -1572,6 +1598,28 @@
             "Mba afaho amin'ny fahazavanao",
             "Mamirata, mamirata",
             "Mamirata"
+          ]
+        },
+        {
+          "verse_number": 2,
+          "lines": [
+            "Fenoy ny voninahitrao ny taninay",
+            "Mirehata",
+            "Ao am-ponay",
+            "Mikoriana ny rano",
+            "Vontosy ny taninay",
+            "Mitenena",
+            "Hisehoan'ny mazava"
+          ]
+        },
+        {
+          "verse_number": 3,
+          "lines": [
+            "Tompo ô! noho ny fanatrehanao",
+            "No ialako amin'izao aizina izao",
+            "Noho ny ranao no nahafaka ahy",
+            "Raiso aho hiala amin'ny fahamaizako",
+            "Mamirata, mamirata"
           ]
         }
       ],
@@ -2651,7 +2699,14 @@
       "verses": [
         {
           "verse_number": 1,
-          "lines": ["Omeo an'i Jesoa ny entanao", "Fa Izy no miahy anao (D.C.)"]
+          "lines": [
+            "Omeo an'i Jesoa ny entanao",
+            "Fa Izy no miahy anao (D.C.)",
+            "Ambony (5x)",
+            "No asandrato avo Jesoa",
+            "Ambany (5x)",
+            "No hanoseho an'i Satana"
+          ]
         }
       ],
       "chorus": null
