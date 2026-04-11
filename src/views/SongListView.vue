@@ -15,7 +15,7 @@
           <ion-item button @click="navigateToSong(song.id)">
             <ion-label class="song-label">
               <span class="song-id">{{ song.id }}</span>
-              <ion-icon :icon="line" class="bullet-icon line" />
+              <ion-icon :icon="line" class="bullet-icon line-icon" />
               <span class="song-title">{{ song.title }}</span>
             </ion-label>
           </ion-item>

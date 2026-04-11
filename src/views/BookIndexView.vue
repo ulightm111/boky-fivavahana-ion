@@ -72,11 +72,11 @@
             />
             <ion-label v-if="song.title" class="song-label">
               <span class="song-id">{{ song.id }}</span>
-              <ion-icon :icon="line" class="bullet-icon line" />
+              <ion-icon :icon="line" class="bullet-icon line-icon" />
               <span class="song-title">{{ song.title }}</span>
             </ion-label>
             <ion-label v-else>
-              Salamo<ion-icon :icon="line" class="bullet-icon line" />
+              Salamo<ion-icon :icon="line" class="bullet-icon line-icon" />
               <span style="margin-left: 0">{{ song.id }}</span>
             </ion-label>
           </ion-item>
