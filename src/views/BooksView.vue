@@ -149,6 +149,10 @@ const clearGlobalSearch = () => {
   transform: scale(0.98);
 }
 
+ion-card {
+  font-family: Tahoma, Roboto, sans-serif;
+}
+
 ion-card-header {
   padding-bottom: 4px;
 }
@@ -156,6 +160,7 @@ ion-card-header {
 ion-card-title {
   font-size: 1.2em;
   font-weight: bold;
+  letter-spacing: 0.05em;
 }
 
 ion-card-content {
