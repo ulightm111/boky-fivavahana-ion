@@ -23,6 +23,9 @@
           >
             <ion-label>{{ book.name }}</ion-label>
           </ion-item>
+          <ion-item button @click="settings">
+            <ion-label>Fikirakirana</ion-label>
+          </ion-item>
           <ion-item button @click="about">
             <ion-label>Mombamomba</ion-label>
           </ion-item>
@@ -67,6 +70,11 @@ const ionRouter = useIonRouter();
 const navigateToBook = async (book: any) => {
   await menuController.close("main-menu");
   ionRouter.push(`/books/${book.id}`);
+};
+
+const settings = async () => {
+  await menuController.close("main-menu");
+  ionRouter.push("/settings");
 };
 
 const about = async () => {

@@ -21,7 +21,6 @@
       <ion-card mode="ios">
         <ion-card-content>
           <p class="description">
-            Voninahitra ho an'Andriamanitra irery ihany.<br />
             Natao hampiasaina amin'ny litorjia sy hira anglikana raha sendra tsy
             eo ny boky.
           </p>
@@ -29,15 +28,14 @@
       </ion-card>
 
       <ion-list-header>
-        <ion-label
-          >Fifandraisana raha misy fanamarihana, olana,
-          sosokevitra...</ion-label
-        >
+        <ion-label>
+          Fifandraisana raha misy fanamarihana, olana, sosokevitra...
+        </ion-label>
       </ion-list-header>
 
       <ion-list :inset="true" mode="ios" id="contacts">
         <ion-item button @click="openEmail">
-          <ion-icon :icon="mailOutline" slot="start" color="primary"></ion-icon>
+          <ion-icon :icon="mailOutline" slot="start" color="primary" />
           <ion-label>
             <h3>Mailaka</h3>
             <p>tsiorymanana7@gmail.com</p>
@@ -45,7 +43,7 @@
         </ion-item>
 
         <ion-item button @click="openPhone">
-          <ion-icon :icon="callOutline" slot="start" color="primary"></ion-icon>
+          <ion-icon :icon="callOutline" slot="start" color="primary" />
           <ion-label>
             <h3>Finday</h3>
             <p>+261 34 70 485 04</p>
@@ -53,11 +51,7 @@
         </ion-item>
 
         <ion-item button @click="openFacebook">
-          <ion-icon
-            :icon="logoFacebook"
-            slot="start"
-            color="primary"
-          ></ion-icon>
+          <ion-icon :icon="logoFacebook" slot="start" color="primary" />
           <ion-label>
             <h3>Facebook</h3>
             <p>Tsiory Manana</p>
@@ -92,7 +86,7 @@
               name="crescent"
               slot="start"
             ></ion-spinner>
-            <ion-icon v-else :icon="refreshOutline" slot="start"></ion-icon>
+            <ion-icon v-else :icon="refreshOutline" slot="start" />
             Hijerena version farany
           </ion-button>
 
@@ -104,13 +98,12 @@
             class="ion-margin-top"
             @click="openDownloadPage"
           >
-            <ion-icon :icon="downloadOutline" slot="start"></ion-icon>
+            <ion-icon :icon="downloadOutline" slot="start" />
             Haka ny version vaovao
           </ion-button>
         </div>
       </div>
     </ion-content>
-    <app-footer />
   </ion-page>
 </template>
 
@@ -141,7 +134,6 @@ import {
 import { Browser } from "@capacitor/browser";
 import { App } from "@capacitor/app";
 import AppHeader from "@/components/AppHeader.vue";
-import AppFooter from "@/components/AppFooter.vue";
 
 const currentVersion = ref("...");
 const isChecking = ref(false);
@@ -202,7 +194,8 @@ const showToast = async (message: string, color = "dark") => {
     message,
     duration: 3000,
     color,
-    position: "bottom",
+    position: "top",
+    positionAnchor: "contacts",
   });
   await toast.present();
 };

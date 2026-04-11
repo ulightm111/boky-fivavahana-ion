@@ -37,7 +37,7 @@
         v-else-if="displayMode === 'song'"
         :song="itemObj"
         :is-hira="isHira"
-        :is-alternated="isAlternated"
+        :is-zigzag="settings.lyricsZZStyle"
       />
 
       <ion-fab
@@ -48,18 +48,30 @@
         class="zoom-fab"
       >
         <ion-fab-button
-          v-if="displayMode === 'song'"
-          @click="toggleIndent"
-          :class="isAlternated ? 'translucent-btn disabled' : 'translucent-btn'"
+          v-if="displayMode === 'song' && settings.showZigzagBtn"
+          @click="toggleZigzag"
+          class="translucent-btn"
           size="small"
         >
-          <ion-icon :icon="reorderThreeOutline"></ion-icon>
+          <ion-icon
+            :icon="settings.lyricsZZStyle ? verticalIcon : zigzagIcon"
+          />
         </ion-fab-button>
-        <ion-fab-button @click="zoomIn" class="translucent-btn" size="small">
-          <ion-icon :icon="add"></ion-icon>
+        <ion-fab-button
+          v-if="settings.showZoomBtn"
+          @click="zoomIn"
+          class="translucent-btn"
+          size="small"
+        >
+          <ion-icon :icon="add" />
         </ion-fab-button>
-        <ion-fab-button @click="zoomOut" class="translucent-btn" size="small">
-          <ion-icon :icon="remove"></ion-icon>
+        <ion-fab-button
+          v-if="settings.showZoomBtn"
+          @click="zoomOut"
+          class="translucent-btn"
+          size="small"
+        >
+          <ion-icon :icon="remove" />
         </ion-fab-button>
       </ion-fab>
     </ion-content>
@@ -87,7 +99,7 @@ import {
   IonLabel,
   useIonRouter,
 } from "@ionic/vue";
-import { add, ellipse, remove, reorderThreeOutline } from "ionicons/icons";
+import { add, ellipse, remove } from "ionicons/icons";
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
@@ -96,6 +108,18 @@ import AppFooter from "@/components/AppFooter.vue";
 import SongContent from "@/components/lyrics/SongContent.vue";
 import PsalmContent from "@/components/lyrics/PsalmContent.vue";
 import LitContent from "@/components/lyrics/LitContent.vue";
+import { useSettingsStore } from "@/stores/settingsStore";
+
+const zigzagIcon =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">\
+  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="44"\
+  d="M 190.3038,256 H 410 M 102,156 H 307.11392 M 102,356 h 205.11392"/></svg>';
+const verticalIcon =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">\
+  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="44"\
+  d="M 102,256 H 410 M 102,156 H 410 M 102,356 h 308"/></svg>';
+
+const settings = useSettingsStore();
 
 const route = useRoute();
 const router = useIonRouter();
@@ -120,11 +144,8 @@ const isSalamo = computed(() => bookStore.isSalamoBook(book.value || null));
 const isLitP = computed(() => bookStore.isLitPBook(book.value || null));
 const isLHF = computed(() => bookStore.isLHFBook(book.value || null));
 
-const isAlternated = ref(true);
-const currentFontSize = ref(100);
-
 const contentStyle = computed(() => ({
-  "--lyrics-font-size": `${currentFontSize.value}%`,
+  "--lyrics-font-size": `${settings.fontSize}%`,
 }));
 
 const displayMode = ref("");
@@ -225,7 +246,7 @@ const toggleAutoscroll = async () => {
     };
     el.addEventListener("pointerdown", stopOnInteraction);
 
-    const speed = 10;
+    const speed = settings.scrollSpeed;
     let lastTime = performance.now();
     let currentPos = el.scrollTop;
 
@@ -261,20 +282,11 @@ onUnmounted(() => {
 
 onMounted(async () => {
   if (bookStore.books.length === 0) await bookStore.loadData();
-  const savedFontSize = localStorage.getItem("fontSizePercentage");
-  if (savedFontSize) {
-    currentFontSize.value = parseInt(savedFontSize);
-  }
-  const savedIndent = localStorage.getItem("isAlternatedLayout");
-  if (savedIndent !== null) {
-    isAlternated.value = savedIndent === "true";
-  }
   loadContent();
 });
 
-const toggleIndent = () => {
-  isAlternated.value = !isAlternated.value;
-  localStorage.setItem("isAlternatedLayout", isAlternated.value.toString());
+const toggleZigzag = () => {
+  settings.lyricsZZStyle = !settings.lyricsZZStyle;
 };
 
 watch([routeSongId, routeSectionName, routeSubIndex], () => {
@@ -320,17 +332,11 @@ const navigateByItem = (itemObjRef: any) => {
 };
 
 const zoomIn = () => {
-  currentFontSize.value = Math.min(currentFontSize.value + 10, 150);
-  applyFontSize();
+  settings.fontSize = Math.min(settings.fontSize + 10, 150);
 };
 
 const zoomOut = () => {
-  currentFontSize.value = Math.max(currentFontSize.value - 10, 80);
-  applyFontSize();
-};
-
-const applyFontSize = () => {
-  localStorage.setItem("fontSizePercentage", currentFontSize.value.toString());
+  settings.fontSize = Math.max(settings.fontSize - 10, 70);
 };
 </script>
 
@@ -350,11 +356,5 @@ const applyFontSize = () => {
   --background-focused: rgba(var(--ion-color-primary-rgb), 0.6);
   --color: var(--ion-color-primary-contrast);
   margin-top: 10px;
-}
-.disabled {
-  --background: rgba(var(--ion-color-medium-rgb), 0.4);
-  --background-activated: rgba(var(--ion-color-medium-rgb), 0.6);
-  --background-focused: rgba(var(--ion-color-medium-rgb), 0.6);
-  --color: var(--ion-color-medium-contrast);
 }
 </style>

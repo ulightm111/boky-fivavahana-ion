@@ -8,7 +8,7 @@
     </div>
 
     <template v-if="song.verses && song.verses.length > 0">
-      <div class="verses" :class="{ 'alternate-layout': isAlternated }">
+      <div class="verses" :class="{ 'zigzag-layout': isZigzag }">
         <template v-for="(v, index) in song.verses" :key="index">
           <div
             class="verse chorus"
@@ -69,7 +69,7 @@ defineProps({
     type: Boolean,
     default: true,
   },
-  isAlternated: {
+  isZigzag: {
     type: Boolean,
     default: true,
   },
@@ -121,7 +121,7 @@ defineProps({
   margin: 1em 0;
 }
 
-.verses.alternate-layout :nth-child(even of .verse) {
+.verses.zigzag-layout :nth-child(even of .verse) {
   margin-left: 3em;
 }
 
