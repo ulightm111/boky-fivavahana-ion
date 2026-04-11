@@ -74,7 +74,7 @@ const about = async () => {
   ionRouter.push("/about");
 };
 
-// ---------- Android Back Button Handling (with double‑click exit) ----------
+// Android Back Button Handling
 let backPressedOnce = false;
 let backTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -100,7 +100,7 @@ useBackButton(-1, async () => {
   }
 });
 
-// Clean up timer on unmount (optional)
+// Clean up timer on unmount
 onUnmounted(() => {
   if (backTimer) clearTimeout(backTimer);
 });

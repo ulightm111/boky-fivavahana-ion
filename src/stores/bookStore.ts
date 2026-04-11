@@ -49,7 +49,7 @@ interface IndexedSearchItem {
 }
 
 export const useBookStore = defineStore('book', () => {
-  const books = ref<Book[]>([]);
+  const books = shallowRef<Book[]>([]);
   const hiraSongs = shallowRef<Song[]>([]);
   const haaSongs = shallowRef<Song[]>([]);
   const salamoPsalms = shallowRef<Psalm[]>([]);
@@ -315,8 +315,8 @@ export const useBookStore = defineStore('book', () => {
       fetch('/data/LHF.json').then(r => r.json())
     ]);
 
-    books.value = booksRes;
     // Mass-apply markRaw to prevent reactivity overhead
+    books.value = markRaw(booksRes);
     hiraSongs.value = markRaw(hiraRes.songs || []);
     haaSongs.value = markRaw(haaRes.songs || []);
     salamoPsalms.value = markRaw(salamoRes.psalms || []);

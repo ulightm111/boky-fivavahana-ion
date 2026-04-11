@@ -31,6 +31,6 @@ defineProps({
   width: 2em;
   font-weight: 600;
   text-align: right;
-  margin-right: 0.3em;
+  margin-right: 0.5em;
 }
 </style>

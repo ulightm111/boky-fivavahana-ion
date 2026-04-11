@@ -6,7 +6,6 @@
     />
 
     <ion-content ref="contentRef" :fullscreen="true" :style="contentStyle">
-      <!-- Render depending on what data we have -->
       <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
       <ion-list :inset="true" v-if="displayMode === 'subsections'">
         <ion-item
@@ -226,7 +225,7 @@ const toggleAutoscroll = async () => {
     };
     el.addEventListener("pointerdown", stopOnInteraction);
 
-    const speed = 10; // Azonao ovana ity: 20 = miadana, 50 = haingana
+    const speed = 10;
     let lastTime = performance.now();
     let currentPos = el.scrollTop;
 
@@ -251,7 +250,6 @@ const toggleAutoscroll = async () => {
   }
 };
 
-// Atsahatra ny scroll raha miala amin'ny pejy na miova hira
 watch([routeSongId, routeSectionName, routeSubIndex], () => {
   isScrolling.value = false;
   loadContent();
