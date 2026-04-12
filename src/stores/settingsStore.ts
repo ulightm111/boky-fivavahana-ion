@@ -41,6 +41,13 @@ export const useSettingsStore = defineStore('settings', () => {
     document.body.classList.toggle('ion-palette-dark', isDark);
   };
 
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  mediaQuery.addEventListener('change', () => {
+    if (theme.value === 'system') {
+      applyTheme();
+    }
+  });
+
   const applyKeepAwake = async () => {
     if (keepScreenOn.value) {
       await KeepAwake.keepAwake();
@@ -58,6 +65,26 @@ export const useSettingsStore = defineStore('settings', () => {
   watch(keepScreenOn, (val) => {
     Preferences.set({ key: 'keepScreenOn', value: String(val) });
     applyKeepAwake();
+  });
+
+  watch(fontSize, (val) => {
+    Preferences.set({ key: 'fontSize', value: String(val) });
+  });
+
+  watch(scrollSpeed, (val) => {
+    Preferences.set({ key: 'scrollSpeed', value: String(val) });
+  });
+
+  watch(showZoomBtn, (val) => {
+    Preferences.set({ key: 'showZoomBtn', value: String(val) });
+  });
+
+  watch(showZigzagBtn, (val) => {
+    Preferences.set({ key: 'showZigzagBtn', value: String(val) });
+  });
+
+  watch(lyricsZZStyle, (val) => {
+    Preferences.set({ key: 'lyricsZZStyle', value: String(val) });
   });
 
   return { theme, keepScreenOn, fontSize, scrollSpeed, showZoomBtn, showZigzagBtn, lyricsZZStyle, loadSettings };

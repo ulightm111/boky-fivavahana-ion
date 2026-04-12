@@ -62,6 +62,7 @@ import { onUnmounted, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
+import { useSettingsStore } from "./stores/settingsStore";
 import { App } from "@capacitor/app";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Device } from "@capacitor/device";
@@ -90,6 +91,7 @@ const getBookSvg = (name: string) => {
 
 const route = useRoute();
 const bookStore = useBookStore();
+const settingsStore = useSettingsStore();
 const { books } = storeToRefs(bookStore);
 const ionRouter = useIonRouter();
 
@@ -148,6 +150,7 @@ onMounted(async () => {
       await StatusBar.setStyle({ style: Style.Dark });
     }, 300);
   }
+  await settingsStore.loadSettings();
 });
 </script>
 
