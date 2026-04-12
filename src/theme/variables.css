@@ -68,11 +68,10 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-primary-rgb: 0, 47, 152;
   --ion-color-light: white;
   --ion-color-primary-contrast: white;
-  --ion-background-color: #0a0a0a;
+  --ion-background-color: #121212;
   --ion-text-color: #e0e0e0;
   --ion-box-shadow-color: rgba(231, 231, 231, 0.1);
   --app-bg-color: hsl(39, 77%, 12%);
-  --inner-bg: #1e1e1e;
   --chorus-bg-color: #19140e;
   --note-text-color: #a0908f;
 }
