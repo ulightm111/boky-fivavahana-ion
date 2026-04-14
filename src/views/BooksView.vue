@@ -138,7 +138,7 @@ const clearGlobalSearch = () => {
 .svg-container {
   width: 40px;
   height: 40px;
-  color: var(--ion-color-primary);
+  color: var(--ion-color-secondary);
 }
 
 .text-section {
