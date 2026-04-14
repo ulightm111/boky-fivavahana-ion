@@ -70,6 +70,7 @@ import {
   menuController,
   useIonRouter,
   toastController,
+  modalController,
 } from "@ionic/vue";
 import {
   menu,
@@ -83,6 +84,7 @@ import {
 import { useRoute } from "vue-router";
 import { App } from "@capacitor/app";
 import { onUnmounted } from "vue";
+import MainMenuModal from "./MainMenuModal.vue";
 
 defineProps({
   canGoPrev: { type: Boolean, default: false },
@@ -152,6 +154,11 @@ const gotoSearch = (event?: Event) => {
 };
 
 const openMenu = async () => {
-  await menuController.open("main-menu");
+  const modal = await modalController.create({
+    component: MainMenuModal,
+    initialBreakpoint: 0.5,
+    cssClass: "bottom-menu-modal",
+  });
+  await modal.present();
 };
 </script>
