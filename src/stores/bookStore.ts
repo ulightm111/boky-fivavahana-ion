@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-import { ref, shallowRef, markRaw } from 'vue';
+import { defineStore } from "pinia";
+import { ref, shallowRef, markRaw } from "vue";
 
 export interface Book {
   id: number;
@@ -44,11 +44,11 @@ export interface SearchResult {
 
 // Internal structure for fast searching
 interface IndexedSearchItem {
-  searchKey: string;   // lowercased, concatenated searchable fields
+  searchKey: string; // lowercased, concatenated searchable fields
   result: SearchResult;
 }
 
-export const useBookStore = defineStore('book', () => {
+export const useBookStore = defineStore("book", () => {
   const books = shallowRef<Book[]>([]);
   const hiraSongs = shallowRef<Song[]>([]);
   const haaSongs = shallowRef<Song[]>([]);
@@ -57,7 +57,9 @@ export const useBookStore = defineStore('book', () => {
   const litbfContents = shallowRef<LitContent[]>([]);
   const lhfContents = shallowRef<LitContent[]>([]);
   const searchResults = shallowRef<SearchResult[]>([]);
-  const groupedSongsCache = shallowRef<{ section: string; songs: Song[] }[]>([]);
+  const groupedSongsCache = shallowRef<{ section: string; songs: Song[] }[]>(
+    [],
+  );
   const lastGroupedBookId = ref<number | null>(null);
   const flatSongsSorted = shallowRef<any[]>([]);
   const lastFlatBookId = ref<number | null>(null);
@@ -76,15 +78,17 @@ export const useBookStore = defineStore('book', () => {
     songs: Song[],
     bookName: string,
     bookId: number,
-    type: string
+    type: string,
   ): IndexedSearchItem[] {
-    return songs.map(song => {
-      const searchKey = `${song.id} ${song.title || ''} ${song.section || ''}`.toLowerCase();
+    return songs.map((song) => {
+      const searchKey = `${song.id} ${song.title || ""} ${
+        song.section || ""
+      }`.toLowerCase();
       const result: SearchResult = {
         type,
         id: song.id,
         title: `${song.id} - ${song.title}`,
-        subtitle: `${bookName}${song.section ? ' → ' + song.section : ''}`,
+        subtitle: `${bookName}${song.section ? " → " + song.section : ""}`,
         bookId,
       };
       return { searchKey, result };
@@ -96,7 +100,7 @@ export const useBookStore = defineStore('book', () => {
     contents: LitContent[],
     bookName: string,
     bookId: number,
-    typePrefix: string
+    typePrefix: string,
   ): IndexedSearchItem[] {
     const items: IndexedSearchItem[] = [];
     let idc = 0;
@@ -140,32 +144,61 @@ export const useBookStore = defineStore('book', () => {
 
   // Build all search indexes after data is loaded
   function buildSearchIndexes() {
-    const hiraBook = books.value.find(b => b.name === 'Fihirana');
+    const hiraBook = books.value.find((b) => b.name === "Fihirana");
     if (hiraBook) {
-      hiraSearchIndex.value = buildSongIndex(hiraSongs.value, 'Fihirana', hiraBook.id, 'hira');
+      hiraSearchIndex.value = buildSongIndex(
+        hiraSongs.value,
+        "Fihirana",
+        hiraBook.id,
+        "hira",
+      );
     }
-    const haaBook = books.value.find(b => b.name === 'Hanandratra Anao Aho');
+    const haaBook = books.value.find((b) => b.name === "Hanandratra Anao Aho");
     if (haaBook) {
-      haaSearchIndex.value = buildSongIndex(haaSongs.value, 'Hanandratra Anao Aho', haaBook.id, 'haa');
+      haaSearchIndex.value = buildSongIndex(
+        haaSongs.value,
+        "Hanandratra Anao Aho",
+        haaBook.id,
+        "haa",
+      );
     }
-    const litbfBook = books.value.find(b => b.name === 'Litorjia Boky Fivavahana');
+    const litbfBook = books.value.find(
+      (b) => b.name === "Litorjia Boky Fivavahana",
+    );
     if (litbfBook) {
-      litbfSearchIndex.value = buildLitIndex(litbfContents.value, 'Litorjia Boky Fivavahana', litbfBook.id, 'litbf');
+      litbfSearchIndex.value = buildLitIndex(
+        litbfContents.value,
+        "Litorjia Boky Fivavahana",
+        litbfBook.id,
+        "litbf",
+      );
     }
-    const lhfBook = books.value.find(b => b.name === "Lalan'ny Hazo Fijaliana");
+    const lhfBook = books.value.find(
+      (b) => b.name === "Lalan'ny Hazo Fijaliana",
+    );
     if (lhfBook) {
-      lhfSearchIndex.value = buildLitIndex(lhfContents.value, "Lalan'ny Hazo Fijaliana", lhfBook.id, 'lhf');
+      lhfSearchIndex.value = buildLitIndex(
+        lhfContents.value,
+        "Lalan'ny Hazo Fijaliana",
+        lhfBook.id,
+        "lhf",
+      );
     }
-    const litpBook = books.value.find(b => b.name === 'Litorjia Provinsialy');
+    const litpBook = books.value.find((b) => b.name === "Litorjia Provinsialy");
     if (litpBook) {
-      litpSearchIndex.value = buildLitIndex(litpContents.value, 'Litorjia Provinsialy', litpBook.id, 'litp');
+      litpSearchIndex.value = buildLitIndex(
+        litpContents.value,
+        "Litorjia Provinsialy",
+        litpBook.id,
+        "litp",
+      );
     }
-    const salamoBook = books.value.find(b => b.name === 'Salamo');
+    const salamoBook = books.value.find((b) => b.name === "Salamo");
     if (salamoBook) {
-      salamoSearchIndex.value = salamoPsalms.value.map(psalm => ({
+      salamoSearchIndex.value = salamoPsalms.value.map((psalm) => ({
         searchKey: String(psalm.id),
         result: {
-          type: 'salamo',
+          type: "salamo",
           id: psalm.id,
           title: `Salamo - ${psalm.id}`,
           bookId: salamoBook.id,
@@ -175,19 +208,28 @@ export const useBookStore = defineStore('book', () => {
   }
 
   // Helper: search within a specific index
-  function searchIndex(index: IndexedSearchItem[], query: string): SearchResult[] {
+  function searchIndex(
+    index: IndexedSearchItem[],
+    query: string,
+  ): SearchResult[] {
     if (!index.length) return [];
     const normalized = query.toLowerCase().trim();
     if (!normalized) return [];
-    return index.filter(item => item.searchKey.includes(normalized)).map(item => item.result);
+    return index
+      .filter((item) => item.searchKey.includes(normalized))
+      .map((item) => item.result);
   }
 
-  const isHiraBook = (book: Book | null) => book?.name === 'Fihirana';
-  const isHaaBook = (book: Book | null) => book?.name === 'Hanandratra Anao Aho';
-  const isSalamoBook = (book: Book | null) => book?.name === 'Salamo';
-  const isLitPBook = (book: Book | null) => book?.name === 'Litorjia Provinsialy';
-  const isLitBFBook = (book: Book | null) => book?.name === 'Litorjia Boky Fivavahana';
-  const isLHFBook = (book: Book | null) => book?.name === 'Lalan\'ny Hazo Fijaliana';
+  const isHiraBook = (book: Book | null) => book?.name === "Fihirana";
+  const isHaaBook = (book: Book | null) =>
+    book?.name === "Hanandratra Anao Aho";
+  const isSalamoBook = (book: Book | null) => book?.name === "Salamo";
+  const isLitPBook = (book: Book | null) =>
+    book?.name === "Litorjia Provinsialy";
+  const isLitBFBook = (book: Book | null) =>
+    book?.name === "Litorjia Boky Fivavahana";
+  const isLHFBook = (book: Book | null) =>
+    book?.name === "Lalan'ny Hazo Fijaliana";
 
   const getBookData = (book: Book | null): any[] => {
     if (!book) return [];
@@ -202,7 +244,10 @@ export const useBookStore = defineStore('book', () => {
 
   const getGroupedSongs = (book: Book | null) => {
     if (!book) return [];
-    if (lastGroupedBookId.value === book.id && groupedSongsCache.value.length > 0) {
+    if (
+      lastGroupedBookId.value === book.id &&
+      groupedSongsCache.value.length > 0
+    ) {
       return groupedSongsCache.value;
     }
 
@@ -212,13 +257,16 @@ export const useBookStore = defineStore('book', () => {
     if (songs.length === 0) return [];
 
     const groups = new Map<string, Song[]>();
-    songs.forEach(song => {
-      const section = song.section || 'Other';
+    songs.forEach((song) => {
+      const section = song.section || "Other";
       if (!groups.has(section)) groups.set(section, []);
       groups.get(section)!.push(song);
     });
 
-    const result = Array.from(groups).map(([section, songs]) => ({ section, songs }));
+    const result = Array.from(groups).map(([section, songs]) => ({
+      section,
+      songs,
+    }));
     groupedSongsCache.value = result;
     lastGroupedBookId.value = book.id;
     return result;
@@ -258,7 +306,9 @@ export const useBookStore = defineStore('book', () => {
     if (!normalized) return;
 
     const isGlobal = scopeBookId == null;
-    const scopedBook = scopeBookId ? books.value.find(b => b.id === scopeBookId) : null;
+    const scopedBook = scopeBookId
+      ? books.value.find((b) => b.id === scopeBookId)
+      : null;
 
     const results: SearchResult[] = [];
 
@@ -270,30 +320,40 @@ export const useBookStore = defineStore('book', () => {
     };
 
     // Fihirana
-    const hiraBook = books.value.find(b => b.name === 'Fihirana');
+    const hiraBook = books.value.find((b) => b.name === "Fihirana");
     if (hiraBook) addFromIndex(hiraSearchIndex.value, hiraBook.id);
 
     // Hanandratra Anao Aho
-    const haaBook = books.value.find(b => b.name === 'Hanandratra Anao Aho');
+    const haaBook = books.value.find((b) => b.name === "Hanandratra Anao Aho");
     if (haaBook) addFromIndex(haaSearchIndex.value, haaBook.id);
 
     // Litorjia Boky Fivavahana
-    const litbfBook = books.value.find(b => b.name === 'Litorjia Boky Fivavahana');
+    const litbfBook = books.value.find(
+      (b) => b.name === "Litorjia Boky Fivavahana",
+    );
     if (litbfBook) addFromIndex(litbfSearchIndex.value, litbfBook.id);
 
     // Lalan'ny Hazo Fijaliana
-    const lhfBook = books.value.find(b => b.name === "Lalan'ny Hazo Fijaliana");
+    const lhfBook = books.value.find(
+      (b) => b.name === "Lalan'ny Hazo Fijaliana",
+    );
     if (lhfBook) addFromIndex(lhfSearchIndex.value, lhfBook.id);
 
     // Litorjia Provinsialy
-    const litpBook = books.value.find(b => b.name === 'Litorjia Provinsialy');
-    if (litpBook && (isGlobal || (scopedBook && scopedBook.id === litpBook.id))) {
+    const litpBook = books.value.find((b) => b.name === "Litorjia Provinsialy");
+    if (
+      litpBook &&
+      (isGlobal || (scopedBook && scopedBook.id === litpBook.id))
+    ) {
       results.push(...searchIndex(litpSearchIndex.value, normalized));
     }
 
     // Salamo
-    const salamoBook = books.value.find(b => b.name === 'Salamo');
-    if (salamoBook && (isGlobal || (scopedBook && scopedBook.id === salamoBook.id))) {
+    const salamoBook = books.value.find((b) => b.name === "Salamo");
+    if (
+      salamoBook &&
+      (isGlobal || (scopedBook && scopedBook.id === salamoBook.id))
+    ) {
       results.push(...searchIndex(salamoSearchIndex.value, normalized));
     }
 
@@ -305,15 +365,16 @@ export const useBookStore = defineStore('book', () => {
   };
 
   const loadData = async () => {
-    const [booksRes, hiraRes, haaRes, salamoRes, litpRes, litbfRes, lhfRes] = await Promise.all([
-      fetch('/data/books.json').then(r => r.json()),
-      fetch('/data/HIRA.json').then(r => r.json()),
-      fetch('/data/HAA.json').then(r => r.json()),
-      fetch('/data/SALAMO.json').then(r => r.json()),
-      fetch('/data/LitP.json').then(r => r.json()),
-      fetch('/data/LitBF.json').then(r => r.json()),
-      fetch('/data/LHF.json').then(r => r.json())
-    ]);
+    const [booksRes, hiraRes, haaRes, salamoRes, litpRes, litbfRes, lhfRes] =
+      await Promise.all([
+        fetch("/data/books.json").then((r) => r.json()),
+        fetch("/data/HIRA.json").then((r) => r.json()),
+        fetch("/data/HAA.json").then((r) => r.json()),
+        fetch("/data/SALAMO.json").then((r) => r.json()),
+        fetch("/data/LitP.json").then((r) => r.json()),
+        fetch("/data/LitBF.json").then((r) => r.json()),
+        fetch("/data/LHF.json").then((r) => r.json()),
+      ]);
 
     // Mass-apply markRaw to prevent reactivity overhead
     books.value = markRaw(booksRes);
@@ -323,7 +384,7 @@ export const useBookStore = defineStore('book', () => {
     litpContents.value = markRaw(litpRes.contents || []);
     litbfContents.value = markRaw(litbfRes.sections || []);
     lhfContents.value = markRaw(lhfRes.sections || []);
-    
+
     // Build search indexes after data is loaded
     buildSearchIndexes();
   };
