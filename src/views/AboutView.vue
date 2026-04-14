@@ -35,7 +35,7 @@
 
       <ion-list :inset="true" id="contacts">
         <ion-item button @click="openEmail">
-          <ion-icon :icon="mailOutline" slot="start" color="primary" />
+          <ion-icon :icon="mailOutline" slot="start" color="secondary" />
           <ion-label>
             <h3>Mailaka</h3>
             <p>tsiorymanana7@gmail.com</p>
@@ -43,7 +43,7 @@
         </ion-item>
 
         <ion-item button @click="openPhone">
-          <ion-icon :icon="callOutline" slot="start" color="primary" />
+          <ion-icon :icon="callOutline" slot="start" color="secondary" />
           <ion-label>
             <h3>Finday</h3>
             <p>+261 34 70 485 04</p>
@@ -51,7 +51,7 @@
         </ion-item>
 
         <ion-item button @click="openFacebook">
-          <ion-icon :icon="logoFacebook" slot="start" color="primary" />
+          <ion-icon :icon="logoFacebook" slot="start" color="secondary" />
           <ion-label>
             <h3>Facebook</h3>
             <p>Tsiory Manana</p>
@@ -59,7 +59,7 @@
         </ion-item>
 
         <ion-item button @click="openGithub">
-          <ion-icon :icon="logoGithub" slot="start" color="primary"></ion-icon>
+          <ion-icon :icon="logoGithub" slot="start" color="secondary" />
           <ion-label>
             <h3>GitHub</h3>
             <p>ulightm111/boky-fivavahana-ion</p>
