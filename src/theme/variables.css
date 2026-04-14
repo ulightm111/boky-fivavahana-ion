@@ -53,27 +53,27 @@ http://ionicframework.com/docs/theming/ */
 }
 
 :root {
-  --ion-color-primary: #002f98;
-  --ion-color-primary-rgb: 0, 47, 152;
-  --ion-background-color: #fafafa;
-  --ion-text-color: #020122;
+  --ion-color-primary: rgb(0, 69, 181);
+  --ion-color-primary-rgb: 0, 69, 181;
+  --ion-background-color: #fdfbf7;
+  --ion-text-color: #1a1a1b;
   --ion-box-shadow-color: rgba(0, 0, 0, 0.08);
   --app-bg-color: wheat;
-  --chorus-bg-color: #fbf1df;
+  --chorus-bg-color: #f2e7d5;
   --note-text-color: #695958;
 }
 
 .ion-palette-dark {
-  --ion-color-primary: #002f98;
-  --ion-color-primary-rgb: 0, 47, 152;
+  --ion-color-primary: rgb(0, 39, 124);
+  --ion-color-primary-rgb: 0, 39, 124;
   --ion-color-light: white;
   --ion-color-primary-contrast: white;
-  --ion-background-color: #121212;
+  --ion-background-color: #0f1115;
   --ion-text-color: #e0e0e0;
   --ion-box-shadow-color: rgba(231, 231, 231, 0.1);
-  --app-bg-color: hsl(39, 77%, 12%);
-  --chorus-bg-color: #19140e;
-  --note-text-color: #a0908f;
+  --app-bg-color: hsl(42, 11%, 18%);
+  --chorus-bg-color: #1e2128;
+  --note-text-color: #8e96a3;
 }
 
 ion-content {
@@ -86,6 +86,8 @@ ion-list {
 }
 ion-item {
   --border-radius: 8px;
+  --padding-top: 2px;
+  --padding-bottom: 2px;
 }
 ion-label {
   font-family: Tahoma, Roboto, sans-serif !important;

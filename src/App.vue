@@ -146,7 +146,7 @@ onMounted(async () => {
   const androidVersion = parseInt(info.osVersion);
   if (androidVersion < 15) {
     setTimeout(async () => {
-      await StatusBar.setBackgroundColor({ color: "#002f98" });
+      await StatusBar.setBackgroundColor({ color: "--ion-color-primary" });
       await StatusBar.setStyle({ style: Style.Dark });
     }, 300);
   }
