@@ -53,6 +53,7 @@ http://ionicframework.com/docs/theming/ */
 }
 
 :root {
+  color-scheme: light dark;
   --ion-color-primary: #0045b5;
   --ion-color-primary-rgb: 0, 69, 181;
   --ion-background-color: #fdfbf7;
