@@ -10,7 +10,7 @@
         >
           <div class="menu-item" @click="navigateToBook(book)">
             <div class="icon-container">
-              <ion-icon :icon="getBookSvg(book.name)" size="large"></ion-icon>
+              <ion-icon :icon="getBookSvg(book.name)" size="large" />
             </div>
             <div class="menu-label">{{ book.name }}</div>
           </div>
@@ -18,7 +18,7 @@
         <ion-col size="4" class="ion-text-center">
           <div class="menu-item" @click="settings">
             <div class="icon-container">
-              <ion-icon :icon="settingsIcon" size="large"></ion-icon>
+              <ion-icon :icon="settingsIcon" size="large" />
             </div>
             <div class="menu-label">Fikirakirana</div>
           </div>
@@ -26,7 +26,7 @@
         <ion-col size="4" class="ion-text-center">
           <div class="menu-item" @click="about">
             <div class="icon-container">
-              <ion-icon :icon="informationCircle" size="large"></ion-icon>
+              <ion-icon :icon="informationCircle" size="large" />
             </div>
             <div class="menu-label">Mombamomba</div>
           </div>
@@ -34,7 +34,7 @@
         <ion-col size="4" class="ion-text-center">
           <div class="menu-item" @click="exitAppPrompt">
             <div class="icon-container">
-              <ion-icon :icon="exitOutline" size="large"></ion-icon>
+              <ion-icon :icon="exitOutline" size="large" />
             </div>
             <div class="menu-label">Hiala</div>
           </div>
@@ -114,10 +114,12 @@ const exitAppPrompt = async () => {
       {
         text: "Tsia",
         role: "cancel",
+        cssClass: "alert-btn",
       },
       {
         text: "Eny",
         role: "confirm",
+        cssClass: "alert-btn",
         handler: async () => {
           await App.exitApp();
         },
@@ -130,9 +132,8 @@ const exitAppPrompt = async () => {
 
 <style scoped>
 ion-content {
-  --background: var(--ion-color-step-50, var(--ion-background-color));
+  --background: var(--ion-background-color);
 }
-
 .menu-item {
   display: flex;
   flex-direction: column;
@@ -177,5 +178,20 @@ ion-content {
   color: var(--ion-text-color);
   overflow: hidden;
   text-align: center;
+}
+</style>
+
+<style>
+.alert-btn {
+  color: var(--ion-color-secondary) !important;
+  width: 40%;
+}
+.bottom-menu-modal {
+  --height: 400px;
+  --border-radius: 24px;
+  --border-width: 2px;
+  --border-style: solid;
+  --border-color: var(--ion-color-medium);
+  padding-inline: 20px;
 }
 </style>

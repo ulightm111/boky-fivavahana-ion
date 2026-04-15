@@ -67,7 +67,6 @@ import {
   IonButtons,
   IonButton,
   IonIcon,
-  menuController,
   useIonRouter,
   toastController,
   modalController,
@@ -156,7 +155,7 @@ const gotoSearch = (event?: Event) => {
 const openMenu = async () => {
   const modal = await modalController.create({
     component: MainMenuModal,
-    initialBreakpoint: 0.5,
+    initialBreakpoint: 0.8,
     cssClass: "bottom-menu-modal",
   });
   await modal.present();
