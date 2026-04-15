@@ -5,9 +5,6 @@ import { KeepAwake } from "@capacitor-community/keep-awake";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Device } from "@capacitor/device";
 
-const info = await Device.getInfo();
-const androidVersion = parseInt(info.osVersion);
-
 export const useSettingsStore = defineStore("settings", () => {
   const theme = ref<"light" | "dark" | "system">("system");
   const keepScreenOn = ref(false);
@@ -46,6 +43,8 @@ export const useSettingsStore = defineStore("settings", () => {
         window.matchMedia("(prefers-color-scheme: dark)").matches);
     document.body.classList.toggle("ion-palette-dark", isDark);
     // Staus bar
+    const info = await Device.getInfo();
+    const androidVersion = parseInt(info.osVersion);
     if (androidVersion < 15) {
       const styles = getComputedStyle(document.body);
       const primaryColor = styles
