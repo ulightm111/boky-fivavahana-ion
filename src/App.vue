@@ -15,8 +15,6 @@ import { onUnmounted, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useSettingsStore } from "./stores/settingsStore";
 import { App } from "@capacitor/app";
-import { StatusBar, Style } from "@capacitor/status-bar";
-import { Device } from "@capacitor/device";
 
 const route = useRoute();
 const settingsStore = useSettingsStore();
@@ -53,14 +51,6 @@ onUnmounted(() => {
 });
 
 onMounted(async () => {
-  const info = await Device.getInfo();
-  const androidVersion = parseInt(info.osVersion);
-  if (androidVersion < 15) {
-    setTimeout(async () => {
-      await StatusBar.setBackgroundColor({ color: "--ion-color-primary" });
-      await StatusBar.setStyle({ style: Style.Dark });
-    }, 300);
-  }
   await settingsStore.loadSettings();
 });
 </script>
