@@ -2,7 +2,11 @@ import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 import { Preferences } from "@capacitor/preferences";
 import { KeepAwake } from "@capacitor-community/keep-awake";
-import { StatusBar } from "@capacitor/status-bar";
+import { StatusBar, Style } from "@capacitor/status-bar";
+import { Device } from "@capacitor/device";
+
+const info = await Device.getInfo();
+const androidVersion = parseInt(info.osVersion);
 
 export const useSettingsStore = defineStore("settings", () => {
   const theme = ref<"light" | "dark" | "system">("system");
@@ -41,7 +45,17 @@ export const useSettingsStore = defineStore("settings", () => {
       (theme.value === "system" &&
         window.matchMedia("(prefers-color-scheme: dark)").matches);
     document.body.classList.toggle("ion-palette-dark", isDark);
-    await StatusBar.setBackgroundColor({ color: "--ion-color-primary" });
+    // Staus bar
+    if (androidVersion < 15) {
+      const styles = getComputedStyle(document.body);
+      const primaryColor = styles
+        .getPropertyValue("--ion-color-primary")
+        .trim();
+      await StatusBar.setBackgroundColor({ color: primaryColor });
+      await StatusBar.setStyle({ style: Style.Dark });
+    } else {
+      await StatusBar.setStyle({ style: Style.Dark });
+    }
   };
 
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");

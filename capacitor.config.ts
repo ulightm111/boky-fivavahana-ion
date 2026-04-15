@@ -1,14 +1,14 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'com.uli.bokyfivavahana2',
-  appName: 'Boky Fivavahana Anglikana',
-  webDir: 'dist',
+  appId: "com.uli.bokyfivavahana2",
+  appName: "Boky Fivavahana Anglikana",
+  webDir: "dist",
   plugins: {
     StatusBar: {
       overlaysWebView: true,
       style: "DARK",
-      backgroundColor: "#002f98",
+      backgroundColor: "#00277c",
     },
   },
 };
