@@ -9,10 +9,10 @@
     </template>
     <template v-else-if="isLHF">
       <h2 class="title">{{ title?.toUpperCase() }}</h2>
-      <div v-html="htmlContent"></div>
+      <div v-html="htmlContent?.join('')"></div>
     </template>
     <template v-else>
-      <div v-html="htmlContent"></div>
+      <div v-html="htmlContent?.join('')"></div>
     </template>
   </div>
 </template>
@@ -25,7 +25,7 @@ const props = defineProps({
   isLHF: Boolean,
   title: String,
   items: Array as PropType<Array<{ id: number; content: string }>>,
-  htmlContent: String,
+  htmlContent: Array,
 });
 
 const sortedItems = computed(() => {

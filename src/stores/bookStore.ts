@@ -27,8 +27,8 @@ export interface Psalm {
 
 export interface LitContent {
   section: string;
-  content?: string;
-  subsections?: Array<{ subsection: string; content?: string }>;
+  content?: string[];
+  subsections?: Array<{ subsection: string; content?: string[] }>;
   items?: Array<{ id: number; content: string }>;
 }
 

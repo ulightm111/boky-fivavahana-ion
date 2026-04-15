@@ -150,7 +150,7 @@ const contentStyle = computed(() => ({
 
 const displayMode = ref("");
 const itemObj = ref<any>(null);
-const htmlContent = ref<string>("");
+const htmlContent = ref<string[]>([]);
 const subTitleText = ref<string>("");
 const title = ref("");
 const subtitle = ref("");
@@ -216,7 +216,7 @@ const loadContent = () => {
           currentTitleIndex.value = -1;
         } else {
           displayMode.value = "liturgia";
-          htmlContent.value = section.content || "";
+          htmlContent.value = section.content || [];
           currentTitlesList.value = data.map((s: any) => ({
             id: s.section,
             type: "section",
