@@ -6,7 +6,7 @@ import { StatusBar, Style } from "@capacitor/status-bar";
 import { Device } from "@capacitor/device";
 
 export const useSettingsStore = defineStore("settings", () => {
-  const theme = ref<"light" | "dark" | "system">("system");
+  const theme = ref<"light" | "dark" | "system">("light");
   const keepScreenOn = ref(false);
   const fontSize = ref(100);
   const scrollSpeed = ref(10);
@@ -51,8 +51,6 @@ export const useSettingsStore = defineStore("settings", () => {
         .getPropertyValue("--ion-color-primary")
         .trim();
       await StatusBar.setBackgroundColor({ color: primaryColor });
-      await StatusBar.setStyle({ style: Style.Dark });
-    } else {
       await StatusBar.setStyle({ style: Style.Dark });
     }
   };
