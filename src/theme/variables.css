@@ -60,7 +60,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-text-color: #1a1a1b;
   --ion-box-shadow-color: rgba(0, 0, 0, 0.08);
   --app-bg-color: wheat;
-  --chorus-bg-color: #f2e7d5;
+  --chorus-bg-color: #fdf4e2;
   --note-text-color: #695958;
 }
 
@@ -73,7 +73,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-text-color: #e0e0e0;
   --ion-box-shadow-color: rgba(231, 231, 231, 0.1);
   --app-bg-color: hsl(42, 11%, 18%);
-  --chorus-bg-color: #1e2128;
+  --chorus-bg-color: #17191f;
   --note-text-color: #8e96a3;
 }
 

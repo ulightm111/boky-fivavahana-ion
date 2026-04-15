@@ -12,7 +12,7 @@ export const useSettingsStore = defineStore("settings", () => {
   const scrollSpeed = ref(10);
   const showZoomBtn = ref(true);
   const showZigzagBtn = ref(true);
-  const lyricsZZStyle = ref(true);
+  const lyricsZZStyle = ref(false);
 
   // Load settings on startup
   const loadSettings = async () => {
