@@ -1,0 +1,6 @@
+Update v2.1.0
+- New Menu UI
+- Optimized Light/Dark theme integration
+- Settings UI/UX improved
+- Liturgy's contents typo fixes
+- Some bug fixes and opimization

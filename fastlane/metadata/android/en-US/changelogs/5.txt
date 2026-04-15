@@ -1,1 +1,15 @@
 Major Update v2.0.0
+
+New :
+- App icon
+- Settings Features
+- Autoscroll
+- Lyrics layout toggle
+- Dark theme
+
+Fixes and optimizatiom :
+- Hira and Salamo bullet
+- Nav buttons click area
+- Removed the weird spinner
+- Contents typo
+- Some UI/UX
