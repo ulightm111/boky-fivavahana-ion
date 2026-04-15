@@ -22,7 +22,10 @@
             </p>
           </div>
 
-          <div class="verse">
+          <div
+            class="verse"
+            :class="{ 'even-verse': v.verse_number % 2 === 0 }"
+          >
             <span v-if="isHira"
               ><strong>{{ v.verse_number }}.</strong></span
             >
@@ -121,7 +124,7 @@ defineProps({
   margin: 1em 0;
 }
 
-.verses.zigzag-layout :nth-child(even of .verse) {
+.verses.zigzag-layout .even-verse {
   margin-left: 3em;
 }
 
