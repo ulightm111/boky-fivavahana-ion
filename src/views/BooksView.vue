@@ -119,6 +119,7 @@ const clearGlobalSearch = () => {
   width: 100%;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform;
 }
 
 .card-content-wrapper {
@@ -151,6 +152,7 @@ ion-card-title {
 
 .book-card:active {
   transform: scale(0.98);
+  will-change: transform;
 }
 
 ion-card {

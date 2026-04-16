@@ -161,9 +161,11 @@ ion-content {
   justify-content: center;
   margin-bottom: 8px;
   transition: transform 0.2s;
+  will-change: transform;
 }
 
 .menu-item:active .icon-container {
+  will-change: transform;
   transform: scale(0.95);
 }
 
