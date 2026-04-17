@@ -52,17 +52,19 @@
         v-else-if="displayMode === 'songs'"
         class="song-section"
       >
-        <template v-for="(song, index) in flatSongs" :key="song.id">
+        <template v-for="(song, index) in displayedSongs" :key="song.id">
           <ion-item-divider
             v-if="
               song.section &&
-              (index === 0 || song.section !== flatSongs[index - 1].section)
+              (index === 0 ||
+                song.section !== displayedSongs[index - 1].section)
             "
             class="sticky-label"
             sticky
           >
             <ion-label>{{ song.section }}</ion-label>
           </ion-item-divider>
+
           <ion-item button @click="navigateToSong(song.id)">
             <ion-icon
               v-if="!song.title"
@@ -107,6 +109,7 @@
         </ion-fab-button>
       </ion-fab>
     </ion-content>
+
     <app-footer />
   </ion-page>
 </template>
@@ -142,64 +145,126 @@ const router = useIonRouter();
 const bookStore = useBookStore();
 
 const bookId = computed(() => Number(route.params.bookId));
-const book = computed(() => bookStore.books.find((b) => b.id === bookId.value));
+const book = computed(() => bookStore.getBookById(bookId.value));
 
 const sectionSearchQuery = ref("");
+const debouncedSearchQuery = ref("");
 const displayMode = ref<"sections" | "songSections" | "songs">("sections");
+
+const pageSize = 50;
+const displayedSongs = ref<any[]>([]);
+const prefetchedSongs = ref<any[]>([]);
 
 const line =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\
   <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" d="M5 12h14"/></svg>';
 
+type BookKind = "hira" | "haa" | "salamo" | "litp" | "litbf" | "lhf" | null;
+
+const bookType = computed<BookKind>(() => {
+  if (!book.value) return null;
+  if (bookStore.isHiraBook(book.value)) return "hira";
+  if (bookStore.isHaaBook(book.value)) return "haa";
+  if (bookStore.isSalamoBook(book.value)) return "salamo";
+  if (bookStore.isLitPBook(book.value)) return "litp";
+  if (bookStore.isLitBFBook(book.value)) return "litbf";
+  if (bookStore.isLHFBook(book.value)) return "lhf";
+  return null;
+});
+
 const sections = computed(() => {
-  if (!book.value) return [];
-  if (bookStore.isLitBFBook(book.value))
-    return bookStore.litbfContents.map((s) => s.section);
-  if (bookStore.isLHFBook(book.value))
-    return bookStore.lhfContents.map((s) => s.section);
-  if (bookStore.isLitPBook(book.value))
-    return bookStore.litpContents.map((s) => s.section);
-  return [];
+  switch (bookType.value) {
+    case "litbf":
+      return bookStore.litbfContents.map((s) => s.section);
+    case "lhf":
+      return bookStore.lhfContents.map((s) => s.section);
+    case "litp":
+      return bookStore.litpContents.map((s) => s.section);
+    default:
+      return [];
+  }
 });
 
 const songSections = computed(() =>
   bookStore.getGroupedSongs(book.value || null).map((g) => g.section),
 );
-const allFlatSongs = computed<any[]>(() => {
-  if (!book.value) return [];
-  if (bookStore.isHiraBook(book.value)) return bookStore.hiraSongs;
-  if (bookStore.isHaaBook(book.value)) return bookStore.haaSongs;
-  if (bookStore.isSalamoBook(book.value)) return bookStore.salamoPsalms;
-  return [];
+
+const flatSongSource = computed<any[]>(() => {
+  switch (bookType.value) {
+    case "hira":
+      return bookStore.hiraSongs;
+    case "haa":
+      return bookStore.haaSongs;
+    case "salamo":
+      return bookStore.salamoPsalms;
+    default:
+      return [];
+  }
 });
 
-const filteredAllFlatSongs = computed(() => {
-  if (!sectionSearchQuery.value) return allFlatSongs.value;
-  const q = sectionSearchQuery.value.toLowerCase().trim();
-  return allFlatSongs.value.filter((song: any) => {
-    const title = song.title ? song.title.toLowerCase() : `salamo ${song.id}`;
-    const section = song.section ? song.section.toLowerCase() : "";
+const filteredFlatSongs = computed(() => {
+  const source = flatSongSource.value;
+  const query = debouncedSearchQuery.value.toLowerCase().trim();
+
+  if (!query) return source;
+
+  return source.filter((song: any) => {
+    const title = song.title
+      ? String(song.title).toLowerCase()
+      : `salamo ${song.id}`;
+    const section = song.section ? String(song.section).toLowerCase() : "";
     return (
-      String(song.id).includes(q) || title.includes(q) || section.includes(q)
+      String(song.id).includes(query) ||
+      title.includes(query) ||
+      section.includes(query)
     );
   });
 });
 
-const flatSongs = computed(() => {
-  return filteredAllFlatSongs.value.slice(0, (bookStore.currentPage + 1) * 50);
-});
+const hasMoreItems = computed(() => prefetchedSongs.value.length > 0);
 
-const hasMoreItems = computed(() => {
-  return (bookStore.currentPage + 1) * 50 < filteredAllFlatSongs.value.length;
-});
 const canToggleView = computed(
   () =>
     book.value &&
     (bookStore.isHiraBook(book.value) || bookStore.isHaaBook(book.value)),
 );
 
-const checkDisplayMode = () => {
+const syncSongPagination = () => {
+  if (displayMode.value !== "songs") {
+    displayedSongs.value = [];
+    prefetchedSongs.value = [];
+    return;
+  }
+
+  const songs = filteredFlatSongs.value;
+  bookStore.currentPage = 0;
+  displayedSongs.value = songs.slice(0, pageSize);
+  prefetchedSongs.value = songs.slice(pageSize, pageSize * 2);
+};
+
+watch(
+  sectionSearchQuery,
+  (value, _oldValue, onCleanup) => {
+    const timer = window.setTimeout(() => {
+      debouncedSearchQuery.value = value;
+    }, 200);
+
+    onCleanup(() => window.clearTimeout(timer));
+  },
+  { immediate: true },
+);
+
+watch(
+  [filteredFlatSongs, displayMode],
+  () => {
+    syncSongPagination();
+  },
+  { immediate: true },
+);
+
+const applyDefaultDisplayMode = () => {
   if (!book.value) return;
+
   if (
     bookStore.isHiraBook(book.value) ||
     bookStore.isHaaBook(book.value) ||
@@ -211,15 +276,18 @@ const checkDisplayMode = () => {
   }
 };
 
+watch(
+  bookType,
+  () => {
+    applyDefaultDisplayMode();
+  },
+  { immediate: true },
+);
+
 onMounted(async () => {
   if (bookStore.books.length === 0) await bookStore.loadData();
-  bookStore.currentPage = 0; // Reset pagination
-  checkDisplayMode();
-});
-
-watch(book, () => {
   bookStore.currentPage = 0;
-  checkDisplayMode();
+  applyDefaultDisplayMode();
 });
 
 const navigateToSection = (sectionName: string) => {
@@ -236,9 +304,22 @@ const navigateToSong = (songId: number) => {
   router.push(`/books/${bookId.value}/song/${songId}`);
 };
 
-const onIonInfinite = (event: any) => {
-  bookStore.currentPage++;
-  setTimeout(() => event.target.complete(), 50);
+const onIonInfinite = async (event: any) => {
+  if (prefetchedSongs.value.length === 0) {
+    await event.target.complete();
+    return;
+  }
+
+  displayedSongs.value = displayedSongs.value.concat(prefetchedSongs.value);
+  bookStore.currentPage += 1;
+
+  const nextStart = (bookStore.currentPage + 1) * pageSize;
+  prefetchedSongs.value = filteredFlatSongs.value.slice(
+    nextStart,
+    nextStart + pageSize,
+  );
+
+  await event.target.complete();
 };
 
 const toggleToFlatSongs = () => {
@@ -250,6 +331,7 @@ const onSectionSearchSubmit = () => {
     // If we're displaying flat songs, search acts as a local filter.
     return;
   }
+
   const query = sectionSearchQuery.value.toLowerCase().trim();
   if (query !== "") {
     router.push({ path: "/search", query: { q: query, scope: bookId.value } });
@@ -258,6 +340,7 @@ const onSectionSearchSubmit = () => {
 
 const clearSectionSearch = () => {
   sectionSearchQuery.value = "";
+  debouncedSearchQuery.value = "";
 };
 </script>
 
@@ -267,9 +350,11 @@ const clearSectionSearch = () => {
   max-width: 900px;
   margin: 0 auto;
 }
+
 .song-section {
   overflow: visible;
 }
+
 .sticky-label {
   color: var(--ion-text-color);
   font-weight: 600;
