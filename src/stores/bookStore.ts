@@ -61,8 +61,6 @@ export const useBookStore = defineStore("book", () => {
     [],
   );
   const lastGroupedBookId = ref<number | null>(null);
-  const flatSongsSorted = shallowRef<any[]>([]);
-  const lastFlatBookId = ref<number | null>(null);
   const currentPage = ref(0);
 
   // Search indexes (built once after data load)
@@ -274,23 +272,6 @@ export const useBookStore = defineStore("book", () => {
 
   const pageSize = 50;
 
-  const getFlatSongs = (book: Book | null) => {
-    if (!book) return [];
-    if (lastFlatBookId.value === book.id && flatSongsSorted.value.length > 0) {
-      return flatSongsSorted.value.slice(0, (currentPage.value + 1) * pageSize);
-    }
-
-    let songs: any[] = [];
-    if (isHiraBook(book)) songs = hiraSongs.value;
-    else if (isHaaBook(book)) songs = haaSongs.value;
-    else if (isSalamoBook(book)) songs = salamoPsalms.value;
-    if (songs.length === 0) return [];
-
-    flatSongsSorted.value = songs;
-    lastFlatBookId.value = book.id;
-    return songs.slice(0, (currentPage.value + 1) * pageSize);
-  };
-
   const hasMoreItems = (book: Book | null) => {
     if (!book) return false;
     let totalSongs: any[] = [];
@@ -398,17 +379,12 @@ export const useBookStore = defineStore("book", () => {
     litbfContents,
     lhfContents,
     searchResults,
-    groupedSongsCache,
-    lastGroupedBookId,
-    flatSongsSorted,
-    lastFlatBookId,
     currentPage,
     loadData,
     performSearch,
     clearSearchResults,
     getBookData,
     getGroupedSongs,
-    getFlatSongs,
     hasMoreItems,
     isHiraBook,
     isHaaBook,
