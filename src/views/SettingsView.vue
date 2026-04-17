@@ -110,7 +110,7 @@
             color="secondary"
             aria-hidden="true"
           />
-          <ion-label>Aseho ny bokotra zigzag</ion-label>
+          <ion-label>Aseho ny bokotra Zigzag</ion-label>
           <ion-toggle
             v-model="settings.showZigzagBtn"
             color="secondary"
@@ -155,8 +155,8 @@
             </div>
             <ion-range
               v-model="settings.scrollSpeed"
-              :min="5"
-              :max="30"
+              :min="1"
+              :max="10"
               :pin="true"
               color="secondary"
               class="custom-range"

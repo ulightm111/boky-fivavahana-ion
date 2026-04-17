@@ -276,7 +276,7 @@ const toggleAutoscroll = async () => {
 
   el.addEventListener("pointerdown", stopOnInteraction);
 
-  const speed = settings.scrollSpeed;
+  const speed = settings.scrollSpeed * 5;
   let lastTime = performance.now();
   let currentPos = el.scrollTop;
 

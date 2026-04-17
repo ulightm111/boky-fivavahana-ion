@@ -9,7 +9,7 @@ export const useSettingsStore = defineStore("settings", () => {
   const theme = ref<"light" | "dark" | "system">("light");
   const keepScreenOn = ref(false);
   const fontSize = ref(100);
-  const scrollSpeed = ref(10);
+  const scrollSpeed = ref(2);
   const showZoomBtn = ref(true);
   const showZigzagBtn = ref(true);
   const lyricsZZStyle = ref(false);
