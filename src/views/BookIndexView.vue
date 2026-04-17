@@ -2,7 +2,7 @@
   <ion-page>
     <app-header
       :title="book?.name || ''"
-      :show-searchbar="true"
+      :show-searchbar="bookType !== 'litp' && bookType !== 'lhf'"
       :search-placeholder="`Hitady @${book?.name || ''}...`"
       v-model:searchQuery="sectionSearchQuery"
       @search-submit="onSectionSearchSubmit"
