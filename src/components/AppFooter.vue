@@ -47,7 +47,7 @@
             </ion-col>
             <ion-col>
               <ion-button @click="openMenu" fill="clear" expand="block">
-                <ion-icon :icon="menu"></ion-icon>
+                <ion-icon :icon="apps"></ion-icon>
               </ion-button>
             </ion-col>
           </ion-row>
@@ -72,13 +72,13 @@ import {
   modalController,
 } from "@ionic/vue";
 import {
-  menu,
   chevronBack,
   chevronForward,
   search,
   caretBack,
   play,
   pause,
+  apps,
 } from "ionicons/icons";
 import { useRoute } from "vue-router";
 import { App } from "@capacitor/app";

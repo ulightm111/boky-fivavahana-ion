@@ -153,6 +153,9 @@ const navigateToSearchResult = (result: SearchResult) => {
 </script>
 
 <style scoped>
+h3 {
+  font-size: 1em;
+}
 .no-results {
   text-align: center;
   margin-top: 2em;
