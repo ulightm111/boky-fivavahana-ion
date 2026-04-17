@@ -92,10 +92,9 @@ npx ionic cap run android
 
 ---
 
-## 📜 License & Credits
+## 📜 License
 
 - **License:** Released under the [GNU General Public License v3.0](https://www.google.com/search?q=LICENSE).
-- **Credits:** _FEEM NTIC — Lead Code Group_.
 - **Maintainer:** Tsiory M.
 
 ---
