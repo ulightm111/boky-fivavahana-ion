@@ -120,21 +120,23 @@ const verticalIcon =
   d="M 102,256 H 410 M 102,156 H 410 M 102,356 h 308"/></svg>';
 
 const settings = useSettingsStore();
-
 const route = useRoute();
 const router = useIonRouter();
 const bookStore = useBookStore();
 
 const bookId = computed(() => Number(route.params.bookId));
-const book = computed(() => bookStore.books.find((b) => b.id === bookId.value));
+const book = computed(() => bookStore.getBookById(bookId.value));
+
 const routeSongId = computed(() =>
   route.params.songId ? Number(route.params.songId) : null,
 );
+
 const routeSectionName = computed(() =>
   route.params.sectionName
     ? decodeURIComponent(route.params.sectionName as string)
     : null,
 );
+
 const routeSubIndex = computed(() =>
   route.params.subIndex !== undefined ? Number(route.params.subIndex) : null,
 );
@@ -148,7 +150,7 @@ const contentStyle = computed(() => ({
   "--lyrics-font-size": `${settings.fontSize}%`,
 }));
 
-const displayMode = ref("");
+const displayMode = ref<"subsections" | "liturgia" | "psalm" | "song" | "">("");
 const itemObj = ref<any>(null);
 const htmlContent = ref<string[]>([]);
 const subTitleText = ref<string>("");
@@ -165,119 +167,142 @@ const canGoNext = computed(
     currentTitleIndex.value < currentTitlesList.value.length - 1,
 );
 
-const loadContent = () => {
-  if (!book.value) return;
+const contentRef = ref<any>(null);
+const isScrolling = ref(false);
 
-  const data = bookStore.getBookData(book.value);
-  if (!data || data.length === 0) return;
+const loadContent = () => {
+  const currentBook = book.value;
+  if (!currentBook) return;
+
+  const data = bookStore.getBookData(currentBook);
+  if (!Array.isArray(data) || data.length === 0) return;
+
+  // Reset per-load state first, so stale values do not linger.
+  itemObj.value = null;
+  htmlContent.value = [];
+  subTitleText.value = "";
+  title.value = "";
+  subtitle.value = currentBook.name;
+  currentTitlesList.value = [];
+  currentTitleIndex.value = -1;
 
   if (routeSongId.value !== null) {
     const songId = routeSongId.value;
     const songIndex = data.findIndex((s: any) => s.id === songId);
+
     if (songIndex !== -1) {
-      itemObj.value = data[songIndex];
+      const song = data[songIndex];
+      itemObj.value = song;
       displayMode.value = isSalamo.value ? "psalm" : "song";
       title.value = isSalamo.value
-        ? `Salamo - ${itemObj.value.id}`
-        : `${itemObj.value.id} - ${itemObj.value.title}`;
-      subtitle.value = book.value.name;
-
+        ? `Salamo - ${song.id}`
+        : `${song.id} - ${song.title}`;
       currentTitlesList.value = data.map((s: any) => ({
         id: s.id,
         type: "song",
       }));
       currentTitleIndex.value = songIndex;
     }
-  } else if (routeSectionName.value !== null) {
-    const sName = routeSectionName.value;
-    const sectionIndex = data.findIndex((s: any) => s.section === sName);
-    if (sectionIndex !== -1) {
-      const section = data[sectionIndex];
-      itemObj.value = section;
-      title.value = sName;
-      subtitle.value = book.value.name;
+    return;
+  }
 
-      if (routeSubIndex.value !== null) {
+  if (routeSectionName.value !== null) {
+    const sectionName = routeSectionName.value;
+    const sectionIndex = data.findIndex((s: any) => s.section === sectionName);
+
+    if (sectionIndex === -1) return;
+
+    const section = data[sectionIndex];
+    itemObj.value = section;
+    title.value = sectionName;
+
+    if (routeSubIndex.value !== null) {
+      const subs = section.subsections || [];
+      const idx = routeSubIndex.value;
+
+      if (idx >= 0 && idx < subs.length) {
         displayMode.value = "liturgia";
-        const sub = section.subsections[routeSubIndex.value];
+        const sub = subs[idx];
         subTitleText.value = sub.subsection;
-        htmlContent.value = sub.content;
-        currentTitlesList.value = section.subsections.map(
-          (_: any, idx: number) => ({
-            id: idx,
-            type: "subsection",
-            section: sName,
-          }),
-        );
-        currentTitleIndex.value = routeSubIndex.value;
-      } else {
-        if (section.subsections && section.subsections.length > 0) {
-          displayMode.value = "subsections";
-          currentTitleIndex.value = -1;
-        } else {
-          displayMode.value = "liturgia";
-          htmlContent.value = section.content || [];
-          currentTitlesList.value = data.map((s: any) => ({
-            id: s.section,
-            type: "section",
-          }));
-          currentTitleIndex.value = sectionIndex;
-        }
+        htmlContent.value = sub.content || [];
+        currentTitlesList.value = subs.map((_s: any, subIdx: number) => ({
+          id: subIdx,
+          type: "subsection",
+          section: sectionName,
+        }));
+        currentTitleIndex.value = idx;
       }
+      return;
+    }
+
+    if (section.subsections && section.subsections.length > 0) {
+      displayMode.value = "subsections";
+      currentTitlesList.value = section.subsections.map(
+        (_s: any, idx: number) => ({
+          id: idx,
+          type: "subsection",
+          section: sectionName,
+        }),
+      );
+    } else {
+      displayMode.value = "liturgia";
+      htmlContent.value = section.content || [];
+      currentTitlesList.value = data.map((s: any) => ({
+        id: s.section,
+        type: "section",
+      }));
+      currentTitleIndex.value = sectionIndex;
     }
   }
 };
 
-const contentRef = ref<any>(null);
-const isScrolling = ref(false);
-
 const toggleAutoscroll = async () => {
   if (isScrolling.value) {
     isScrolling.value = false;
-  } else {
-    const el = await contentRef.value.$el.getScrollElement();
-    isScrolling.value = true;
-
-    const stopOnInteraction = () => {
-      if (isScrolling.value) {
-        isScrolling.value = false;
-        el.removeEventListener("pointerdown", stopOnInteraction);
-      }
-    };
-    el.addEventListener("pointerdown", stopOnInteraction);
-
-    const speed = settings.scrollSpeed;
-    let lastTime = performance.now();
-    let currentPos = el.scrollTop;
-
-    const step = (currentTime: number) => {
-      if (!isScrolling.value) return;
-
-      const deltaTime = (currentTime - lastTime) / 1000;
-      lastTime = currentTime;
-
-      currentPos += speed * deltaTime;
-      el.scrollTop = currentPos;
-
-      if (currentPos + el.clientHeight < el.scrollHeight - 1) {
-        requestAnimationFrame(step);
-      } else {
-        isScrolling.value = false;
-        el.removeEventListener("pointerdown", stopOnInteraction);
-      }
-    };
-
-    requestAnimationFrame(step);
+    return;
   }
+
+  const el = await contentRef.value?.$el?.getScrollElement?.();
+  if (!el) return;
+
+  isScrolling.value = true;
+
+  const stopOnInteraction = () => {
+    if (isScrolling.value) {
+      isScrolling.value = false;
+      el.removeEventListener("pointerdown", stopOnInteraction);
+    }
+  };
+
+  el.addEventListener("pointerdown", stopOnInteraction);
+
+  const speed = settings.scrollSpeed;
+  let lastTime = performance.now();
+  let currentPos = el.scrollTop;
+
+  const step = (currentTime: number) => {
+    if (!isScrolling.value) return;
+
+    const deltaTime = (currentTime - lastTime) / 1000;
+    lastTime = currentTime;
+
+    currentPos += speed * deltaTime;
+    el.scrollTop = currentPos;
+
+    if (currentPos + el.clientHeight < el.scrollHeight - 1) {
+      requestAnimationFrame(step);
+    } else {
+      isScrolling.value = false;
+      el.removeEventListener("pointerdown", stopOnInteraction);
+    }
+  };
+
+  requestAnimationFrame(step);
 };
 
-watch([routeSongId, routeSectionName, routeSubIndex], () => {
+watch([routeSongId, routeSectionName, routeSubIndex, bookId], () => {
   isScrolling.value = false;
   loadContent();
-});
-
-onUnmounted(() => {
-  isScrolling.value = false;
 });
 
 onMounted(async () => {
@@ -285,49 +310,51 @@ onMounted(async () => {
   loadContent();
 });
 
+onUnmounted(() => {
+  isScrolling.value = false;
+});
+
 const toggleZigzag = () => {
   settings.lyricsZZStyle = !settings.lyricsZZStyle;
 };
 
-watch([routeSongId, routeSectionName, routeSubIndex], () => {
-  loadContent();
-});
-
 const navigateToSubsection = (index: number) => {
+  if (!routeSectionName.value) return;
+
   router.push(
     `/books/${bookId.value}/section/${encodeURIComponent(
-      routeSectionName.value as string,
+      routeSectionName.value,
     )}/subsection/${index}`,
   );
 };
 
+const navigateByItem = (item: any) => {
+  if (!item) return;
+
+  if (item.type === "song") {
+    router.push(`/books/${bookId.value}/song/${item.id}`);
+  } else if (item.type === "section") {
+    router.push(
+      `/books/${bookId.value}/section/${encodeURIComponent(item.id)}`,
+    );
+  } else if (item.type === "subsection") {
+    router.push(
+      `/books/${bookId.value}/section/${encodeURIComponent(
+        item.section,
+      )}/subsection/${item.id}`,
+    );
+  }
+};
+
 const navigatePrev = () => {
   if (canGoPrev.value) {
-    const prevItem = currentTitlesList.value[currentTitleIndex.value - 1];
-    navigateByItem(prevItem);
+    navigateByItem(currentTitlesList.value[currentTitleIndex.value - 1]);
   }
 };
 
 const navigateNext = () => {
   if (canGoNext.value) {
-    const nextItem = currentTitlesList.value[currentTitleIndex.value + 1];
-    navigateByItem(nextItem);
-  }
-};
-
-const navigateByItem = (itemObjRef: any) => {
-  if (itemObjRef.type === "song") {
-    router.push(`/books/${bookId.value}/song/${itemObjRef.id}`);
-  } else if (itemObjRef.type === "section") {
-    router.push(
-      `/books/${bookId.value}/section/${encodeURIComponent(itemObjRef.id)}`,
-    );
-  } else if (itemObjRef.type === "subsection") {
-    router.push(
-      `/books/${bookId.value}/section/${encodeURIComponent(
-        itemObjRef.section,
-      )}/subsection/${itemObjRef.id}`,
-    );
+    navigateByItem(currentTitlesList.value[currentTitleIndex.value + 1]);
   }
 };
 
