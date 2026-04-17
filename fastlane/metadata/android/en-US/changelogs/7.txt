@@ -1,0 +1,4 @@
+- Section search fix
+- Database reorganized
+- Performance optimization
+- Code and typo fixes
