@@ -88,7 +88,7 @@ npx ionic cap run android
 
 | Books View                                       | Song List                                        | Content View                                     |
 | :----------------------------------------------- | :----------------------------------------------- | :----------------------------------------------- |
-| <img src="images/Screenshot_1.jpg" width="200"/> | <img src="images/Screenshot_2.jpg" width="200"/> | <img src="images/Screenshot_3.jpg" width="200"/> |
+| <img src="images/Screenshot_1.png" width="200"/> | <img src="images/Screenshot_2.png" width="200"/> | <img src="images/Screenshot_3.png" width="200"/> |
 
 ---
 
