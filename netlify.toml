@@ -5,5 +5,5 @@
 # SPA fallback
 [[redirects]]
   from = "/*"
-  to = "/books"
+  to = "/index.html"
   status = 200
