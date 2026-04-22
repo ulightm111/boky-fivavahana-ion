@@ -24,11 +24,15 @@
 
           <div
             class="verse"
-            :class="{ 'even-verse': v.verse_number % 2 === 0 }"
+            :class="{
+              'even-verse': v.verse_number % 2 === 0,
+              chorus: !v.verse_number,
+            }"
           >
-            <span v-if="isHira"
-              ><strong>{{ v.verse_number }}.</strong></span
-            >
+            <span v-if="isHira">
+              <strong v-if="v.verse_number">{{ v.verse_number }}.</strong>
+              <div v-else class="chorus-title">Fiverenana:</div>
+            </span>
             <p>
               <span
                 v-for="(line, lIndex) in Array.isArray(v.lines)
