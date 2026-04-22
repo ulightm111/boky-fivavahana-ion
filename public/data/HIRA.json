@@ -22621,6 +22621,15 @@
       "headnote": null,
       "verses": [
         {
+          "verse_number": 0,
+          "lines": [
+            "Atosahy ny herinao",
+            "O! ry Tompo be fitia",
+            "Mamirata Ianao",
+            "Hazavao ity tany ity."
+          ]
+        },
+        {
           "verse_number": 1,
           "lines": [
             "Mbola maro sesehena",
@@ -22634,15 +22643,6 @@
           ]
         },
         {
-          "verse_number": 0,
-          "lines": [
-            "Atosahy ny herinao",
-            "O! ry Tompo be fitia",
-            "Mamiratana Ianao",
-            "Hazavao ity tany ity."
-          ]
-        },
-        {
           "verse_number": 2,
           "lines": [
             "Ndeha satana afatory",
@@ -22653,15 +22653,6 @@
             "Tian'i jesoa hovoriana",
             "Ento ho any am-paradisa",
             "Lozantsika raha hangina."
-          ]
-        },
-        {
-          "verse_number": 0,
-          "lines": [
-            "Atosahy ny herinao",
-            "O! ry Tompo be fitia",
-            "Mamiratana Ianao",
-            "Hazavao ity tany ity."
           ]
         }
       ],
