@@ -358,5 +358,7 @@ const clearSectionSearch = () => {
 .sticky-label {
   color: var(--ion-text-color);
   font-weight: 600;
+  height: 3em;
+  text-wrap: balance;
 }
 </style>
