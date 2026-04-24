@@ -1,6 +1,6 @@
 <template>
   <ion-app>
-    <ion-router-outlet id="main-content" :animated="false" />
+    <ion-router-outlet id="main-content" :animation="customAnimation" />
   </ion-app>
 </template>
 
@@ -15,6 +15,7 @@ import { onUnmounted, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useSettingsStore } from "./stores/settingsStore";
 import { App } from "@capacitor/app";
+import { customAnimation } from "./router/animation";
 
 const route = useRoute();
 const settingsStore = useSettingsStore();

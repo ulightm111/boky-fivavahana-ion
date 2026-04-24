@@ -1,5 +1,7 @@
 <template>
-  <ion-page>
+  <ion-page
+    :class="{ 'content-view-page': initialDisplayMode !== 'subsections' }"
+  >
     <app-header
       :title="title"
       :subtitle="displayMode === 'psalm' ? '' : subtitle"
@@ -109,6 +111,7 @@ import SongContent from "@/components/lyrics/SongContent.vue";
 import PsalmContent from "@/components/lyrics/PsalmContent.vue";
 import LitContent from "@/components/lyrics/LitContent.vue";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { setForceDirection } from "@/router/animation";
 
 const zigzagIcon =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">\
@@ -151,6 +154,9 @@ const contentStyle = computed(() => ({
 }));
 
 const displayMode = ref<"subsections" | "liturgia" | "psalm" | "song" | "">("");
+const initialDisplayMode = ref<
+  "subsections" | "liturgia" | "psalm" | "song" | ""
+>("");
 const itemObj = ref<any>(null);
 const htmlContent = ref<string[]>([]);
 const subTitleText = ref<string>("");
@@ -254,6 +260,10 @@ const loadContent = () => {
       currentTitleIndex.value = sectionIndex;
     }
   }
+
+  if (initialDisplayMode.value === "" && displayMode.value !== "") {
+    initialDisplayMode.value = displayMode.value;
+  }
 };
 
 const toggleAutoscroll = async () => {
@@ -328,33 +338,35 @@ const navigateToSubsection = (index: number) => {
   );
 };
 
-const navigateByItem = (item: any) => {
+const navigateByItem = (item: any, direction: 'forward' | 'back' = 'forward') => {
   if (!item) return;
 
+  let path = "";
   if (item.type === "song") {
-    router.push(`/books/${bookId.value}/song/${item.id}`);
+    path = `/books/${bookId.value}/song/${item.id}`;
   } else if (item.type === "section") {
-    router.push(
-      `/books/${bookId.value}/section/${encodeURIComponent(item.id)}`,
-    );
+    path = `/books/${bookId.value}/section/${encodeURIComponent(item.id)}`;
   } else if (item.type === "subsection") {
-    router.push(
-      `/books/${bookId.value}/section/${encodeURIComponent(
-        item.section,
-      )}/subsection/${item.id}`,
-    );
+    path = `/books/${bookId.value}/section/${encodeURIComponent(
+      item.section,
+    )}/subsection/${item.id}`;
+  }
+  
+  if (path) {
+    setForceDirection(direction);
+    router.navigate(path, direction, 'replace');
   }
 };
 
 const navigatePrev = () => {
   if (canGoPrev.value) {
-    navigateByItem(currentTitlesList.value[currentTitleIndex.value - 1]);
+    navigateByItem(currentTitlesList.value[currentTitleIndex.value - 1], 'back');
   }
 };
 
 const navigateNext = () => {
   if (canGoNext.value) {
-    navigateByItem(currentTitlesList.value[currentTitleIndex.value + 1]);
+    navigateByItem(currentTitlesList.value[currentTitleIndex.value + 1], 'forward');
   }
 };
 
