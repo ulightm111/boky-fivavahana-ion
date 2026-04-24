@@ -94,7 +94,7 @@ const clearSearch = () => {
 };
 
 onMounted(async () => {
-  if (bookStore.books.length === 0) await bookStore.loadData();
+  await bookStore.loadData();
 
   if (route.query.q) {
     query.value = route.query.q as string;

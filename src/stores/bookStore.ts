@@ -338,32 +338,36 @@ export const useBookStore = defineStore("book", () => {
   };
 
   const loadData = async () => {
+    if (books.value.length > 0) {
+      isLoading.value = false;
+      return;
+    }
     isLoading.value = true;
     try {
       const [booksRes, hiraRes, haaRes, salamoRes, litpRes, litbfRes, lhfRes] =
         await Promise.all([
-        fetch("/data/books.json").then((r) => r.json()),
-        fetch("/data/HIRA.json").then((r) => r.json()),
-        fetch("/data/HAA.json").then((r) => r.json()),
-        fetch("/data/SALAMO.json").then((r) => r.json()),
-        fetch("/data/LitP.json").then((r) => r.json()),
-        fetch("/data/LitBF.json").then((r) => r.json()),
-        fetch("/data/LHF.json").then((r) => r.json()),
-      ]);
+          fetch("/data/books.json").then((r) => r.json()),
+          fetch("/data/HIRA.json").then((r) => r.json()),
+          fetch("/data/HAA.json").then((r) => r.json()),
+          fetch("/data/SALAMO.json").then((r) => r.json()),
+          fetch("/data/LitP.json").then((r) => r.json()),
+          fetch("/data/LitBF.json").then((r) => r.json()),
+          fetch("/data/LHF.json").then((r) => r.json()),
+        ]);
 
-    const booksList = markRaw(booksRes as Book[]);
-    books.value = booksList;
-    booksById.value = Object.fromEntries(booksList.map((b) => [b.id, b]));
-    booksByName.value = Object.fromEntries(booksList.map((b) => [b.name, b]));
+      const booksList = markRaw(booksRes as Book[]);
+      books.value = booksList;
+      booksById.value = Object.fromEntries(booksList.map((b) => [b.id, b]));
+      booksByName.value = Object.fromEntries(booksList.map((b) => [b.name, b]));
 
-    hiraSongs.value = markRaw(hiraRes.songs || []);
-    haaSongs.value = markRaw(haaRes.songs || []);
-    salamoPsalms.value = markRaw(salamoRes.psalms || []);
-    litpContents.value = markRaw(litpRes.contents || []);
-    litbfContents.value = markRaw(litbfRes.sections || []);
-    lhfContents.value = markRaw(lhfRes.sections || []);
+      hiraSongs.value = markRaw(hiraRes.songs || []);
+      haaSongs.value = markRaw(haaRes.songs || []);
+      salamoPsalms.value = markRaw(salamoRes.psalms || []);
+      litpContents.value = markRaw(litpRes.contents || []);
+      litbfContents.value = markRaw(litbfRes.sections || []);
+      lhfContents.value = markRaw(lhfRes.sections || []);
 
-    buildSearchIndexes();
+      buildSearchIndexes();
     } finally {
       isLoading.value = false;
     }
