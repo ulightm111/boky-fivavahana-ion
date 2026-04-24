@@ -1,75 +1,113 @@
 import { createAnimation } from "@ionic/vue";
 
-let _forceDirection: "forward" | "back" | null = null;
+type Direction = "forward" | "back";
 
-export const setForceDirection = (dir: "forward" | "back" | null) => {
+interface CustomAnimationOptions {
+  direction?: Direction;
+  enteringEl?: HTMLElement | null;
+  leavingEl?: HTMLElement | null;
+}
+
+let _forceDirection: Direction | null = null;
+
+export const setForceDirection = (dir: Direction | null) => {
   _forceDirection = dir;
 };
 
-export const customAnimation = (_: HTMLElement, opts: any) => {
-  const isBack = (_forceDirection || opts.direction) === "back";
-  _forceDirection = null; // reset after reading
-  const enteringEl = opts.enteringEl;
-  const leavingEl = opts.leavingEl;
+const getContentElement = (pageEl?: HTMLElement | null) => {
+  return pageEl?.querySelector("ion-content") as HTMLElement | null;
+};
 
-  const isEnteringContent = enteringEl?.classList.contains("content-view-page");
-  const isLeavingContent = leavingEl?.classList.contains("content-view-page");
+const setWillChange = (el: HTMLElement | null) => {
+  if (!el) return;
+  el.style.willChange = "transform, opacity";
+};
+
+const clearWillChange = (el: HTMLElement | null) => {
+  if (!el) return;
+  el.style.willChange = "";
+};
+
+export const customAnimation = (_: HTMLElement, opts: CustomAnimationOptions) => {
+  const direction = _forceDirection || opts.direction || "forward";
+  _forceDirection = null;
+
+  const isBack = direction === "back";
+
+  const enteringEl = opts.enteringEl ?? null;
+  const leavingEl = opts.leavingEl ?? null;
+
+  const enteringContentEl = getContentElement(enteringEl);
+  const leavingContentEl = getContentElement(leavingEl);
+
+  const isEnteringContent = !!enteringEl?.classList.contains("content-view-page");
+  const isLeavingContent = !!leavingEl?.classList.contains("content-view-page");
 
   const isOpen = isEnteringContent && !isLeavingContent;
   const isClose = !isEnteringContent && isLeavingContent;
-  
-  const duration = isOpen || isClose ? 180 : 220;
-  const easing = isOpen || isClose ? "cubic-bezier(0.25, 0.8, 0.25, 1)" : "cubic-bezier(0.25, 1, 0.5, 1)";
+
+  const duration = isOpen || isClose ? 170 : 210;
+  const easing = "cubic-bezier(0.4, 0.0, 0.2, 1)";
 
   const rootAnimation = createAnimation()
     .duration(duration)
     .easing(easing);
 
-  if (enteringEl) {
+  const slideFrom = isBack ? "-100%" : "100%";
+  const slideTo = "0%";
+  const slideOut = isBack ? "100%" : "-100%";
+
+  // --- ENTERING ---
+  if (enteringEl && enteringContentEl) {
+    setWillChange(enteringContentEl);
+
     const enteringPage = createAnimation()
       .addElement(enteringEl)
       .beforeStyles({ background: "transparent" })
       .afterClearStyles(["background"]);
-      
-    rootAnimation.addAnimation([enteringPage]);
 
-    const enteringContentEl = enteringEl.querySelector("ion-content");
-    if (enteringContentEl) {
-      const enteringContent = createAnimation().addElement(enteringContentEl);
-      
-      if (isOpen || isClose) {
-        enteringContent
-          .fromTo("opacity", "0", "1")
-          .fromTo("transform", "scale(0.97)", "scale(1)");
-      } else {
-        enteringContent.fromTo(
-          "transform",
-          isBack ? "translateX(-100%)" : "translateX(100%)",
-          "translateX(0)"
-        );
-      }
-      rootAnimation.addAnimation([enteringContent]);
+    const enteringContent = createAnimation()
+      .addElement(enteringContentEl);
+
+    if (isOpen || isClose) {
+      enteringContent
+        .fromTo("opacity", "0", "1")
+        .fromTo("transform", "translateZ(0) scale(0.98)", "translateZ(0) scale(1)");
+    } else {
+      enteringContent.fromTo(
+        "transform",
+        `translate3d(${slideFrom},0,0)`,
+        `translate3d(${slideTo},0,0)`
+      );
     }
+
+    enteringContent.afterAddWrite(() => clearWillChange(enteringContentEl));
+
+    rootAnimation.addAnimation([enteringPage, enteringContent]);
   }
 
-  if (leavingEl) {
-    const leavingContentEl = leavingEl.querySelector("ion-content");
-    if (leavingContentEl) {
-      const leavingContent = createAnimation().addElement(leavingContentEl);
-      
-      if (isOpen || isClose) {
-        leavingContent
-          .fromTo("opacity", "1", "0")
-          .fromTo("transform", "scale(1)", "scale(0.97)");
-      } else {
-        leavingContent.fromTo(
-          "transform",
-          "translateX(0)",
-          isBack ? "translateX(100%)" : "translateX(-100%)"
-        );
-      }
-      rootAnimation.addAnimation([leavingContent]);
+  // --- LEAVING ---
+  if (leavingEl && leavingContentEl) {
+    setWillChange(leavingContentEl);
+
+    const leavingContent = createAnimation()
+      .addElement(leavingContentEl);
+
+    if (isOpen || isClose) {
+      leavingContent
+        .fromTo("opacity", "1", "0")
+        .fromTo("transform", "translateZ(0) scale(1)", "translateZ(0) scale(0.98)");
+    } else {
+      leavingContent.fromTo(
+        "transform",
+        "translate3d(0,0,0)",
+        `translate3d(${slideOut},0,0)`
+      );
     }
+
+    leavingContent.afterAddWrite(() => clearWillChange(leavingContentEl));
+
+    rootAnimation.addAnimation([leavingContent]);
   }
 
   return rootAnimation;
