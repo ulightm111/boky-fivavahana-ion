@@ -66,6 +66,7 @@ export const useBookStore = defineStore("book", () => {
   );
   const lastGroupedBookId = ref<number | null>(null);
   const currentPage = ref(0);
+  const isLoading = ref(false);
 
   // Search indexes (built once after data load)
   const hiraSearchIndex = shallowRef<IndexedSearchItem[]>([]);
@@ -337,8 +338,10 @@ export const useBookStore = defineStore("book", () => {
   };
 
   const loadData = async () => {
-    const [booksRes, hiraRes, haaRes, salamoRes, litpRes, litbfRes, lhfRes] =
-      await Promise.all([
+    isLoading.value = true;
+    try {
+      const [booksRes, hiraRes, haaRes, salamoRes, litpRes, litbfRes, lhfRes] =
+        await Promise.all([
         fetch("/data/books.json").then((r) => r.json()),
         fetch("/data/HIRA.json").then((r) => r.json()),
         fetch("/data/HAA.json").then((r) => r.json()),
@@ -361,6 +364,9 @@ export const useBookStore = defineStore("book", () => {
     lhfContents.value = markRaw(lhfRes.sections || []);
 
     buildSearchIndexes();
+    } finally {
+      isLoading.value = false;
+    }
   };
 
   return {
@@ -375,6 +381,7 @@ export const useBookStore = defineStore("book", () => {
     lhfContents,
     searchResults,
     currentPage,
+    isLoading,
     loadData,
     performSearch,
     clearSearchResults,

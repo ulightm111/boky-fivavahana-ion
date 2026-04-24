@@ -8,8 +8,19 @@
     />
 
     <ion-content ref="contentRef" :fullscreen="true" :style="contentStyle">
+      <!-- Skeleton Loading State -->
+      <div v-if="isLoading" class="skeleton-container" style="padding: 16px; margin: 0 auto; max-width: 800px;">
+        <ion-skeleton-text animated style="width: 50%; height: 32px; margin-bottom: 24px; border-radius: 4px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 1.5em; margin-bottom: 8px; border-radius: 4px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 90%; height: 1.5em; margin-bottom: 8px; border-radius: 4px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 95%; height: 1.5em; margin-bottom: 8px; border-radius: 4px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 80%; height: 1.5em; margin-bottom: 24px; border-radius: 4px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 1.5em; margin-bottom: 8px; border-radius: 4px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 85%; height: 1.5em; margin-bottom: 8px; border-radius: 4px;"></ion-skeleton-text>
+      </div>
+
       <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
-      <ion-list :inset="true" v-if="displayMode === 'subsections'">
+      <ion-list :inset="true" v-else-if="displayMode === 'subsections'">
         <ion-item
           v-for="(sub, index) in itemObj.subsections"
           :key="index"
@@ -99,12 +110,14 @@ import {
   IonList,
   IonItem,
   IonLabel,
+  IonSkeletonText,
   useIonRouter,
 } from "@ionic/vue";
 import { add, ellipse, remove } from "ionicons/icons";
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
+import { storeToRefs } from "pinia";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import SongContent from "@/components/lyrics/SongContent.vue";
@@ -126,6 +139,7 @@ const settings = useSettingsStore();
 const route = useRoute();
 const router = useIonRouter();
 const bookStore = useBookStore();
+const { isLoading } = storeToRefs(bookStore);
 
 const bookId = computed(() => Number(route.params.bookId));
 const book = computed(() => bookStore.getBookById(bookId.value));

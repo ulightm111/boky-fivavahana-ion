@@ -10,27 +10,51 @@
 
     <ion-content :fullscreen="true">
       <div class="books-container">
-        <ion-card
-          v-for="book in books"
-          :key="book.id"
-          button
-          @click="navigateToBook(book.id)"
-          class="book-card"
-        >
-          <div class="card-content-wrapper">
-            <div class="icon-section">
-              <div class="svg-container" v-html="getBookSvg(book.name)"></div>
+        <template v-if="isLoading">
+          <ion-card
+            v-for="i in 6"
+            :key="'skeleton-' + i"
+            class="book-card"
+          >
+            <div class="card-content-wrapper">
+              <div class="icon-section">
+                <ion-skeleton-text animated style="width: 40px; height: 40px; border-radius: 4px;"></ion-skeleton-text>
+              </div>
+              <div class="text-section">
+                <ion-card-header>
+                  <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-skeleton-text animated style="width: 100%;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 80%;"></ion-skeleton-text>
+                </ion-card-content>
+              </div>
             </div>
-            <div class="text-section">
-              <ion-card-header>
-                <ion-card-title>{{ book.name }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                {{ book.description }}
-              </ion-card-content>
+          </ion-card>
+        </template>
+        <template v-else>
+          <ion-card
+            v-for="book in books"
+            :key="book.id"
+            button
+            @click="navigateToBook(book.id)"
+            class="book-card"
+          >
+            <div class="card-content-wrapper">
+              <div class="icon-section">
+                <div class="svg-container" v-html="getBookSvg(book.name)"></div>
+              </div>
+              <div class="text-section">
+                <ion-card-header>
+                  <ion-card-title>{{ book.name }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  {{ book.description }}
+                </ion-card-content>
+              </div>
             </div>
-          </div>
-        </ion-card>
+          </ion-card>
+        </template>
       </div>
     </ion-content>
     <app-footer />
@@ -45,6 +69,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
+  IonSkeletonText,
   useIonRouter,
 } from "@ionic/vue";
 import { ref, onMounted } from "vue";
@@ -55,7 +80,7 @@ import AppFooter from "@/components/AppFooter.vue";
 
 const router = useIonRouter();
 const bookStore = useBookStore();
-const { books } = storeToRefs(bookStore);
+const { books, isLoading } = storeToRefs(bookStore);
 const globalSearchQuery = ref("");
 
 const SVGS = {
