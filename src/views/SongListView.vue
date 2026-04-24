@@ -10,14 +10,7 @@
     />
 
     <ion-content :fullscreen="true">
-      <ion-list :inset="true" v-if="isLoading">
-        <ion-item v-for="i in 15" :key="'skeleton-' + i">
-          <ion-label>
-            <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-      <ion-list :inset="true" v-else>
+      <ion-list :inset="true">
         <template v-for="song in filteredSongs" :key="song.id">
           <ion-item button @click="navigateToSong(song.id)">
             <ion-label class="song-label">
@@ -40,13 +33,11 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonSkeletonText,
   useIonRouter,
 } from "@ionic/vue";
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
-import { storeToRefs } from "pinia";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
@@ -57,7 +48,6 @@ const line =
 const route = useRoute();
 const router = useIonRouter();
 const bookStore = useBookStore();
-const { isLoading } = storeToRefs(bookStore);
 
 const sectionSearchQuery = ref("");
 const bookId = computed(() => Number(route.params.bookId));
@@ -83,7 +73,7 @@ const filteredSongs = computed(() => {
 });
 
 onMounted(async () => {
-  if (bookStore.books.length === 0) await bookStore.loadData();
+  await bookStore.loadData();
 });
 
 const navigateToSong = (songId: number) => {

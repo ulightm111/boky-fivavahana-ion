@@ -10,17 +10,8 @@
     />
 
     <ion-content :fullscreen="true">
-      <ion-list :inset="true" v-if="isLoading">
-        <ion-item v-for="i in 15" :key="'skeleton-' + i">
-          <ion-icon :icon="ellipse" slot="start" size="x-small" class="bullet-icon" />
-          <ion-label>
-            <ion-skeleton-text animated style="width: 80%;"></ion-skeleton-text>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-
       <!-- Sections for LitBF, LitP, LHF -->
-      <ion-list :inset="true" v-else-if="displayMode === 'sections'">
+      <ion-list :inset="true" v-if="displayMode === 'sections'">
         <ion-item
           v-for="section in sections"
           :key="section"
@@ -136,7 +127,6 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonItemDivider,
-  IonSkeletonText,
   useIonRouter,
 } from "@ionic/vue";
 import {
@@ -147,14 +137,12 @@ import {
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore } from "@/stores/bookStore";
-import { storeToRefs } from "pinia";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 const route = useRoute();
 const router = useIonRouter();
 const bookStore = useBookStore();
-const { isLoading } = storeToRefs(bookStore);
 
 const bookId = computed(() => Number(route.params.bookId));
 const book = computed(() => bookStore.getBookById(bookId.value));
@@ -297,7 +285,7 @@ watch(
 );
 
 onMounted(async () => {
-  if (bookStore.books.length === 0) await bookStore.loadData();
+  await bookStore.loadData();
   bookStore.currentPage = 0;
   applyDefaultDisplayMode();
 });
