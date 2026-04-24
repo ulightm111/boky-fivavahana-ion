@@ -110,6 +110,7 @@ ion-label {
   padding: 16px;
   margin: 12px;
   max-width: 900px;
+  margin-inline: max(16px, (100% - 900px) / 2);
   border-radius: 10px;
   box-shadow: 0 2px 6px var(--ion-box-shadow-color);
   background: var(--ion-background-color);
