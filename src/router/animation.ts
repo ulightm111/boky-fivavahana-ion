@@ -28,7 +28,10 @@ const clearWillChange = (el: HTMLElement | null) => {
   el.style.willChange = "";
 };
 
-export const customAnimation = (_: HTMLElement, opts: CustomAnimationOptions) => {
+export const customAnimation = (
+  _: HTMLElement,
+  opts: CustomAnimationOptions,
+) => {
   const direction = _forceDirection || opts.direction || "forward";
   _forceDirection = null;
 
@@ -40,7 +43,8 @@ export const customAnimation = (_: HTMLElement, opts: CustomAnimationOptions) =>
   const enteringContentEl = getContentElement(enteringEl);
   const leavingContentEl = getContentElement(leavingEl);
 
-  const isEnteringContent = !!enteringEl?.classList.contains("content-view-page");
+  const isEnteringContent =
+    !!enteringEl?.classList.contains("content-view-page");
   const isLeavingContent = !!leavingEl?.classList.contains("content-view-page");
 
   const isOpen = isEnteringContent && !isLeavingContent;
@@ -49,9 +53,7 @@ export const customAnimation = (_: HTMLElement, opts: CustomAnimationOptions) =>
   const duration = isOpen || isClose ? 170 : 210;
   const easing = "cubic-bezier(0.4, 0.0, 0.2, 1)";
 
-  const rootAnimation = createAnimation()
-    .duration(duration)
-    .easing(easing);
+  const rootAnimation = createAnimation().duration(duration).easing(easing);
 
   const slideFrom = isBack ? "-100%" : "100%";
   const slideTo = "0%";
@@ -66,18 +68,21 @@ export const customAnimation = (_: HTMLElement, opts: CustomAnimationOptions) =>
       .beforeStyles({ background: "transparent" })
       .afterClearStyles(["background"]);
 
-    const enteringContent = createAnimation()
-      .addElement(enteringContentEl);
+    const enteringContent = createAnimation().addElement(enteringContentEl);
 
     if (isOpen || isClose) {
       enteringContent
         .fromTo("opacity", "0", "1")
-        .fromTo("transform", "translateZ(0) scale(0.98)", "translateZ(0) scale(1)");
+        .fromTo(
+          "transform",
+          "translateZ(0) scale(0.98)",
+          "translateZ(0) scale(1)",
+        );
     } else {
       enteringContent.fromTo(
         "transform",
         `translate3d(${slideFrom},0,0)`,
-        `translate3d(${slideTo},0,0)`
+        `translate3d(${slideTo},0,0)`,
       );
     }
 
@@ -90,18 +95,21 @@ export const customAnimation = (_: HTMLElement, opts: CustomAnimationOptions) =>
   if (leavingEl && leavingContentEl) {
     setWillChange(leavingContentEl);
 
-    const leavingContent = createAnimation()
-      .addElement(leavingContentEl);
+    const leavingContent = createAnimation().addElement(leavingContentEl);
 
     if (isOpen || isClose) {
       leavingContent
         .fromTo("opacity", "1", "0")
-        .fromTo("transform", "translateZ(0) scale(1)", "translateZ(0) scale(0.98)");
+        .fromTo(
+          "transform",
+          "translateZ(0) scale(1)",
+          "translateZ(0) scale(0.98)",
+        );
     } else {
       leavingContent.fromTo(
         "transform",
         "translate3d(0,0,0)",
-        `translate3d(${slideOut},0,0)`
+        `translate3d(${slideOut},0,0)`,
       );
     }
 

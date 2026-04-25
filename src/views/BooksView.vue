@@ -11,22 +11,30 @@
     <ion-content :fullscreen="true">
       <div class="books-container">
         <template v-if="isLoading">
-          <ion-card
-            v-for="i in 6"
-            :key="'skeleton-' + i"
-            class="book-card"
-          >
+          <ion-card v-for="i in 6" :key="'skeleton-' + i" class="book-card">
             <div class="card-content-wrapper">
               <div class="icon-section">
-                <ion-skeleton-text animated style="width: 40px; height: 40px; border-radius: 4px;"></ion-skeleton-text>
+                <ion-skeleton-text
+                  animated
+                  style="width: 40px; height: 40px; border-radius: 4px"
+                ></ion-skeleton-text>
               </div>
               <div class="text-section">
                 <ion-card-header>
-                  <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+                  <ion-skeleton-text
+                    animated
+                    style="width: 60%"
+                  ></ion-skeleton-text>
                 </ion-card-header>
                 <ion-card-content>
-                  <ion-skeleton-text animated style="width: 100%;"></ion-skeleton-text>
-                  <ion-skeleton-text animated style="width: 80%;"></ion-skeleton-text>
+                  <ion-skeleton-text
+                    animated
+                    style="width: 100%"
+                  ></ion-skeleton-text>
+                  <ion-skeleton-text
+                    animated
+                    style="width: 80%"
+                  ></ion-skeleton-text>
                 </ion-card-content>
               </div>
             </div>
@@ -105,14 +113,8 @@ const getBookSvg = (name: string) => {
   return SVGS.DEFAULT;
 };
 
-const loadData = async () => {
-  if (books.value.length === 0) {
-    await bookStore.loadData();
-  }
-};
-
 onMounted(async () => {
-  await loadData();
+  await bookStore.loadData();
 });
 
 const navigateToBook = (bookId: number) => {
