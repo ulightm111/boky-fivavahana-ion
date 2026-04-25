@@ -1,7 +1,5 @@
 <template>
-  <ion-page
-    :class="{ 'content-view-page': initialDisplayMode !== 'subsections' }"
-  >
+  <ion-page class="content-view-page">
     <app-header
       :title="title"
       :subtitle="displayMode === 'psalm' ? '' : subtitle"
@@ -154,9 +152,6 @@ const contentStyle = computed(() => ({
 }));
 
 const displayMode = ref<"subsections" | "liturgia" | "psalm" | "song" | "">("");
-const initialDisplayMode = ref<
-  "subsections" | "liturgia" | "psalm" | "song" | ""
->("");
 const itemObj = ref<any>(null);
 const htmlContent = ref<string[]>([]);
 const subTitleText = ref<string>("");
@@ -258,10 +253,6 @@ const loadContent = () => {
       }));
       currentTitleIndex.value = sectionIndex;
     }
-  }
-
-  if (initialDisplayMode.value === "" && displayMode.value !== "") {
-    initialDisplayMode.value = displayMode.value;
   }
 };
 

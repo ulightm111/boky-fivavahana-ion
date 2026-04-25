@@ -6,6 +6,7 @@ interface CustomAnimationOptions {
   direction?: Direction;
   enteringEl?: HTMLElement | null;
   leavingEl?: HTMLElement | null;
+  animationsEnabled?: boolean;
 }
 
 let _forceDirection: Direction | null = null;
@@ -32,6 +33,7 @@ export const customAnimation = (
   _: HTMLElement,
   opts: CustomAnimationOptions,
 ) => {
+  const animationsEnabled = opts.animationsEnabled !== false;
   const direction = _forceDirection || opts.direction || "forward";
   _forceDirection = null;
 
@@ -53,7 +55,9 @@ export const customAnimation = (
   const duration = isOpen || isClose ? 170 : 210;
   const easing = "cubic-bezier(0.4, 0.0, 0.2, 1)";
 
-  const rootAnimation = createAnimation().duration(duration).easing(easing);
+  const rootAnimation = createAnimation()
+    .duration(animationsEnabled ? duration : 0)
+    .easing(easing);
 
   const slideFrom = isBack ? "-100%" : "100%";
   const slideTo = "0%";
@@ -61,7 +65,9 @@ export const customAnimation = (
 
   // --- ENTERING ---
   if (enteringEl && enteringContentEl) {
-    setWillChange(enteringContentEl);
+    if (animationsEnabled) {
+      setWillChange(enteringContentEl);
+    }
 
     const enteringPage = createAnimation()
       .addElement(enteringEl)
@@ -70,50 +76,44 @@ export const customAnimation = (
 
     const enteringContent = createAnimation().addElement(enteringContentEl);
 
-    if (isOpen || isClose) {
-      enteringContent
-        .fromTo("opacity", "0", "1")
-        .fromTo(
+    if (animationsEnabled) {
+      if (isOpen || isClose) {
+        enteringContent.fromTo("opacity", "0", "1");
+      } else {
+        enteringContent.fromTo(
           "transform",
-          "translateZ(0) scale(0.98)",
-          "translateZ(0) scale(1)",
+          `translate3d(${slideFrom},0,0)`,
+          `translate3d(${slideTo},0,0)`,
         );
-    } else {
-      enteringContent.fromTo(
-        "transform",
-        `translate3d(${slideFrom},0,0)`,
-        `translate3d(${slideTo},0,0)`,
-      );
-    }
+      }
 
-    enteringContent.afterAddWrite(() => clearWillChange(enteringContentEl));
+      enteringContent.afterAddWrite(() => clearWillChange(enteringContentEl));
+    }
 
     rootAnimation.addAnimation([enteringPage, enteringContent]);
   }
 
   // --- LEAVING ---
   if (leavingEl && leavingContentEl) {
-    setWillChange(leavingContentEl);
+    if (animationsEnabled) {
+      setWillChange(leavingContentEl);
+    }
 
     const leavingContent = createAnimation().addElement(leavingContentEl);
 
-    if (isOpen || isClose) {
-      leavingContent
-        .fromTo("opacity", "1", "0")
-        .fromTo(
+    if (animationsEnabled) {
+      if (isOpen || isClose) {
+        leavingContent.fromTo("opacity", "1", "0");
+      } else {
+        leavingContent.fromTo(
           "transform",
-          "translateZ(0) scale(1)",
-          "translateZ(0) scale(0.98)",
+          "translate3d(0,0,0)",
+          `translate3d(${slideOut},0,0)`,
         );
-    } else {
-      leavingContent.fromTo(
-        "transform",
-        "translate3d(0,0,0)",
-        `translate3d(${slideOut},0,0)`,
-      );
-    }
+      }
 
-    leavingContent.afterAddWrite(() => clearWillChange(leavingContentEl));
+      leavingContent.afterAddWrite(() => clearWillChange(leavingContentEl));
+    }
 
     rootAnimation.addAnimation([leavingContent]);
   }
