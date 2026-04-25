@@ -213,7 +213,7 @@ const showToast = async (message: string, color = "dark") => {
 .logo-container {
   width: 80px;
   height: 80px;
-  background: var(--iion-background-color);
+  background: var(--ion-background-color);
   border-radius: 10px;
   display: flex;
   align-items: center;
