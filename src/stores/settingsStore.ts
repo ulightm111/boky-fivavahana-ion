@@ -13,6 +13,7 @@ export const useSettingsStore = defineStore("settings", () => {
   const showZoomBtn = ref(true);
   const showZigzagBtn = ref(true);
   const lyricsZZStyle = ref(false);
+  const enableAnimations = ref(true);
 
   // Load settings on startup
   const loadSettings = async () => {
@@ -23,6 +24,7 @@ export const useSettingsStore = defineStore("settings", () => {
     const { value: z } = await Preferences.get({ key: "showZoomBtn" });
     const { value: i } = await Preferences.get({ key: "showZigzagBtn" });
     const { value: zz } = await Preferences.get({ key: "lyricsZZStyle" });
+    const { value: ea } = await Preferences.get({ key: "enableAnimations" });
 
     if (t) theme.value = t as any;
     if (k) keepScreenOn.value = k === "true";
@@ -31,6 +33,7 @@ export const useSettingsStore = defineStore("settings", () => {
     if (z) showZoomBtn.value = z === "true";
     if (i) showZigzagBtn.value = i === "true";
     if (zz) lyricsZZStyle.value = zz === "true";
+    if (ea) enableAnimations.value = ea === "true";
 
     applyTheme();
     applyKeepAwake();
@@ -101,6 +104,10 @@ export const useSettingsStore = defineStore("settings", () => {
     Preferences.set({ key: "lyricsZZStyle", value: String(val) });
   });
 
+  watch(enableAnimations, (val) => {
+    Preferences.set({ key: "enableAnimations", value: String(val) });
+  });
+
   return {
     theme,
     keepScreenOn,
@@ -109,6 +116,7 @@ export const useSettingsStore = defineStore("settings", () => {
     showZoomBtn,
     showZigzagBtn,
     lyricsZZStyle,
+    enableAnimations,
     loadSettings,
   };
 });

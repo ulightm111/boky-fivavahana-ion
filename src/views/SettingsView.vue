@@ -176,6 +176,22 @@
             </ion-range>
           </div>
         </ion-item>
+
+        <ion-item>
+          <ion-icon
+            :icon="flashOutline"
+            slot="start"
+            color="secondary"
+            aria-hidden="true"
+          />
+          <ion-label>Animations</ion-label>
+          <ion-toggle
+            v-model="settings.enableAnimations"
+            color="secondary"
+            slot="end"
+          >
+          </ion-toggle>
+        </ion-item>
       </ion-list>
     </ion-content>
   </ion-page>
@@ -211,6 +227,7 @@ import {
   phonePortraitOutline,
   sunnyOutline,
   moonOutline,
+  flashOutline,
 } from "ionicons/icons";
 import { useSettingsStore } from "@/stores/settingsStore";
 import AppHeader from "@/components/AppHeader.vue";

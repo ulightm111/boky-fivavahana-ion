@@ -1,6 +1,6 @@
 <template>
   <ion-app>
-    <ion-router-outlet id="main-content" :animation="customAnimation" />
+    <ion-router-outlet id="main-content" :animation="animationWrapper" />
   </ion-app>
 </template>
 
@@ -19,6 +19,13 @@ import { customAnimation } from "./router/animation";
 
 const route = useRoute();
 const settingsStore = useSettingsStore();
+
+const animationWrapper = (baseEl: HTMLElement, opts: any) => {
+  return customAnimation(baseEl, {
+    ...opts,
+    animationsEnabled: settingsStore.enableAnimations,
+  });
+};
 
 // Android Back Button Handling
 let backPressedOnce = false;
