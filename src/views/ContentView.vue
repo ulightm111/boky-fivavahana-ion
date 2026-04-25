@@ -187,7 +187,6 @@ const loadContent = () => {
   itemObj.value = null;
   htmlContent.value = [];
   subTitleText.value = "";
-  title.value = "";
   subtitle.value = currentBook.name;
   currentTitlesList.value = [];
   currentTitleIndex.value = -1;
