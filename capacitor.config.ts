@@ -10,6 +10,12 @@ const config: CapacitorConfig = {
       style: "DARK",
       backgroundColor: "#00277c",
     },
+    SystemBars: {
+      insetsHandling: "disable",
+    },
+    EdgeToEdge: {
+      backgroundColor: "#00277c",
+    },
   },
 };
 

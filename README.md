@@ -37,7 +37,7 @@ The app is written in **Ionic Vue**, offering a native-feeling experience with s
 
 - **Framework:** [Ionic Vue](https://ionicframework.com/docs/vue/overview) (Vue 3)
 - **State Management:** [Pinia](https://pinia.vuejs.org/) (with shallow reactivity for performance)
-- **Native Bridge:** [Capacitor 8](https://capacitorjs.com/)
+- **Native Bridge:** [Capacitor 7](https://capacitorjs.com/)
 - **Icons:** [Ionicons](https://ionicons.com/)
 - **Styling:** CSS Variables (supporting system-wide theming)
 
@@ -48,7 +48,7 @@ The app is written in **Ionic Vue**, offering a native-feeling experience with s
 1.  Download the latest `boky-fivavahana2.apk` from the [Releases](https://github.com/ulightm111/boky-fivavahana-ion/releases/latest) page.
 2.  Ensure "Install from unknown sources" is enabled in your Android settings.
 3.  Open the APK to install.
-    - _Compatible with Android 7.0 (Nougat) up to Android 16._
+    - _Compatible with Android 6.0 up to Android 15._
 
 ---
 
