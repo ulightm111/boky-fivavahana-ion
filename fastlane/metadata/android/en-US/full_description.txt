@@ -1,7 +1,9 @@
-Boky Fivavahana is a free, offline-first Android app providing the full content of the Malagasy Anglican prayer book.
-It contains liturgies, hymns, psalms, and prayers in Malagasy, organized for easy navigation and reading.
+(Note: This app is currently available in Malagasy only)
 
-<h2>Books included</h2>
+Boky Fivavahana is a free, offline-first Android app providing the full content of the Malagasy Anglican prayer book. It contains liturgies, hymns, psalms, and prayers in Malagasy, organized for easy navigation and reading.
+(Internet access is for manual version update only)
+
+Books included:
 
 - Litorjia Boky Fivavahana — Anglican liturgy
 - Salamo — Psalms
@@ -10,7 +12,7 @@ It contains liturgies, hymns, psalms, and prayers in Malagasy, organized for eas
 - Hanandratra Anao Aho (H.A.A) — Praise hymns
 - Lalan'ny Hazo Fijaliana — Stations of the Cross
 
-<h2>Features</h2>
+Features:
 
 - Fully offline — no internet required after install
 - Fast search across all books and sections

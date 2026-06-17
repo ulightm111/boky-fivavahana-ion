@@ -1,0 +1,4 @@
+- New: Animations (can be disabled)
+- Optimized navigation (back, skeleton...)
+- Fix: song chorus, section divider
+- Typo: H379, HAA111
