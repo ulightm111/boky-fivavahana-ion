@@ -3,26 +3,30 @@
     <app-header title="Favorites" />
 
     <ion-content :fullscreen="true">
-      <ion-list v-if="favoriteItems.length > 0" :inset="true">
-        <ion-item
-          v-for="item in favoriteItems"
-          :key="favoriteKey(item)"
-          button
-          @click="openFavorite(item)"
+      <div v-if="favoriteItems.length > 0">
+        <template
+          v-for="group in groupedAndSortedFavorites"
+          :key="group.bookId"
         >
-          <ion-icon :icon="star" slot="start" color="secondary" />
-          <ion-label>
-            <h3>{{ item.title }}</h3>
-            <p>
-              {{
-                item.subtitle ||
-                bookStore.getBookById(item.bookId)?.name ||
-                "Favorite"
-              }}
-            </p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
+          <ion-item-divider sticky>
+            <ion-label>{{ group.bookName }}</ion-label>
+          </ion-item-divider>
+          <ion-list>
+            <ion-item
+              v-for="item in group.items"
+              :key="favoriteKey(item)"
+              button
+              @click="openFavorite(item)"
+            >
+              <ion-icon :icon="star" slot="start" color="secondary" />
+              <ion-label>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.subtitle || "Favorite" }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </template>
+      </div>
 
       <div v-else class="empty-state">
         <ion-icon :icon="starOutline" size="large" color="medium" />
@@ -42,9 +46,11 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
+  IonItemDivider,
   useIonRouter,
 } from "@ionic/vue";
 import { star, starOutline } from "ionicons/icons";
+import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useBookStore, FavoriteItem } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
@@ -53,6 +59,42 @@ import AppFooter from "@/components/AppFooter.vue";
 const router = useIonRouter();
 const bookStore = useBookStore();
 const { favoriteItems } = storeToRefs(bookStore);
+
+const groupedAndSortedFavorites = computed(() => {
+  // Group by bookId
+  const groupMap = new Map<
+    number,
+    { bookName: string; items: FavoriteItem[] }
+  >();
+
+  favoriteItems.value.forEach((item) => {
+    if (!groupMap.has(item.bookId)) {
+      const book = bookStore.getBookById(item.bookId);
+      groupMap.set(item.bookId, {
+        bookName: book?.name || `Book ${item.bookId}`,
+        items: [],
+      });
+    }
+    groupMap.get(item.bookId)!.items.push(item);
+  });
+
+  // Sort each group by item ID, then convert to sorted array by book ID
+  const sorted = Array.from(groupMap.entries())
+    .sort(([bookIdA], [bookIdB]) => bookIdA - bookIdB)
+    .map(([bookId, group]) => ({
+      bookId,
+      bookName: group.bookName,
+      items: group.items.sort((a, b) => {
+        const aId =
+          typeof a.id === "number" ? a.id : parseInt(String(a.id), 10);
+        const bId =
+          typeof b.id === "number" ? b.id : parseInt(String(b.id), 10);
+        return aId - bId;
+      }),
+    }));
+
+  return sorted;
+});
 
 const favoriteKey = (item: FavoriteItem) =>
   `${item.type}-${item.bookId}-${item.id}-${item.sectionName || ""}-${
