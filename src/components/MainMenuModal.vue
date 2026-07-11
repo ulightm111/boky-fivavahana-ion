@@ -28,7 +28,7 @@
             <div class="icon-container">
               <ion-icon :icon="starOutline" size="large" />
             </div>
-            <div class="menu-label">Favorites</div>
+            <div class="menu-label">Tiana</div>
           </div>
         </ion-col>
         <ion-col size="4" class="ion-text-center">

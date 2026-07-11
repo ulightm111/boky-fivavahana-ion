@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <app-header title="Favorites" />
+    <app-header title="Tiana" />
 
     <ion-content :fullscreen="true">
       <div v-if="favoriteItems.length > 0">
@@ -30,7 +30,7 @@
 
       <div v-else class="empty-state">
         <ion-icon :icon="starOutline" size="large" color="medium" />
-        <p>No favorites yet.</p>
+        <p>Mbola tsy misy nataonao ato.</p>
       </div>
     </ion-content>
 
