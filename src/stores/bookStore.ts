@@ -1,3 +1,4 @@
+import { Preferences } from "@capacitor/preferences";
 import { defineStore } from "pinia";
 import { ref, shallowRef, markRaw } from "vue";
 
@@ -88,13 +89,11 @@ export const useBookStore = defineStore("book", () => {
   const litpSearchIndex = shallowRef<IndexedSearchItem[]>([]);
   const salamoSearchIndex = shallowRef<IndexedSearchItem[]>([]);
 
-  const loadFavorites = () => {
-    if (typeof window === "undefined") return;
-
+  const loadFavorites = async () => {
     try {
-      const stored = window.localStorage.getItem(favoritesStorageKey);
-      if (!stored) return;
-      const parsed = JSON.parse(stored);
+      const { value } = await Preferences.get({ key: favoritesStorageKey });
+      if (!value) return;
+      const parsed = JSON.parse(value);
       if (Array.isArray(parsed)) {
         favoriteItems.value = parsed as FavoriteItem[];
       }
@@ -103,12 +102,11 @@ export const useBookStore = defineStore("book", () => {
     }
   };
 
-  const persistFavorites = () => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem(
-      favoritesStorageKey,
-      JSON.stringify(favoriteItems.value),
-    );
+  const persistFavorites = async () => {
+    await Preferences.set({
+      key: favoritesStorageKey,
+      value: JSON.stringify(favoriteItems.value),
+    });
   };
 
   const getFavoriteKey = (item: FavoriteItem) =>
@@ -121,7 +119,7 @@ export const useBookStore = defineStore("book", () => {
       (favorite) => getFavoriteKey(favorite) === getFavoriteKey(item),
     );
 
-  const toggleFavorite = (item: FavoriteItem) => {
+  const toggleFavorite = async (item: FavoriteItem) => {
     const favoriteKey = getFavoriteKey(item);
     const nextFavorites = favoriteItems.value.filter(
       (favorite) => getFavoriteKey(favorite) !== favoriteKey,
@@ -133,7 +131,7 @@ export const useBookStore = defineStore("book", () => {
       favoriteItems.value = nextFavorites;
     }
 
-    persistFavorites();
+    await persistFavorites();
   };
 
   const getFavoritePath = (item: FavoriteItem) => {
