@@ -13,6 +13,9 @@
         <div v-if="subtitle" class="subtitle">{{ subtitle }}</div>
         <div class="title">{{ title }}</div>
       </ion-title>
+      <ion-buttons slot="end">
+        <slot name="header-actions" />
+      </ion-buttons>
     </ion-toolbar>
     <ion-toolbar color="primary" v-if="showSearchbar">
       <form action="." @submit.prevent="onSubmit">
@@ -35,6 +38,7 @@ import {
   IonTitle,
   IonSearchbar,
   IonIcon,
+  IonButtons,
   useIonRouter,
 } from "@ionic/vue";
 import { book } from "ionicons/icons";

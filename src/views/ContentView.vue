@@ -3,7 +3,19 @@
     <app-header
       :title="title"
       :subtitle="displayMode === 'psalm' ? '' : subtitle"
-    />
+    >
+      <template #header-actions>
+        <ion-button
+          v-if="currentFavoriteItem"
+          fill="clear"
+          size="small"
+          class="favorite-header-btn"
+          @click="toggleCurrentFavorite"
+        >
+          <ion-icon :icon="isCurrentFavorite ? star : starOutline" />
+        </ion-button>
+      </template>
+    </app-header>
 
     <ion-content ref="contentRef" :fullscreen="true" :style="contentStyle">
       <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
@@ -18,21 +30,6 @@
           <ion-label>{{ sub.subsection }}</ion-label>
         </ion-item>
       </ion-list>
-
-      <div v-if="currentFavoriteItem" class="favorite-action-row">
-        <ion-button
-          fill="clear"
-          size="small"
-          class="favorite-btn"
-          @click="toggleCurrentFavorite"
-        >
-          <ion-icon
-            :icon="isCurrentFavorite ? star : starOutline"
-            slot="start"
-          />
-          {{ isCurrentFavorite ? "Favorite" : "Favorite" }}
-        </ion-button>
-      </div>
 
       <!-- Liturgy Section or liturgia subsection content -->
       <lit-content
@@ -435,14 +432,10 @@ const zoomOut = () => {
 </script>
 
 <style scoped>
-.favorite-action-row {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0.5rem 1rem 0;
-}
-
-.favorite-btn {
-  --color: var(--ion-color-secondary);
+.favorite-header-btn {
+  --color: var(--ion-color-light);
+  --padding-start: 4px;
+  --padding-end: 4px;
 }
 
 :deep(.lyrics-content) {
