@@ -193,6 +193,14 @@
           </ion-toggle>
         </ion-item>
       </ion-list>
+      <ion-button
+        expand="block"
+        color="secondary"
+        fill="outline"
+        shape="round"
+        @click="about"
+        >Mombamomba</ion-button
+      >
     </ion-content>
   </ion-page>
 </template>
@@ -211,7 +219,9 @@ import {
   IonRange,
   IonIcon,
   IonNote,
+  IonButton,
   toastController,
+  useIonRouter,
 } from "@ionic/vue";
 import {
   text,
@@ -233,6 +243,7 @@ import { useSettingsStore } from "@/stores/settingsStore";
 import AppHeader from "@/components/AppHeader.vue";
 
 const settings = useSettingsStore();
+const ionRouter = useIonRouter();
 
 const showThemeToast = async (message: string) => {
   const toast = await toastController.create({
@@ -243,6 +254,10 @@ const showThemeToast = async (message: string) => {
     color: "medium",
   });
   await toast.present();
+};
+
+const about = async () => {
+  ionRouter.push("/about");
 };
 </script>
 

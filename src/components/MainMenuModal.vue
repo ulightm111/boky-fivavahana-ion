@@ -24,11 +24,11 @@
           </div>
         </ion-col>
         <ion-col size="4" class="ion-text-center">
-          <div class="menu-item" @click="about">
+          <div class="menu-item" @click="favorites">
             <div class="icon-container">
-              <ion-icon :icon="informationCircle" size="large" />
+              <ion-icon :icon="starOutline" size="large" />
             </div>
-            <div class="menu-label">Mombamomba</div>
+            <div class="menu-label">Favorites</div>
           </div>
         </ion-col>
         <ion-col size="4" class="ion-text-center">
@@ -55,9 +55,9 @@ import {
   alertController,
 } from "@ionic/vue";
 import {
-  informationCircle,
   settings as settingsIcon,
   exitOutline,
+  starOutline,
 } from "ionicons/icons";
 import { App } from "@capacitor/app";
 import { storeToRefs } from "pinia";
@@ -100,9 +100,9 @@ const settings = async () => {
   ionRouter.push("/settings");
 };
 
-const about = async () => {
+const favorites = async () => {
   await modalController.dismiss();
-  ionRouter.push("/about");
+  ionRouter.push("/favorites");
 };
 
 const exitAppPrompt = async () => {
