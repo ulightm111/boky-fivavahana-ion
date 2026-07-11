@@ -19,6 +19,21 @@
         </ion-item>
       </ion-list>
 
+      <div v-if="currentFavoriteItem" class="favorite-action-row">
+        <ion-button
+          fill="clear"
+          size="small"
+          class="favorite-btn"
+          @click="toggleCurrentFavorite"
+        >
+          <ion-icon
+            :icon="isCurrentFavorite ? star : starOutline"
+            slot="start"
+          />
+          {{ isCurrentFavorite ? "Favorite" : "Favorite" }}
+        </ion-button>
+      </div>
+
       <!-- Liturgy Section or liturgia subsection content -->
       <lit-content
         v-else-if="displayMode === 'liturgia'"
@@ -94,15 +109,16 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
+  IonButton,
   IonList,
   IonItem,
   IonLabel,
   useIonRouter,
 } from "@ionic/vue";
-import { add, ellipse, remove } from "ionicons/icons";
+import { add, ellipse, remove, star, starOutline } from "ionicons/icons";
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import { useBookStore } from "@/stores/bookStore";
+import { useBookStore, FavoriteItem } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import SongContent from "@/components/lyrics/SongContent.vue";
@@ -150,6 +166,46 @@ const isLHF = computed(() => bookStore.isLHFBook(book.value || null));
 const contentStyle = computed(() => ({
   "--lyrics-font-size": `${settings.fontSize}%`,
 }));
+
+const currentFavoriteItem = computed<FavoriteItem | null>(() => {
+  if (!book.value || !itemObj.value) return null;
+
+  if (displayMode.value === "song" || displayMode.value === "psalm") {
+    return {
+      type: displayMode.value === "psalm" ? "psalm" : "song",
+      bookId: book.value.id,
+      id: itemObj.value.id,
+      title: title.value || `${itemObj.value.id}`,
+      subtitle: book.value.name,
+    };
+  }
+
+  if (displayMode.value === "liturgia") {
+    return {
+      type: routeSubIndex.value !== null ? "subsection" : "section",
+      bookId: book.value.id,
+      id: routeSubIndex.value ?? title.value,
+      title: subTitleText.value || title.value,
+      subtitle: book.value.name,
+      sectionName: routeSectionName.value || title.value,
+      subsectionIndex: routeSubIndex.value ?? undefined,
+    };
+  }
+
+  return null;
+});
+
+const isCurrentFavorite = computed(() =>
+  currentFavoriteItem.value
+    ? bookStore.isFavorite(currentFavoriteItem.value)
+    : false,
+);
+
+const toggleCurrentFavorite = () => {
+  if (currentFavoriteItem.value) {
+    bookStore.toggleFavorite(currentFavoriteItem.value);
+  }
+};
 
 const displayMode = ref<"subsections" | "liturgia" | "psalm" | "song" | "">("");
 const itemObj = ref<any>(null);
@@ -379,6 +435,16 @@ const zoomOut = () => {
 </script>
 
 <style scoped>
+.favorite-action-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 1rem 0;
+}
+
+.favorite-btn {
+  --color: var(--ion-color-secondary);
+}
+
 :deep(.lyrics-content) {
   font-size: var(--lyrics-font-size, 100%);
 }

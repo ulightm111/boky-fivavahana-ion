@@ -42,6 +42,16 @@ export interface SearchResult {
   subsectionIndex?: number;
 }
 
+export interface FavoriteItem {
+  type: "song" | "psalm" | "section" | "subsection";
+  bookId: number;
+  id: number | string;
+  title: string;
+  subtitle?: string;
+  sectionName?: string;
+  subsectionIndex?: number;
+}
+
 // Internal structure for fast searching
 interface IndexedSearchItem {
   searchKey: string;
@@ -67,6 +77,8 @@ export const useBookStore = defineStore("book", () => {
   const lastGroupedBookId = ref<number | null>(null);
   const currentPage = ref(0);
   const isLoading = ref(false);
+  const favoriteItems = shallowRef<FavoriteItem[]>([]);
+  const favoritesStorageKey = "boky-favorites";
 
   // Search indexes (built once after data load)
   const hiraSearchIndex = shallowRef<IndexedSearchItem[]>([]);
@@ -75,6 +87,75 @@ export const useBookStore = defineStore("book", () => {
   const lhfSearchIndex = shallowRef<IndexedSearchItem[]>([]);
   const litpSearchIndex = shallowRef<IndexedSearchItem[]>([]);
   const salamoSearchIndex = shallowRef<IndexedSearchItem[]>([]);
+
+  const loadFavorites = () => {
+    if (typeof window === "undefined") return;
+
+    try {
+      const stored = window.localStorage.getItem(favoritesStorageKey);
+      if (!stored) return;
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        favoriteItems.value = parsed as FavoriteItem[];
+      }
+    } catch {
+      favoriteItems.value = [];
+    }
+  };
+
+  const persistFavorites = () => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(
+      favoritesStorageKey,
+      JSON.stringify(favoriteItems.value),
+    );
+  };
+
+  const getFavoriteKey = (item: FavoriteItem) =>
+    `${item.type}:${item.bookId}:${item.id}:${item.sectionName || ""}:${
+      item.subsectionIndex ?? ""
+    }`;
+
+  const isFavorite = (item: FavoriteItem) =>
+    favoriteItems.value.some(
+      (favorite) => getFavoriteKey(favorite) === getFavoriteKey(item),
+    );
+
+  const toggleFavorite = (item: FavoriteItem) => {
+    const favoriteKey = getFavoriteKey(item);
+    const nextFavorites = favoriteItems.value.filter(
+      (favorite) => getFavoriteKey(favorite) !== favoriteKey,
+    );
+
+    if (nextFavorites.length === favoriteItems.value.length) {
+      favoriteItems.value = [...favoriteItems.value, item];
+    } else {
+      favoriteItems.value = nextFavorites;
+    }
+
+    persistFavorites();
+  };
+
+  const getFavoritePath = (item: FavoriteItem) => {
+    const book = getBookById(item.bookId);
+    const bookPath = book ? `/books/${book.id}` : `/books/${item.bookId}`;
+
+    if (item.type === "song" || item.type === "psalm") {
+      return `${bookPath}/song/${item.id}`;
+    }
+
+    if (item.type === "subsection") {
+      return `${bookPath}/section/${encodeURIComponent(
+        item.sectionName || item.title,
+      )}/subsection/${item.subsectionIndex ?? 0}`;
+    }
+
+    return `${bookPath}/section/${encodeURIComponent(
+      item.sectionName || item.title,
+    )}`;
+  };
+
+  loadFavorites();
 
   const getBookById = (id: number): Book | null => booksById.value[id] ?? null;
   const getBookByName = (name: string): Book | null =>
@@ -386,11 +467,15 @@ export const useBookStore = defineStore("book", () => {
     searchResults,
     currentPage,
     isLoading,
+    favoriteItems,
     loadData,
     performSearch,
     clearSearchResults,
     getBookById,
     getBookByName,
+    isFavorite,
+    toggleFavorite,
+    getFavoritePath,
     getBookData,
     getGroupedSongs,
     hasMoreItems,
