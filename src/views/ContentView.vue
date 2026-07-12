@@ -123,25 +123,12 @@ import PsalmContent from "@/components/lyrics/PsalmContent.vue";
 import LitContent from "@/components/lyrics/LitContent.vue";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { setForceDirection } from "@/router/animation";
-
-const zigzagIcon =
-  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">\
-  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="44"\
-  d="M 190.3038,256 H 410 M 102,156 H 307.11392 M 102,356 h 205.11392"/></svg>';
-const verticalIcon =
-  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">\
-  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="44"\
-  d="M 102,256 H 410 M 102,156 H 410 M 102,356 h 308"/></svg>';
-const starIcon =
-  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">\
-	<path d="M0 0h24v24H0z" fill="none" />\
-	<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" \
-  d="m12 17.75l-6.172 3.245l1.179-6.873l-5-4.867l6.9-1l3.086-6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>';
-const starIconSolid =
-  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">\
-	<path d="M0 0h24v24H0z" fill="none" />\
-	<path fill="currentColor" \
-  d="m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z" /></svg>';
+import {
+  zigzagIcon,
+  verticalIcon,
+  starIcon,
+  starIconSolid,
+} from "@/utils/svgIcons";
 
 const settings = useSettingsStore();
 const route = useRoute();

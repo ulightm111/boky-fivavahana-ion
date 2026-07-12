@@ -50,7 +50,7 @@
           >
             <div class="card-content-wrapper">
               <div class="icon-section">
-                <div class="svg-container" v-html="getBookSvg(book.name)"></div>
+                <ion-icon :icon="getBookSvg(book.name)" color="secondary" />
               </div>
               <div class="text-section">
                 <ion-card-header>
@@ -85,33 +85,12 @@ import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
+import { getBookSvg } from "@/utils/svgIcons";
 
 const router = useIonRouter();
 const bookStore = useBookStore();
 const { books, isLoading } = storeToRefs(bookStore);
 const globalSearchQuery = ref("");
-
-const SVGS = {
-  LITURGY:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
-  MUSIC:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>',
-  PSALMS:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M9 14V7l8-1v7"></path><circle cx="7.5" cy="14" r="1.5"></circle><circle cx="15.5" cy="13" r="1.5"></circle></svg>',
-  CROSS:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="9" x2="17" y2="9"></line></svg>',
-  DEFAULT:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>',
-};
-
-const getBookSvg = (name: string) => {
-  const re = /fihirana|hanandratra/i;
-  if (re.test(name)) return SVGS.MUSIC;
-  if (name.includes("Salamo")) return SVGS.PSALMS;
-  if (name.includes("Hazo Fijaliana")) return SVGS.CROSS;
-  if (name.includes("Litorjia")) return SVGS.LITURGY;
-  return SVGS.DEFAULT;
-};
 
 onMounted(async () => {
   await bookStore.loadData();
@@ -163,10 +142,9 @@ const clearGlobalSearch = () => {
   height: 70px;
 }
 
-.svg-container {
+ion-icon {
   width: 40px;
   height: 40px;
-  color: var(--ion-color-secondary);
 }
 
 .text-section {

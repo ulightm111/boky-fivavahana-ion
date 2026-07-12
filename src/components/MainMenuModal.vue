@@ -26,7 +26,7 @@
         <ion-col size="4" class="ion-text-center">
           <div class="menu-item" @click="favorites">
             <div class="icon-container">
-              <ion-icon :icon="starOutline" size="large" />
+              <ion-icon :icon="starIcon" size="large" />
             </div>
             <div class="menu-label">Tiana</div>
           </div>
@@ -54,37 +54,12 @@ import {
   modalController,
   alertController,
 } from "@ionic/vue";
-import {
-  settings as settingsIcon,
-  exitOutline,
-  starOutline,
-} from "ionicons/icons";
+import { settings as settingsIcon, exitOutline } from "ionicons/icons";
 import { App } from "@capacitor/app";
 import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
 import { useIonRouter } from "@ionic/vue";
-
-const SVGS = {
-  LITURGY:
-    'data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
-  MUSIC:
-    'data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>',
-  PSALMS:
-    'data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M9 14V7l8-1v7"></path><circle cx="7.5" cy="14" r="1.5"></circle><circle cx="15.5" cy="13" r="1.5"></circle></svg>',
-  CROSS:
-    'data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="9" x2="17" y2="9"></line></svg>',
-  DEFAULT:
-    'data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>',
-};
-
-const getBookSvg = (name: string) => {
-  const re = /fihirana|hanandratra/i;
-  if (re.test(name)) return SVGS.MUSIC;
-  if (name.includes("Salamo")) return SVGS.PSALMS;
-  if (name.includes("Hazo Fijaliana")) return SVGS.CROSS;
-  if (name.includes("Litorjia")) return SVGS.LITURGY;
-  return SVGS.DEFAULT;
-};
+import { getBookSvg, starIcon } from "@/utils/svgIcons";
 
 const bookStore = useBookStore();
 const { books } = storeToRefs(bookStore);
