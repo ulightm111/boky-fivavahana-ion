@@ -18,7 +18,7 @@
               button
               @click="openFavorite(item)"
             >
-              <ion-icon :icon="star" slot="start" color="secondary" />
+              <ion-icon :icon="starIconSolid" slot="start" color="secondary" />
               <ion-label>
                 <h3>{{ item.title }}</h3>
                 <p>{{ item.subtitle || "Favorite" }}</p>
@@ -29,7 +29,7 @@
       </div>
 
       <div v-else class="empty-state">
-        <ion-icon :icon="starOutline" size="large" color="medium" />
+        <ion-icon :icon="starIcon" size="large" color="medium" />
         <p>Mbola tsy misy nataonao ato.</p>
       </div>
     </ion-content>
@@ -45,16 +45,15 @@ import {
   IonList,
   IonItem,
   IonLabel,
-  IonIcon,
   IonItemDivider,
   useIonRouter,
 } from "@ionic/vue";
-import { star, starOutline } from "ionicons/icons";
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useBookStore, FavoriteItem } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
+import { starIcon, starIconSolid } from "@/utils/svgIcons";
 
 const router = useIonRouter();
 const bookStore = useBookStore();
