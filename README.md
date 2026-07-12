@@ -1,5 +1,24 @@
 # Boky Fivavahana (Ionic Vue)
 
+<p align="center">
+  <img src="assets/logo.png" alt="Boky Fivavahana app icon" width="120" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/ulightm111/boky-fivavahana-ion/releases/latest">
+    <img src="https://img.shields.io/github/v/release/ulightm111/boky-fivavahana-ion?label=Release" alt="Latest release" />
+  </a>
+  <a href="https://github.com/ulightm111/boky-fivavahana-ion/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/ulightm111/boky-fivavahana-ion" alt="License" />
+  </a>
+  <a href="https://f-droid.org/packages/com.uli.bokyfivavahana2/">
+    <img src="https://img.shields.io/badge/F-Droid-1976D2?logo=f-droid&logoColor=white" alt="Get it on F-Droid" />
+  </a>
+  <a href="https://boky-fivavahana.netlify.app">
+    <img src="https://img.shields.io/badge/Live%20Demo-Netlify-00C7B7?logo=netlify&logoColor=white" alt="Open live demo" />
+  </a>
+</p>
+
 **Boky Fivavahana Anglikana** — A modern Anglican Common Prayer Book app in Malagasy.
 
 > _"Ary toy izany ihany koa ianareo: raha fatra-paniry ny zava-panahy, dia izay hampandroso ny fiangonana no tadiavo indrindra." — I Korintiana 14 : 12_
