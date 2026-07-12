@@ -147,7 +147,7 @@ onMounted(async () => {
     const info = await App.getInfo();
     currentVersion.value = info.version;
   } catch (e) {
-    currentVersion.value = "1.0.0";
+    currentVersion.value = "2.4.0";
   }
 });
 
