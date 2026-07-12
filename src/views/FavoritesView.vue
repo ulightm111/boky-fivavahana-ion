@@ -4,28 +4,32 @@
 
     <ion-content :fullscreen="true">
       <div v-if="favoriteItems.length > 0">
-        <template
-          v-for="group in groupedAndSortedFavorites"
-          :key="group.bookId"
-        >
-          <ion-item-divider sticky>
-            <ion-label>{{ group.bookName }}</ion-label>
-          </ion-item-divider>
-          <ion-list>
+        <ion-list :inset="true">
+          <template
+            v-for="group in groupedAndSortedFavorites"
+            :key="group.bookId"
+          >
+            <ion-item-divider sticky>
+              <ion-label>{{ group.bookName }}</ion-label>
+            </ion-item-divider>
             <ion-item
               v-for="item in group.items"
               :key="favoriteKey(item)"
               button
               @click="openFavorite(item)"
             >
-              <ion-icon :icon="starIconSolid" slot="start" color="secondary" />
+              <ion-icon
+                :icon="getBookSvg(group.bookName)"
+                slot="start"
+                color="medium"
+              />
               <ion-label>
                 <h3>{{ item.title }}</h3>
                 <p>{{ item.subtitle || "Favorite" }}</p>
               </ion-label>
             </ion-item>
-          </ion-list>
-        </template>
+          </template>
+        </ion-list>
       </div>
 
       <div v-else class="empty-state">
@@ -53,7 +57,7 @@ import { storeToRefs } from "pinia";
 import { useBookStore, FavoriteItem } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
-import { starIcon, starIconSolid } from "@/utils/svgIcons";
+import { getBookSvg, starIcon } from "@/utils/svgIcons";
 
 const router = useIonRouter();
 const bookStore = useBookStore();
@@ -116,5 +120,8 @@ const openFavorite = (item: FavoriteItem) => {
   color: var(--ion-color-medium);
   gap: 0.5rem;
   padding: 1rem;
+}
+h3 {
+  font-size: 1em;
 }
 </style>
