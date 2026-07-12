@@ -1,0 +1,3 @@
+- New feature : Tiana (Favorites)
+- Tiana is accessible in the Menu, Mombamomba moved in Fikirakirana
+- Typo fixes : H110, H292
