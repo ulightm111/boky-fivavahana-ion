@@ -194,12 +194,15 @@
         </ion-item>
       </ion-list>
       <ion-button
+        id="infoBtn"
         expand="block"
         color="secondary"
-        fill="outline"
+        fill="solid"
         shape="round"
         @click="about"
-        >Mombamomba</ion-button
+      >
+        <ion-icon :icon="informationCircle" slot="start" aria-hidden="true" />
+        Mombamomba</ion-button
       >
     </ion-content>
   </ion-page>
@@ -238,6 +241,7 @@ import {
   sunnyOutline,
   moonOutline,
   flashOutline,
+  informationCircle,
 } from "ionicons/icons";
 import { useSettingsStore } from "@/stores/settingsStore";
 import AppHeader from "@/components/AppHeader.vue";
@@ -281,5 +285,9 @@ ion-segment-button {
 
 .custom-range {
   padding: 0;
+}
+
+#infoBtn {
+  margin-inline: 16px;
 }
 </style>
