@@ -71,37 +71,67 @@
         <p class="version-text">
           Version: <strong>{{ currentVersion }}</strong>
         </p>
+        <p v-if="!isNativePlatform" class="apk-info">
+          <ion-icon :icon="logoAndroid" />Alaivo ato ny APK:
+        </p>
 
         <div class="button-group">
-          <ion-button
-            v-if="!updateUrl"
-            expand="block"
-            color="secondary"
-            fill="outline"
-            shape="round"
-            @click="checkForUpdate"
-            :disabled="isChecking"
-          >
-            <ion-spinner
-              v-if="isChecking"
-              name="crescent"
-              slot="start"
-            ></ion-spinner>
-            <ion-icon v-else :icon="refreshOutline" slot="start" />
-            Hijerena version farany
-          </ion-button>
+          <template v-if="isNativePlatform">
+            <ion-button
+              v-if="!updateUrl"
+              expand="block"
+              color="secondary"
+              fill="outline"
+              shape="round"
+              @click="checkForUpdate"
+              :disabled="isChecking"
+            >
+              <ion-spinner
+                v-if="isChecking"
+                name="crescent"
+                slot="start"
+              ></ion-spinner>
+              <ion-icon v-else :icon="refreshOutline" slot="start" />
+              Hijerena version farany
+            </ion-button>
 
-          <ion-button
-            v-else
-            expand="block"
-            color="success"
-            shape="round"
-            class="ion-margin-top"
-            @click="openDownloadPage"
-          >
-            <ion-icon :icon="downloadOutline" slot="start" />
-            Haka ny version vaovao
-          </ion-button>
+            <ion-button
+              v-else
+              expand="block"
+              color="success"
+              shape="round"
+              class="ion-margin-top"
+              @click="openDownloadPage"
+            >
+              <ion-icon :icon="downloadOutline" slot="start" />
+              Haka ny version vaovao
+            </ion-button>
+          </template>
+
+          <template v-else>
+            <ion-button
+              expand="block"
+              color="primary"
+              fill="outline"
+              shape="round"
+              @click="openGithubRelease"
+            >
+              <ion-icon :icon="logoGithub" slot="start" />
+              GitHub Release
+            </ion-button>
+
+            <ion-button
+              expand="block"
+              color="secondary"
+              fill="outline"
+              shape="round"
+              class="ion-margin-top"
+              @click="openFdroid"
+            >
+              <ion-icon :icon="downloadOutline" slot="start" />
+              F-Droid
+            </ion-button>
+          </template>
         </div>
       </div>
     </ion-content>
@@ -131,23 +161,39 @@ import {
   logoFacebook,
   logoGithub,
   refreshOutline,
+  logoAndroid,
 } from "ionicons/icons";
 import { Browser } from "@capacitor/browser";
 import { App } from "@capacitor/app";
+import { Capacitor } from "@capacitor/core";
 import AppHeader from "@/components/AppHeader.vue";
 
 const currentVersion = ref("...");
 const isChecking = ref(false);
 const updateUrl = ref<string | null>(null);
+const isNativePlatform = Capacitor.isNativePlatform();
 
 const GITHUB_REPO = "ulightm111/boky-fivavahana-ion";
+const GITHUB_RELEASE_URL = `https://github.com/${GITHUB_REPO}/releases/latest`;
+const FDROID_URL = "https://f-droid.org/packages/com.uli.bokyfivavahana2/";
 
 onMounted(async () => {
   try {
-    const info = await App.getInfo();
-    currentVersion.value = info.version;
+    if (isNativePlatform) {
+      const info = await App.getInfo();
+      currentVersion.value = info.version;
+      return;
+    }
+
+    const response = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`,
+    );
+    if (!response.ok) throw new Error();
+
+    const data = await response.json();
+    currentVersion.value = data.tag_name || "unknown";
   } catch (e) {
-    currentVersion.value = "2.4.0";
+    currentVersion.value = "unknown";
   }
 });
 
@@ -157,6 +203,8 @@ const openFacebook = () =>
   Browser.open({ url: "https://www.facebook.com/tsiory.rjn" });
 const openGithub = () =>
   Browser.open({ url: `https://github.com/${GITHUB_REPO}` });
+const openGithubRelease = () => Browser.open({ url: GITHUB_RELEASE_URL });
+const openFdroid = () => Browser.open({ url: FDROID_URL });
 
 const checkForUpdate = async () => {
   isChecking.value = true;
@@ -263,8 +311,28 @@ const showToast = async (message: string, color = "dark") => {
   margin-bottom: 15px;
 }
 
+.apk-info {
+  margin: 0;
+  font-size: 1em;
+  color: var(--ion-color-text);
+}
+
+.apk-info ion-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
 .button-group {
-  max-width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 360px;
   margin: 0 auto;
+}
+
+.button-group ion-button {
+  flex: 1 1 140px;
 }
 </style>
