@@ -53,6 +53,18 @@ export interface FavoriteItem {
   subsectionIndex?: number;
 }
 
+export interface RecentBookEntry {
+  bookId: number;
+  bookName: string;
+  id?: number | string;
+  type: "song" | "psalm" | "section" | "subsection";
+  title: string;
+  subtitle?: string;
+  sectionName?: string;
+  subsectionIndex?: number;
+  visitedAt: number;
+}
+
 // Internal structure for fast searching
 interface IndexedSearchItem {
   searchKey: string;
@@ -80,6 +92,8 @@ export const useBookStore = defineStore("book", () => {
   const isLoading = ref(false);
   const favoriteItems = shallowRef<FavoriteItem[]>([]);
   const favoritesStorageKey = "boky-favorites";
+  const recentBooks = shallowRef<RecentBookEntry[]>([]);
+  const recentBooksStorageKey = "boky-book-history";
 
   // Search indexes (built once after data load)
   const hiraSearchIndex = shallowRef<IndexedSearchItem[]>([]);
@@ -107,6 +121,64 @@ export const useBookStore = defineStore("book", () => {
       key: favoritesStorageKey,
       value: JSON.stringify(favoriteItems.value),
     });
+  };
+
+  const loadRecentBooks = async () => {
+    try {
+      const { value } = await Preferences.get({ key: recentBooksStorageKey });
+      if (!value) return;
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        recentBooks.value = parsed as RecentBookEntry[];
+      }
+    } catch {
+      recentBooks.value = [];
+    }
+  };
+
+  const persistRecentBooks = async () => {
+    await Preferences.set({
+      key: recentBooksStorageKey,
+      value: JSON.stringify(recentBooks.value),
+    });
+  };
+
+  const recordContentVisit = async (
+    book: Book,
+    entry: Omit<RecentBookEntry, "bookId" | "bookName" | "visitedAt">,
+  ) => {
+    const uniqueKey = [
+      entry.type,
+      String(book.id),
+      entry.id != null ? String(entry.id) : "",
+      entry.sectionName || "",
+      entry.subsectionIndex != null ? String(entry.subsectionIndex) : "",
+      entry.title,
+    ].join(":");
+
+    const nextEntries = recentBooks.value.filter(
+      (item) =>
+        [
+          item.type,
+          String(item.bookId),
+          item.id != null ? String(item.id) : "",
+          item.sectionName || "",
+          item.subsectionIndex != null ? String(item.subsectionIndex) : "",
+          item.title,
+        ].join(":") !== uniqueKey,
+    );
+
+    recentBooks.value = [
+      {
+        ...entry,
+        bookId: book.id,
+        bookName: book.name,
+        visitedAt: Date.now(),
+      },
+      ...nextEntries,
+    ].slice(0, 10);
+
+    await persistRecentBooks();
   };
 
   const getFavoriteKey = (item: FavoriteItem) =>
@@ -154,6 +226,7 @@ export const useBookStore = defineStore("book", () => {
   };
 
   loadFavorites();
+  loadRecentBooks();
 
   const getBookById = (id: number): Book | null => booksById.value[id] ?? null;
   const getBookByName = (name: string): Book | null =>
@@ -466,6 +539,7 @@ export const useBookStore = defineStore("book", () => {
     currentPage,
     isLoading,
     favoriteItems,
+    recentBooks,
     loadData,
     performSearch,
     clearSearchResults,
@@ -473,6 +547,7 @@ export const useBookStore = defineStore("book", () => {
     getBookByName,
     isFavorite,
     toggleFavorite,
+    recordContentVisit,
     getFavoritePath,
     getBookData,
     getGroupedSongs,

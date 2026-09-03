@@ -64,6 +64,31 @@
           </ion-card>
         </template>
       </div>
+
+      <div class="history-panel">
+        <ion-accordion-group>
+          <ion-accordion value="recent">
+            <ion-item slot="header" lines="full" button>
+              <ion-label>Recent</ion-label>
+            </ion-item>
+
+            <div slot="content">
+              <ion-list lines="full">
+                <ion-item
+                  v-for="item in recentBooks"
+                  :key="`${item.bookId}-${item.type}-${item.id ?? ''}-${
+                    item.sectionName || ''
+                  }-${item.subsectionIndex ?? ''}-${item.title}`"
+                  button
+                  @click="openRecentBook(item)"
+                >
+                  <ion-label>{{ item.title }}</ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </div>
     </ion-content>
     <app-footer />
   </ion-page>
@@ -78,6 +103,12 @@ import {
   IonCardTitle,
   IonCardContent,
   IonSkeletonText,
+  IonIcon,
+  IonAccordionGroup,
+  IonAccordion,
+  IonItem,
+  IonLabel,
+  IonList,
   useIonRouter,
 } from "@ionic/vue";
 import { ref, onMounted } from "vue";
@@ -89,7 +120,7 @@ import { getBookSvg } from "@/utils/svgIcons";
 
 const router = useIonRouter();
 const bookStore = useBookStore();
-const { books, isLoading } = storeToRefs(bookStore);
+const { books, isLoading, recentBooks } = storeToRefs(bookStore);
 const globalSearchQuery = ref("");
 
 onMounted(async () => {
@@ -98,6 +129,33 @@ onMounted(async () => {
 
 const navigateToBook = (bookId: number) => {
   router.push(`/books/${bookId}`);
+};
+
+const openRecentBook = (item: any) => {
+  if (item.type === "song" || item.type === "psalm") {
+    router.push(`/books/${item.bookId}/song/${item.id}`);
+    return;
+  }
+
+  if (item.type === "subsection") {
+    router.push(
+      `/books/${item.bookId}/section/${encodeURIComponent(
+        item.sectionName || item.title,
+      )}/subsection/${item.subsectionIndex ?? 0}`,
+    );
+    return;
+  }
+
+  if (item.type === "section") {
+    router.push(
+      `/books/${item.bookId}/section/${encodeURIComponent(
+        item.sectionName || item.title,
+      )}`,
+    );
+    return;
+  }
+
+  router.push(`/books/${item.bookId}`);
 };
 
 const onGlobalSearchSubmit = () => {
@@ -118,6 +176,46 @@ const clearGlobalSearch = () => {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 12px;
   padding: 16px;
+}
+
+.history-panel {
+  margin: 0 16px 12px;
+}
+
+.history-panel ion-accordion-group {
+  border: 1px solid var(--ion-border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ion-item-background);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.history-panel ion-list {
+  background: transparent;
+  padding: 0;
+}
+
+.history-panel ion-item {
+  --min-height: 38px;
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+  --padding-start: 12px;
+  --padding-end: 10px;
+  font-size: 0.8rem;
+}
+
+.history-panel ion-item[slot="header"] {
+  --padding-start: 12px;
+  --padding-end: 10px;
+  min-height: 42px;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.history-panel ion-label {
+  white-space: normal;
+  margin: 6px 0;
+  font-size: 0.8rem;
 }
 
 .book-card {
@@ -179,4 +277,3 @@ ion-card-content {
   color: var(--ion-color-medium);
 }
 </style>
-```

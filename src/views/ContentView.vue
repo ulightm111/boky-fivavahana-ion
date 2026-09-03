@@ -221,7 +221,50 @@ const canGoNext = computed(
 const contentRef = ref<any>(null);
 const isScrolling = ref(false);
 
-const loadContent = () => {
+const recordCurrentContentVisit = async () => {
+  const currentBook = book.value;
+  if (!currentBook) return;
+
+  if (displayMode.value === "song") {
+    const titleText = title.value || `${itemObj.value?.id ?? ""}`;
+    await bookStore.recordContentVisit(currentBook, {
+      id: itemObj.value?.id,
+      type: isSalamo.value ? "psalm" : "song",
+      title: titleText,
+      subtitle: currentBook.name,
+    });
+    return;
+  }
+
+  if (displayMode.value === "psalm") {
+    await bookStore.recordContentVisit(currentBook, {
+      id: itemObj.value?.id,
+      type: "psalm",
+      title: title.value || `Salamo - ${itemObj.value?.id ?? ""}`,
+      subtitle: currentBook.name,
+    });
+    return;
+  }
+
+  if (displayMode.value === "liturgia") {
+    const sectionName = routeSectionName.value || title.value;
+    const subsectionIndex = routeSubIndex.value ?? undefined;
+
+    await bookStore.recordContentVisit(currentBook, {
+      id: subsectionIndex !== undefined ? subsectionIndex : undefined,
+      type: subsectionIndex !== undefined ? "subsection" : "section",
+      title:
+        subsectionIndex !== undefined
+          ? subTitleText.value || title.value
+          : title.value,
+      subtitle: currentBook.name,
+      sectionName,
+      subsectionIndex,
+    });
+  }
+};
+
+const loadContent = async () => {
   const currentBook = book.value;
   if (!currentBook) return;
 
@@ -253,6 +296,7 @@ const loadContent = () => {
       }));
       currentTitleIndex.value = songIndex;
     }
+    await recordCurrentContentVisit();
     return;
   }
 
@@ -282,6 +326,7 @@ const loadContent = () => {
         }));
         currentTitleIndex.value = idx;
       }
+      await recordCurrentContentVisit();
       return;
     }
 
@@ -303,6 +348,8 @@ const loadContent = () => {
       }));
       currentTitleIndex.value = sectionIndex;
     }
+
+    await recordCurrentContentVisit();
   }
 };
 
@@ -350,14 +397,15 @@ const toggleAutoscroll = async () => {
   requestAnimationFrame(step);
 };
 
-watch([routeSongId, routeSectionName, routeSubIndex, bookId], () => {
+watch([routeSongId, routeSectionName, routeSubIndex, bookId], async () => {
   isScrolling.value = false;
-  loadContent();
+  await loadContent();
 });
 
 onMounted(async () => {
   await bookStore.loadData();
-  loadContent();
+  await loadContent();
+  await recordCurrentContentVisit();
 });
 
 onUnmounted(() => {
