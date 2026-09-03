@@ -69,6 +69,7 @@
         <ion-accordion-group>
           <ion-accordion value="recent">
             <ion-item slot="header" lines="full" button>
+              <ion-icon :icon="historyIcon" slot="start" color="secondary" />
               <ion-label>Nojerena farany</ion-label>
             </ion-item>
 
@@ -122,7 +123,7 @@ import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
-import { getBookSvg } from "@/utils/svgIcons";
+import { getBookSvg, historyIcon } from "@/utils/svgIcons";
 
 const router = useIonRouter();
 const bookStore = useBookStore();
@@ -216,6 +217,12 @@ const clearGlobalSearch = () => {
   min-height: 42px;
   font-weight: 600;
   font-size: 0.82rem;
+}
+
+.history-panel ion-icon {
+  width: 24px;
+  height: 24px;
+  margin-inline-end: 8px;
 }
 
 .history-panel ion-label {
