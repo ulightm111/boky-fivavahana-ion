@@ -1,0 +1,3 @@
+- Added Recent History feature `Nojerena farany`
+- Added sliding unfavorite action button
+- On the web version, added APK link in `Mombamomba`
