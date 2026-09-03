@@ -59,7 +59,6 @@ export interface RecentBookEntry {
   id?: number | string;
   type: "song" | "psalm" | "section" | "subsection";
   title: string;
-  subtitle?: string;
   sectionName?: string;
   subsectionIndex?: number;
   visitedAt: number;

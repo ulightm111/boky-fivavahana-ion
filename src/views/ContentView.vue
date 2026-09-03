@@ -231,7 +231,6 @@ const recordCurrentContentVisit = async () => {
       id: itemObj.value?.id,
       type: isSalamo.value ? "psalm" : "song",
       title: titleText,
-      subtitle: currentBook.name,
     });
     return;
   }
@@ -241,7 +240,6 @@ const recordCurrentContentVisit = async () => {
       id: itemObj.value?.id,
       type: "psalm",
       title: title.value || `Salamo - ${itemObj.value?.id ?? ""}`,
-      subtitle: currentBook.name,
     });
     return;
   }
@@ -257,7 +255,6 @@ const recordCurrentContentVisit = async () => {
         subsectionIndex !== undefined
           ? subTitleText.value || title.value
           : title.value,
-      subtitle: currentBook.name,
       sectionName,
       subsectionIndex,
     });
