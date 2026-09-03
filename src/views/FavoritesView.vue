@@ -12,22 +12,28 @@
             <ion-item-divider sticky>
               <ion-label>{{ group.bookName }}</ion-label>
             </ion-item-divider>
-            <ion-item
+            <ion-item-sliding
               v-for="item in group.items"
               :key="favoriteKey(item)"
-              button
-              @click="openFavorite(item)"
             >
-              <ion-icon
-                :icon="getBookSvg(group.bookName)"
-                slot="start"
-                color="medium"
-              />
-              <ion-label>
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.subtitle || "Favorite" }}</p>
-              </ion-label>
-            </ion-item>
+              <ion-item button @click="openFavorite(item)">
+                <ion-icon
+                  :icon="getBookSvg(group.bookName)"
+                  slot="start"
+                  color="medium"
+                />
+                <ion-label>
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.subtitle || "Tiana" }}</p>
+                </ion-label>
+              </ion-item>
+
+              <ion-item-options side="end">
+                <ion-item-option color="danger" @click="removeFavorite(item)">
+                  <ion-icon :icon="starIcon" size="large" />
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
           </template>
         </ion-list>
       </div>
@@ -50,6 +56,10 @@ import {
   IonItem,
   IonLabel,
   IonItemDivider,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+  IonIcon,
   useIonRouter,
 } from "@ionic/vue";
 import { computed } from "vue";
@@ -106,6 +116,10 @@ const favoriteKey = (item: FavoriteItem) =>
 
 const openFavorite = (item: FavoriteItem) => {
   router.push(bookStore.getFavoritePath(item));
+};
+
+const removeFavorite = async (item: FavoriteItem) => {
+  await bookStore.toggleFavorite(item);
 };
 </script>
 
