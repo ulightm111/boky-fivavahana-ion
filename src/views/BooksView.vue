@@ -69,7 +69,7 @@
         <ion-accordion-group>
           <ion-accordion value="recent">
             <ion-item slot="header" lines="full" button>
-              <ion-label>Recent</ion-label>
+              <ion-label>Nojerena farany</ion-label>
             </ion-item>
 
             <div slot="content">
@@ -82,6 +82,12 @@
                   button
                   @click="openRecentBook(item)"
                 >
+                  <ion-icon
+                    :icon="getBookSvg(item.bookName)"
+                    slot="start"
+                    color="secondary"
+                    class="history-book-icon"
+                  />
                   <ion-label>{{ item.title }}</ion-label>
                 </ion-item>
               </ion-list>
@@ -216,6 +222,14 @@ const clearGlobalSearch = () => {
   white-space: normal;
   margin: 6px 0;
   font-size: 0.8rem;
+}
+
+.history-book-icon {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  margin-inline-end: 8px;
+  opacity: 0.9;
 }
 
 .book-card {
