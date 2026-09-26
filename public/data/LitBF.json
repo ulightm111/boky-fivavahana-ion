@@ -774,11 +774,13 @@
         {
           "subsection": "Ny Kolekta",
           "content": [
-            "<p class='text-center'><em>Ny Ministera</em><br/><strong>Tompo ô, sokafy ny molotray</strong><br/><em>Valiny</em><br/><strong>Dia hanambara ny fiderana Anao ny vavanay</strong><br/>........ ets.........</p>",
-            "<p>- <strong>Venite Exultemus, Domino (Sal. 95, 1-7) na Sal. 100</strong><br/>- <strong>Salamo:</strong> fandrosoan'ny Presbytera ho amin'ny fiomanana ny fanolorana ny Komoniona Masina</p>",
+            "<p class='text-center'><em>Ny Ministera</em><br/>Tompo ô, sokafy ny molotray<br/><em>Valiny</em><br/>Dia hanambara ny fiderana Anao ny vavanay<br/>........ ets.........</p>",
+            "<p>- Venite Exultemus, Domino (Sal. 95, 1-7) na Sal. 100</p>",
+            "<p>- <strong>Salamo:</strong> <em>fandrosoan'ny Presbytera ho amin'ny fiomanana ny fanolorana ny Komoniona Masina</em></p>",
             "<p>RAINAY Izay any an-danitra, Hohamasinina anie ny Anaranao: Ho tonga anie ny fanjakanao. Hatao anie ny sitraponao; Ety an-tany tahaka ny ny any an-danitra. Omeo anay anio izay hanina sahaza ho anay. Ary mamelà ny helokay, tahaka ny amelanay izay meloka aminay. Ary aza mitondra anay ho amin'ny fakampanahy. Fa manafaha anay amin'ny ratsy. Amena.</p>",
+            "<p class='text-center text-bold'>Ny Kolekta</p>",
             "<p>ANDRIAMANITRA Tsitoha ô, ny fon'ny olona rehetra dia miharihary aminao, ny faniriany rehetra dia fantatrao, ary tsy misy miafina aminao. Diovy amin'ny fanoloran-tsain'ny Fanahinao Masina ny hevitry ny fonay, mba ho tia Anao tokoa izahay, ary hankalaza ny Anaranao Masina araka izay mety; amin'ny alalan'i Kristy Tomponay. Amena.</p>",
-            "<p><strong>Dia hanatrika ny olona ny Presbytera ka hanonona ny Didy folo: ary isaky ny voatonona ny anankiray, ny olona mbola mandohalika dia hangataka ny famindrampon'Andriamanitra noho ny ota nataony, ary ny fahasoavana hanarahany ilay didy amin'ny aoriana, araka izao:</strong></p>"
+            "<p class='text-bold'><em>Dia hanatrika ny olona ny Presbytera ka hanonona ny Didy folo: ary isaky ny voatonona ny anankiray, ny olona mbola mandohalika dia hangataka ny famindrampon'Andriamanitra noho ny ota nataony, ary ny fahasoavana hanarahany ilay didy amin'ny aoriana, araka izao:</em></p>"
           ]
         },
         {
@@ -794,17 +796,20 @@
             "<p>7- Aza mijangajanga.</p>",
             "<p>8- Aza mangalatra.</p>",
             "<p>9- Aza mety ho vavolombelona mandainga (hanameloka ny namanao).</p>",
+            "<p class='text-bold'>Isaky ny voatonona ny Didy anankiray dia hataon'ny olona hoe:</p>",
+            "<p>Tompo ô, mamondrà fo aminay ary tariho ny fonay hankatò izany lalàna izany.</p>",
+            "<p class='text-center'><em>Ny Ministera.</em></p>",
             "<p>10- Aza mitsiriritra ny tranon'ny namanao, aza mi-tsiriritra ny vadin'ny namanao, na ny ankizilahiny, na ny ankizivaviny, na ny ombiny, na ny borikiny, na izay mety ho an'ny namanao (akory aza).</p>",
             "<p class='text-center'><em>Ny olona.</em></p>",
-            "<p class='text-center'>Tompo ô, mifona aminao izahay, mamindrà fo aminay, ary soraty ao am-ponay ireo lalànao rehetra ireo.</p>",
-            "<p><strong>Tsy maintsy atao toy izany indray mandeha isam-bolana ao amin'ny Paroasy ny Didy folo jara-fahaketiny, ary indray mandeha isan'Alahady amin'ny Adventa sy ny Fotoam-pifadiana.</strong></p>",
-            "<p><strong>Amin'ny andro hafa dia azo asolo azy ny tenin'ny Tompo ao amin'i S. Mat. XXII 37-40 hoe:</strong></p>",
+            "<p>Tompo ô, mifona aminao izahay, mamindrà fo aminay, ary soraty ao am-ponay ireo lalànao rehetra ireo.</p>",
+            "<p class='text-bold'><em>Tsy maintsy atao toy izany indray mandeha isam-bolana ao amin'ny Paroasy ny Didy folo jara-fahaketiny, ary indray mandeha isan'Alahady amin'ny Adventa sy ny Fotoam-pifadiana.</em></p>",
+            "<p class='text-bold'><em>Amin'ny andro hafa dia azo asolo azy ny tenin'ny Tompo ao amin'i S. Mat. XXII 37-40 hoe:</em></p>",
             "<p>Tiava an'i Jehovah Andriamanitrao amin'ny fonao rehetra sy ny fanahinao rehetra ary ny sainao rehetra. Izany no didy lehibe sady voalohany. Ary ny faharoa, izay tahaka azy ihany, dia izao: Tiava ny namanao tahaka ny tenanao. Izany didy izany no ihantonan'ny lalàna rehetra sy ny pofeta.</p>",
-            "<p class='text-center'><em>Ka atao indray mamaky, ary ny valiny dia toy ny valin'ny Didy I. Azo asolo azy koa ny hoe:</em></p>",
+            "<p class='text-bold'><em>Ka atao indray mamaky, ary ny valiny dia toy ny valin'ny Didy I. Azo asolo azy koa ny hoe:</em></p>",
             "<p class='text-center'>Tompo ô, mamindrà fo aminay<br/>Kristy ô, mamindrà fo aminay<br/>Tompo ô, mamindrà fo aminay</p>",
-            "<p><strong>Dia hanatrika ny Alitara indray ny Presbytera ka hivavaka ho an'ny Mpanapaka hoe:</strong></p>",
-            "<p class='text-center'>ANDRIAMANITRA Tsitoha sy mandrakizay ô, efa nampianarin'ny teninao masina izahay, fa eo ambanin'ny fahefanao ny fon'ny mpanapaka rehetra, ary Ianao dia mitondra azy araka ny fahendrenao masina. Mangataka aminao izahay mba hotapahinao ny fon'ny Prezidan'ny Repoblika mpanomponao mpitondra anay, mba hitadiavany mandrakariva ny voninahitrao sy ny lazanao, hiheverany koa izay hitandremany ny olonao entiny, ary amin'ny heviny sy ny teniny ary ny ataony rehetra, ary amin'ny miadana ary masina: Tanteraho izany, Ray mamindra fo ô, amin'ny alalan'i Jesoa Kristy Zanakao Tomponay. Amena.</p>",
-            "<p><strong>Raha tsy atao ny Didy folo, dia azo ajanona koa ny Kolekta ho an'ny mpanapaka.</strong></p>"
+            "<p class='text-bold'><em>Dia hanatrika ny Alitara indray ny Presbytera ka hivavaka ho an'ny Mpanapaka hoe:</em></p>",
+            "<p>ANDRIAMANITRA Tsitoha sy mandrakizay ô, efa nampianarin'ny teninao masina izahay, fa eo ambanin'ny fahefanao ny fon'ny mpanapaka rehetra, ary Ianao dia mitondra azy araka ny fahendrenao masina. Mangataka aminao izahay mba hotapahinao ny fon'ny Prezidan'ny Repoblika mpanomponao mpitondra anay, mba hitadiavany mandrakariva ny voninahitrao sy ny lazanao, hiheverany koa izay hitandremany ny olonao entiny, ary amin'ny heviny sy ny teniny ary ny ataony rehetra, ary amin'ny miadana ary masina: Tanteraho izany, Ray mamindra fo ô, amin'ny alalan'i Jesoa Kristy Zanakao Tomponay. Amena.</p>",
+            "<p class='text-bold'><em>Raha tsy atao ny Didy folo, dia azo ajanona koa ny Kolekta ho an'ny mpanapaka.</em></p>"
           ]
         },
         {
@@ -812,36 +817,40 @@
           "content": [
             "<p class='text-center'><em>Dia hataon'ny Presbytera hoe:</em><br/>Homba anareo anie ny Tompo.<br/><em>Valiny.</em><br/>Ary homba ny fanahinao.</p>",
             "<p class='text-center'><em>Presbytera.</em><br/>Aoka isika hivavaka.</p>",
-            "<p><strong>Dia hataony ny Kolekta araka ny andro sy ny haja izay ilaina; ary manaraka izany dia hovakina ny Testamenta Taloha.</strong></p>",
-            "<p class='text-center'>Ary rehefa voavaky ny testamenta taloha dia ataony hoe:<br/><strong>Izany no tenin'ny Tompo.</strong></p>",
-            "<p><strong>Antsa iray (Te Deum Laudamus na hafa)</strong></p>",
-            "<p class='text-center'>Ary rehefa voavaky ny Epistily dia ataony hoe:<br/><strong>Izany no tenin'ny Tompo.</strong></p>",
-            "<p class='text-center'><em>Valiny</em><br/><strong>Isaorana anie ny Tompo</strong><br/><strong>(Hohiraina ny hira araka ny andro ao amin'ny Kalendara)</strong><br/><strong>(office hymn)</strong></p>",
-            "<p><strong>Ary rehefa vita izany dia hitsangana ny olona ka hovakina ny Filazantsara, ary alohan'izay dia hataon'ny mpamaky hoe:</strong></p>",
-            "<p class='text-center'>Homba anareo anie ny Tompo.<br/><em>Valiny.</em><br/>Ary homba ny fanahinao.<br/><em>Presbytera.</em><br/>Ny Filazantsara masina dia nalaina avy amin'ny Filazantsara......, amin'ny toko......, miatomboka amin'ny andininy......</p>",
-            "<p class='text-center'><em>Dia hataon'ny olona hoe:</em><br/><strong>Voninahitra ho Anao, ry Tompo ô!</strong></p>",
-            "<p class='text-center'><em>Ary rehefa voavaky ny Filazantsara dia hataony ny hoe:</em><br/>Izany no filazantsaran'i Kristy (raha tononina)<br/><em>Valiny:</em> Isaorana anie Hianao, ry Tompo ô, noho izany Filazantsaranao Masina izany.</p>",
-            "<p class='text-center'><strong>Benedictus na solony</strong></p>"
+            "<p class='text-bold'><em>Dia hataony ny Kolekta araka ny andro sy ny haja izay ilaina; ary manaraka izany dia hovakina ny Testamenta Taloha.</em></p>",
+            "<p class='text-bold'>Ary rehefa voavaky ny testamenta taloha dia ataony hoe:<br/>Izany no tenin'ny Tompo.</p>",
+            "<p>Antsa iray (Te Deum Laudamus na hafa)<br/><strong>Vakiana ny Epistily na ny solony</strong></p>",
+            "<p class='text-bold'>Ary rehefa voavaky ny Epistily dia ataony hoe:<br/>Izany no tenin'ny Tompo.</p>",
+            "<p class='text-center'><em>Valiny</em><br/>Isaorana anie ny Tompo<br/><strong>(Hohiraina ny hira araka ny andro ao amin'ny Kalendara)</strong><br/>(office hymn)</p>",
+            "<p class='text-bold'><em>Ary rehefa vita izany dia hitsangana ny olona ka hovakina ny Filazantsara, ary alohan'izay dia hataon'ny mpamaky hoe:</em></p>",
+            "<p class='text-center'>Homba anareo anie ny Tompo.<br/><em>Valiny.</em><br/>Ary homba ny fanahinao.<br/><em>Presbytera.<br/>Ny Filazantsara masina dia nalaina avy amin'ny Filazantsara......, amin'ny toko......, miatomboka amin'ny andininy......</em></p>",
+            "<p class='text-center'><strong>Dia hataon'ny olona hoe:</strong><br/>Voninahitra ho Anao, ry Tompo ô!</p>",
+            "<p class='text-center'><strong><em>Ary rehefa voavaky ny Filazantsara dia hataony ny hoe:</em></strong><br/>Izany no filazantsaran'i Kristy (raha tononina)<br/><em>Valiny:</em> Isaorana anie Hianao, ry Tompo ô, noho izany Filazantsaranao Masina izany.</p>",
+            "<p class='text-center text-bold'>Benedictus na solony</p>"
           ]
         },
         {
           "subsection": "Ny Foto-pinoana",
           "content": [
-            "<p><strong><em>Dia hatao amin'izao ity Foto-pinoana ity izay azo avela amin'ny andavanandro, afa-tsy raha Fety lehibe; ary mbola mitsangana ihany ny olona.</em></strong></p>",
+            "<p class='text-bold'><em>Dia hatao amin'izao ity Foto-pinoana ity izay azo avela amin'ny andavanandro, afa-tsy raha Fety lehibe; ary mbola mitsangana ihany ny olona.</em></p>",
             "<p>IZAHO mino an'Andriamanitra iray, Ray Tsitoha, Mpanao ny lanitra sy ny tany, ary ny zavatra rehetra na ny hita na ny tsy hita.</p>",
             "<p>Ary an'i Jesoa Kristy Tompo iray, Zanakalahy Tokan' Andriamanitra, Nateraky ny Rainy talohan'izao rehetra izao, Andriamanitra avy amin'Andriamanitra, ny Mazava avy amin'ny Mazava, Andriamanitra tokoa avy amin' Andriamanitra tokoa. Nateraka fa tsy natao, Miray Sobstansia amin'ny Ray, Izy no nahariana ny zavatra rehetra: Nidina avy tany an-danitra ho antsika olombelona sy ho famonjena antsika Izy, Ary nataon'ny Fanahy Masina nofo avy tamin'i Maria Virijina, Ary natao olona, Dia nohomboana tamin'ny hazo fijaliana ho antsika tamin'ny nanapahan'i Pontio Pilato. Nijaly Izy ary nalevina, ary nony tamin'ny andro fahatelo dia nitsangana araka ny Soratra Masina Izy; dia niakatra any an-danitra, Ary mipetraka eo an-kavanan'ny Ray. Ary ho avy indray amin'ny voninahitra hitsara ny velona sy maty: Ary ny fanjakany dia tsy hanam-pahataperana.</p>",
             "<p>Ary izaho mino ny Fanahy Masina, Tompo sy Mpanome aina, Izay avy amin'ny Ray sy ny Zanaka, Izay itsaohana sy ankalazaina miaraka amin'ny Ray sy ny Zanaka, Izay niteny tamin'ny vavan'ny Profeta. Ary izaho mino ny Eklesia Iray, Masina, Katolika sy Apostolika; ary manaiky ny Batisa iray ho famelankeloka aho; Manantena ny fitsanganan'ny maty, Ary ny fiainana ho avy. Amena.</p>",
-            "<p><strong><em>Dia hambaran'ny Ministera amin'ny olona izay Andro Festa sy Andro fifadiana hotandremana amin'io herinandro io. Ary holazainy koa ny andro hanaovana ny Komoniona Masina sy ny anaran'ny olona izay hatao Mariazy.<br/>Ary tsy hisy hilaza zavatra ao am-piangonana afa-tsy ny Ministera ihany.<br/>Ary dia hatao amin'izao ny Toriteny.<br/>Ary ny Presbytera dia hiverina eo amin'ny Alitara, ka hamaky amin'ireto andininy manaraka ireto, araka izay ataony ho mety.<em></em></em></strong></p>"
+            "<p class='text-bold'><em>Dia hambaran'ny Ministera amin'ny olona izay Andro Festa sy Andro fifadiana hotandremana amin'io herinandro io. Ary holazainy koa ny andro hanaovana ny Komoniona Masina sy ny anaran'ny olona izay hatao Mariazy.</em></p>",
+            "<p class='text-bold'><em>Ary tsy hisy hilaza zavatra ao am-piangonana afa-tsy ny Ministera ihany.</em></p>",
+            "<p class='text-bold'><em>Ary dia hatao amin'izao ny Toriteny.</em></p>",
+            "<p class='text-bold'><em>Ary ny Presbytera dia hiverina eo amin'ny Alitara, ka hamaky amin'ireto andininy manaraka ireto, araka izay ataony ho mety.<em></p>"
           ]
         },
         {
           "subsection": "Sasin-teny",
           "content": [
             "<p class='text-center'>ADVENTA</p>",
-            "<p>Mifalia indrindra, ry Ziona zanakavavy; manaova feo fifaliana, ry Jerosalema zanakavavy; indro ny Mpanjakanao avy ho anao. Zak. IX, 9</p>",
+            "<p>Mifalia indrindra, ry Ziona zanakavavy; manaova feo fifaliana, ry Jerosalema zanakavavy; indro ny Mpanjakanao avy ho anao. <em>Zak. IX, 9</em></p>",
             "<p class='text-center'>KRISTMASY</p>",
-            "<p>Zaza no teraka ho antsika, Zazalahy no omena antsika. Isa. IX, 5</p>",
+            "<p>Zaza no teraka ho antsika, Zazalahy no omena antsika. <em>Isa. IX, 5</em></p>",
             "<p class='text-center'>EPIFANY</p>",
+            "<p>Ny mpanjaka rehetra hiankohoka eo anatrehany; ny firenena rehetra hanompo Azy. <em>Sal IXXII, 11</em></p>",
             "<p class='text-center'>FOTOAM-PIFADIANNA</p>",
             "<p>ALAH. 1-4 - Ny fonareo no triatriaro, fa aza ny fitafianareo, ary miverena amin'i Jehovah Andriamanitrareo; fa mamindra fo sy miantra Izy. <em>Joela II, 13</em></p>",
             "<p class='text-center'>ALAH. 5-AS. ALOH. NY PASKA - Ny latsa dia nanorotoro ny foko, ka reraka indrindra Aho, ary niandry antra Aho, fa tsy nisy, sy mpanony, fa tsy nahita. <em>Sal. LXIX, 20</em></p>",
@@ -877,14 +886,14 @@
             "<p>- Izay miantra ny malahelo dia mampisambotra an'i Jehovah, ary izay nomeny dia honerany kosa. <em>Ohab. XIX, 17</em></p>",
             "<p>- Sambatra izay mahatsiaro ny malahelo; Jehovah hamonjy azy amin'ny andro fahoriana. <em>Sal. XII, 1</em></p>",
             "<p>- Hianao no hanaterako fanati-pisoarana ary ny Anaran'i Jehovah no hantsoiko. Hanefa ny voadiko amin'i Jehovah aho, eny, eo anatrehan'ny olona rehetra. <em>Sal. CXVI, 17-18</em></p>",
-            "<p><em>Raha mbola vakina ireo andininy ireo, dia handray ny fiantrana ho an'ny malahelo sy ny fanatitra hafa ny olona voatendry izany; ary hitondra izany amin'ny Presbytera, ary izy kosa dia nanatitra azy amim-panetrentena eo ambonin'ny Alitara.</em></p>",
-            "<p><em>Raha hatao ny Komoniona, dia hapetraky ny Presbytera eo ambonin'ny Alitara ny Mofo sy ny Divay araka izay ataony ho ampy.</em></p>"
+            "<p class='text-bold'>Raha mbola vakina ireo andininy ireo, dia handray ny fiantrana ho an'ny malahelo sy ny fanatitra hafa ny olona voatendry izany; ary hitondra izany amin'ny Presbytera, ary izy kosa dia nanatitra azy amim-panetrentena eo ambonin'ny Alitara.</p>",
+            "<p class='text-bold'>Raha hatao ny Komoniona, dia hapetraky ny Presbytera eo ambonin'ny Alitara ny Mofo sy ny Divay araka izay ataony ho ampy.</p>"
           ]
         },
         {
           "subsection": "Vavaka Ho An'ny Eklesia",
           "content": [
-            "<p><strong><em>Rehefa vita izany dia hataon'ny Presbytera hoe:</em></strong></p>",
+            "<p class='text-bold'>Rehefa vita izany dia hataon'ny Presbytera hoe:</p>",
             "<p>Aoka isika hivavaka ho an'ny Eklesian'i Kristy.</p>",
             "<p>ANDRIAMANITRA Tsitoha sy mandrakizay ô, ny tenin'ny Apostolinao masina no efa nampianaranao anay hanao fangatahana sy fivavahana ary fisaorana ho an'ny olona rehetra. Koa mangataka aminao izahay, mba raiso amin'ny famindramponao lehibe izao (*rakitra sy fanatitra) ary vavaka izao, izay ataonay eto anatrehanao. <small><em>*Raha tsy misy rakitra dia hajanona ny teny hoe: «RAKITRA»; ary raha tsy misy Komoniona Masina dia hajanona ny teny hoe: «FANATITRA».</em></small></p>",
             "<p>Ary velomy lalandava eo amin'ny Eklesia Katolika ny fanahin'ny fahamarinana sy ny firaisana ary ny fifankatiavana. Ary aoka izay rehetra manaiky ny Anaranao masina hiray saina ny amin'ny teninao masina ary hifankatia tsara.</p>",
@@ -898,13 +907,13 @@
         {
           "subsection": "Fieken-keloka Ho An'izay Handray Ny Komoniona Masina",
           "content": [
-            "<p><strong><em>Dia hataon'ny Presbytera amin'izay handray ny Komoniona Masina hoe:</em></strong></p>",
+            "<p class='text-bold'><em>Dia hataon'ny Presbytera amin'izay handray ny Komoniona Masina hoe:</em></p>",
             "<p>HIANAREO izay mibebaka marina tokoa noho ny fahotanareo sy mifankatia amin'ny namanareo, ary mikasa hitondratena tsara, ka hanaraka ny didin' Andriamanitra sy handeha amin'ny làlany masina hatramin'izao: Manatòna amin'ny finoana ary raiso ity Sakramenta Masina ity hampionona anareo: ary ataovy amim-panetrentena eo am-pandohalehana ny fieken-kelokareo amin'Andriamanitra Tsitoha.</p>",
-            "<p><strong><em>Dia hitarika ity fieken-keloka ity ny ministera anankiray, ary dia hiara-mandohalika izy rehetra ka hanao hoe:</em></strong></p>",
+            "<p class='text-bold'><em>Dia hitarika ity fieken-keloka ity ny ministera anankiray, ary dia hiara-mandohalika izy rehetra ka hanao hoe:</em></p>",
             "<p>ANDRIAMANITRA Tsitoha ô, Rain'i Jesoa Kristy Tomponay, Mpanao ny zavatra rehetra, ary Mpitsara ny olona rehetra. Malahelo izahay ka miaiky ny fahotanay sy ny helokay maro samy hafa. Izay efa nanoheranay Anao matetika, Tamin'ny hevitra sy ny teny ary ny atao, Ka nampirehitra ny fahatezeranao sy ny fahaviniranao marina taminay. Mibebaka marina tokoa izahay noho ireo haratsianay ireo. Mampahory anay ny fahatsiarovanay azy. Tsy zakanay ny fahavesarany. Mamindrà fo aminay, mamindrà fo aminay: Ray mamindra fo indrindra ô. Mamelà ny heloka rehetra nataonay tamin'ny lasa. Noho ny fitiavanao an'i Jesoa Kristy Tomponay. Ary hatramin' izao dia aoka izahay hanompo Anao mandrakariva, amin'ny fitondrantena ankasitrahanao, Ho voninahitra sy ho lazan'ny Anaranao; Amin'ny alalan'i Jesoa Kristy Tomponay. Amena.</p>",
-            "<p><strong><em>Dia hitsangana ny Presbytera (na ny Eveka raha eo izy) ka hanatrika ny olona, ary hanao ity famelan-keloka ity.</em></strong></p>",
+            "<p class='text-bold'><em>Dia hitsangana ny Presbytera (na ny Eveka raha eo izy) ka hanatrika ny olona, ary hanao ity famelan-keloka ity.</em></p>",
             "<p>ANDRIAMANITRA Tsitoha, Raintsika any an-danitra, Izay manaiky amin'ny famindrampony lehibe hamela heloka izay rehetra manatona Azy amin'ny fibebahana mafy sy ny finoana marina: Hamindra fo aminareo anie Izy; hamela sy hanafaka anareo amin'ny helokareo rehetra; hanamafy sy hanatanjaka anareo amin'ny fahatsarana rehetra, ary hitondra anareo ho amin'ny fiainana mandrakizay; amin'ny alalan'i Jesoa Kristy Tompontsika. Amena.</p>",
-            "<p class='text-center'><strong>Dia hataon'ny Presbytera hoe:</strong></p>",
+            "<p class='text-bold'><em>Dia hataon'ny Presbytera hoe:</em></p>",
             "<p>Henoy ny teny mampionona ataon'i Krsity Mpamonjy antsika amin'izay manatona Azy tokoa:</p>",
             "<p>MANKANESA aty amiko hianareo rehetra izay miasa fatratra sy mavesatra entana, fa Izaho no hanome anareo fitsaharana. <em>S. Mat. XI, 28</em></p>",
             "<p>Toy izao no nitiavan'Andriamanitra izao tontolo izao: nomeny ny Zanani-lahy Tokana, mba tsy ho very izay rehetra mino Azy, fa hanana fiainana mandrakizay. <em>S. Jaona III, 16</em></p>",
@@ -912,13 +921,17 @@
             "<p>Mahatoky ka tokony hekena amin'ny fankasitrahana rehetra izao teny izao: tonga tety ambonin'ny tany Kristy Jesoa hamonjy ny mpanota. <em>I Tim. I, 15</em></p>",
             "<p>Henoy koa izay lazain'i S. Jaona:</p>",
             "<p>Raha misy manota, dia manana solovava ao amin'ny Ray isika, dia Jesoa Kristy Ilay Marina; ary Izy no avotra noho ny fahotantsika. <em>I Jaona II, 1</em></p>",
-            "<p><strong>Ary handohalika manatrika ny Alitara ny Presbytera ka hanao izao fivavahana manaraka izao hisolo vava izay rehetra handray ny Komoniona Masina:</strong></p>",
+            "<p class='text-bold'><em>Ary handohalika manatrika ny Alitara ny Presbytera ka hanao izao fivavahana manaraka izao hisolo vava izay rehetra handray ny Komoniona Masina:</em></p>",
             "<p>TOMPO mamindra fo ô, tsy dia matoky ny fahamarinanay izahay no sahy manatona ity Latabatrao ity, fa ny famindramponao maro sy lehibe no itokianay. Tsy mendrika izahay, na dia hihinana ny sombitsombiny latsaka avy amin'ny Latabatrao akory aza. Nefa Hianao no Tompo mamindra fo mandrakariva: Ry Tompo be fahasaoavana ô, aoka ny fihinananay ny Nofon'i Jesoa Kristy Zanakao malala sy ny fisotroanay ny Rany, no hanadiovan'ny Tenany ny tenanay feno fahotana, sy hanasan'ny Rany soa indrindra ny fanahinay, hitoeranay mandrakariva ao aminy, ary Izy ato anatinay. Amena.</p>",
-            "<p class='text-center'><strong>Dia hanatrika ny Alitara ny Presbytera, ka hanao hoe:</strong></p>",
+            "<p class='text-bold'><em>Rehefa vita izany, dia hitsangana ny Presbytera ka hanao hoe:</em></p>",
+            "<p class='text-center'>Homba anareo anie ny Tompo<br/><em>Valiny</em><br/>Ary homba ny fanahinao</p>",
+            "<p class='text-center'><em>Presbytera</em><br/>Asandrato ny fonareo<br/><em>Valiny</em><br/>Asandratray amin'ny Tompo ny fonay</p>",
+            "<p class='text-center'><em>Presbytera</em><br/>Aoka isika hisaotra an'Andriamanitra Tompontsika<br/><em>Valiny</em><br/>Mety sy tokony hatao izany</p>",
+            "<p class='text-bold'><em>Dia hanatrika ny Alitara ny Presbytera, ka hanao hoe:</em></p>",
             "<p>METY dia mety sady marina no tokony hataonay indrindra izany, na oviana na oviana ary na aiza na aiza, dia ny misaotra Anao Tompo ô, Ray Masina, Andriamanitra Tsitoha sy mandrakizay.</p>",
-            "<p><em>Dia hanaraka eto ny Sasinteny voatendry, fa raha tsy misy dia izao no atao:</em></p>",
+            "<p class='text-bold'><em>Dia hanaraka eto ny Sasinteny voatendry, fa raha tsy misy dia izao no atao:</em></p>",
             "<p>Ary noho izany dia miara-misaotra sy mankalaza ny Anaranao malaza izahay mbamin'ny Anjely sy ny Arkanjely ary ireo maro be any an-danitra, ka midera Anao mandrakariva hoe:</p>",
-            "<p class='text-center'><strong>Dia hotononin'ny mpiangona rehetra na hohirainy izao:</strong></p>",
+            "<p class='text-bold'><em>Dia hotononin'ny mpiangona rehetra na hohirainy izao:</em></p>",
             "<p>Masina, masina, masina, ry Tompo Andriamanitry ny maro, manerana ny lanitra sy ny tany ny voninahitrao. Ho Anao anie ny voninahitra, ry Tompo avo indrindra ô. Amena.</p>",
             "<p>Isaorana anie Izay avy amin'ny Anaran'i Jehovah, Hosana amin'ny Avo indrindra.</p>"
           ]
@@ -926,47 +939,47 @@
         {
           "subsection": "Ny Sasinteny Voatendry",
           "content": [
-            "<p class='text-center'><em>Amin'ny ISAN'ALAHADY, afa-tsy raha misy hafa voatendry.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny ISAN'ALAHADY, afa-tsy raha misy hafa voatendry.</em></p>",
             "<p>FA Ianao, Ray ô, mbamin'ny Zanakao-lahy Tokana sy ny Fanahy Masina dia Andriamanitra Iray, Tmpo Iray; nefa tsy Persona iray ihany fa Persona telo amin'ny Sobstansia iray; ka ny Teninao mandrakizay no naharianao ny zavatra rehetra. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny ANDRO KRISTMASY, ka hatramin'ny andro mialoha ny Epifany.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny ANDRO KRISTMASY, ka hatramin'ny andro mialoha ny Epifany.</em></p>",
             "<p>Fa efa nomenao Jesoa Kristy Zanakao-lahy Tokana ho teraka ho anay tamin'ny fotoana izay tsarovanay ankehitriny; ka Izy, tamin'ny fiasan'ny Fanahy Masina, dia natao olona tokoa avy amin'ny tenan'i Maria Virijina reniny; ary ny tsi-fananany tsiny no anadiovany anay amin'ny tsiny rehetra. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny Festan'ny EPIFANY, sy ny hafitoana manaraka azy.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny Festan'ny EPIFANY, sy ny hafitoana manaraka azy.</em></p>",
             "<p>AMIN'ny alalan'ny Zanakao-lahy Tokana, Izay niseho tamin'ny olombelona mety maty ka nanavao anay tamin'ny fahazavan'ny Tenany tsy mety maty. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny ANDRO LAVENONA ka hatramin'ny Asabotsy mialoha ny Alahady fahadimy amin'ny Fotoam-pifadiana afa-tsy raha misy Sasinteny momba ny Olo-masina voatendry.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny ANDRO LAVENONA ka hatramin'ny Asabotsy mialoha ny Alahady fahadimy amin'ny Fotoam-pifadiana afa-tsy raha misy Sasinteny momba ny Olo-masina voatendry.</em></p>",
             "<p>FA Ianao efa nitarika ny fonay ho tia ny fifehezan-tena mba handresenay ny filan-dratsin'ny nofo ka tsy ho velona ho an'ny tenanay intsony fa ho an'llay maty sy nitsangana hamonjy anay, dia Jesoa Kristy Tomponay. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny ALAHADY FAHADIMY amin'ny Fotoam-pifadiana ka hatramin'ny Alarobia amin'ny HERINANDRO MASINA, afa-tsy raha misy sasinteny momba ny olo-masina voatendry.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny ALAHADY FAHADIMY amin'ny Fotoam-pifadiana ka hatramin'ny Alarobia amin'ny HERINANDRO MASINA, afa-tsy raha misy sasinteny momba ny olo-masina voatendry.</em></p>",
             "<p>FA efa nomenao Jesoa Kristy Zanakao-lahy Tokana hanafaka anay amin'ny fahefan'ny maizina; koa nasandratra teo amin'ny Hazo fijaliana Izy mba hitaona ny olona rehetra hanatona Azy, sady mba ho tonga loharanon'ny famonjena mandrakizay ho an'izay rehetra mino sy manaraka Azy. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny ALAKAMISY MASINA sy amin'ny Andro ankalazana ny SAKRAMENTA MASINA.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny ALAKAMISY MASINA sy amin'ny Andro ankalazana ny SAKRAMENTA MASINA.</em></p>",
             "<p>AMIN'ny alalan'i Jesoa Kristy Tomponay, Izay efa tia ny Azy teto amin'izao tontolo izao, ary tia azy hatramin'ny farany; ka tamin'ilay alina nialoha ny Nijaliany dia nanendry izao Zava-miafina masina izao Izy, mba handraisanay ny soa vokatry ny Nijaliany sy hamelomana anay noho ny Fitsanganany tamin'ny maty, ka ho mpiombona ny maha-Andriamanitra Azy sady hofenoina ny fahafenoan' Andriamanitra. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny ANDRO PASKA ka hatramin'ny andro mialoha ny Andro Niakarana, afa-tsy raha misy Sasinteny momba ny olo-masina voatendry.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny ANDRO PASKA ka hatramin'ny andro mialoha ny Andro Niakarana, afa-tsy raha misy Sasinteny momba ny olo-masina voatendry.</em></p>",
             "<p>KA dia tokony hidera Anao indrindra izahay noho ny nitsanganan'i Jesoa Kristy Zanakao-lahy Tokana Tomponay tamin'ny maty, fa Izy no Zanak'ondry Paska marina tokoa. Izay naterina hisolo anay, ka efa nanaisotra ny fahotan'izao tontolo izao; fa ny Nahafatesany no nandravany ny fahafatesana, ary ny Nitsanganany indray no namerenany ny fiainana mandrakizay ho anay. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny ANDRO NIAKARANA sy ny hafitoana manaraka azy.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny ANDRO NIAKARANA sy ny hafitoana manaraka azy.</em></p>",
             "<p>AMIN'ny alalan'i Jesoa Kristy Zanakao malala indrindra Tomponay, Izay niseho niharihary tamin'ny Apostoliny rehetra taorian'ny Nitsanganany malaza indrindra tamin'ny maty, ary hitany niakatra any an-danitra Izy, hanamboatra fitoerana ho anay, mba hiakaranay koa any amin'izay itoerany, hiara-manjaka aminy amin'ny voninahitra. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny ANDRO PENTEKOSTA sy ny herenamana manaraka azy.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny ANDRO PENTEKOSTA sy ny herenamana manaraka azy.</em></p>",
             "<p>AMIN'ny alalan'i Jesoa Kristy Tomponay; fa araka ny teny fikasany marina tokoa, dia nidina avy tany an-danitra ny Fanahy Masina tamin'ny fotoana izay tsarovanay ankehitriny, tamin'ny feo tonga tampoka toy ny rivotra mahery, ary nipetraka toy ny lelafo tamin'ny Apostoly Izy, hampianatra sy hitondra azy amin'ny marina rehetra; ka nampiteny azy fiteny samy hafa sy nanome azy fahasahiana hazoto fatratra hitory ny Filazantsara amin'ny firenena rehetra; ary izany no nitondrany anay niala tamin'ny maizina sy ny fahadisoana ho amin'ny fahazavana, sy ny fahalalana Anao marina sy Jesoa Kristy Zanakao. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny Festan'ny TRINITE.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny Festan'ny TRINITE.</em></p>",
             "<p>DIA Andriamanitra Iray, Tompo Iray, nefa tsy Persona Iray ihany, fa Persona telo amin'ny Sobstansia iray. Koa izay inoanay ny amin'ny voninahitry ny Ray dia inoanay koa ny amin'ny Zanaka sy ny Fanahy Masina, fa tsy misy tsi-fitoviana akory. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny Festan'ny Nanadiaoana sy ny Nambaran'ny Anjely sy ny Festan'ny Maria Virijina SAMBATRA, sy ny Nanambarana.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny Festan'ny Nanadiaoana sy ny Nambaran'ny Anjely sy ny Festan'ny Maria Virijina SAMBATRA, sy ny Nanambarana.</em></p>",
             "<p>FA efa nomenao Jesoa Kristy Zanakao-lahy Tokana ho teraka ho anay; ka Izy, tamin'ny fiasan'ny Fanahy Masina, dia natao olona tokoa avy amin'ny tenan'i Maria Virijina reniny; ary ny tsi-fananany tsiny no anadiovany anay amin'ny tsiny rehetra. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny Festan'ny SANTA, sy amin'ny hafitoana manaraka ny Festan'ny Santa Rehetra afa-tsy raha misy Sasinteny hafa voatendry.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny Festan'ny SANTA, sy amin'ny hafitoana manaraka ny Festan'ny Santa Rehetra afa-tsy raha misy Sasinteny hafa voatendry.</em></p>",
             "<p>FA Ianao efa nanome anay ny mariky ny fitondrantena tsara sy ny fanantenana mahatoky ny amin'ny fiantsoana anay, tamin'ny alalan'ny olonao masina, izay vavolombelona marobe manodidina anay toy ny rahona; ka hihazakazaka amin'ny faharetana amin'izao fihazakazahana filokana napetraka eo anoloanay izao, mba handraisanay ny satroboninahitra izay tsy mety lo. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny NODIMANDRY.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny NODIMANDRY.</em></p>",
             "<p>AMIN'alalan'i Jesoa Kristy Tomponay, Izay efa nampiseho mazava ny fiainana sy ny tsi-fahafatesana mba tsy hahalovonay izay mitanondrika noho ny fahotana sy ny fahafatesana, tahaka ny olona tsy manana fanantenana, satria fantatray fa raha ravàna ny trano lainay eto an-tany, dia manana izay tsara lavitra any an-danitra izahay. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny FITOKANAM-PIANGONANA</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny FITOKANAM-PIANGONANA</em></p>",
             "<p>FA he! na dia ny lanitry ny lanitra aza tsy omby Anao, ary heniky ny voninahitrao izao tontolo izao; kanefa manaiky hitoetra ao amin'ny trano eto an-tany, izay atokana ho an'ny Anaranao, ka ao no ampidinanao fanomezam-pahasoavana ho an'ny olonao. Ary noho izany, ets...</p>",
-            "<p class='text-center'><em>Amin'ny NIOVAN-TAREHY.</em></p>",
+            "<p class='text-center text-bold'><em>Amin'ny NIOVAN-TAREHY.</em></p>",
             "<p>SATRIA ny voninahitry Ilay Teninao tonga nofo dia namirapiratra tao an-tendrombohitra masina teo anatrehan'ireo vavolombelona nahita maso ny fiandrianany, ka nampiseho ny fihavian'ny Fanjakany amin-kery, miaraka amin'ny olony masina eo anatin'ny fahazavana mamirapiratra. Ary noho izany, ets...</p>"
           ]
         },
         {
           "subsection": "Fanamasinana Sy Fandraisana Ny Mofo Sy Ny Divay",
           "content": [
-            "<p><strong>Ary rehefa vita ny anankiray amin'ireo Sasinteny ireo, dia hohiraina na hotononina izao:</strong></p>",
+            "<p class='text-bold'><em>Ary rehefa vita ny anankiray amin'ireo Sasinteny ireo, dia hohiraina na hotononina izao:</em></p>",
             "<p>Ary noho izany dia miara-misaotra sy mankalaza ny Anaranao malaza izahay mbamin'ny Anjely sy ny Arkanjely ary ireo marobe any an-danitra, ka midera Anao mandrakariva hoe:</p>",
-            "<p class='text-center'><strong>Dia hotononin'ny mpiangona rehetra na hohirainy izao:</strong></p>",
+            "<p class='text-bold'><em>Dia hotononin'ny mpiangona rehetra na hohirainy izao:</em></p>",
             "<p>Masina, masina, masina, ry Tompo Andriamanitry ny maro, manerana ny lanitra sy ny tany ny voninahitrao: Ho Anao anie ny voninahitra, ry Tompo avo indrindra ô. Amena.</p>",
             "<p>Isaorana anie Izay avy amin'ny Anaran'i Jehovah. Hosana amin'ny Avo indrindra.</p>",
-            "<p><strong>Rehefa namboarin'ny Presbytera mitsangana manatrika ny alitara ny Mofo sy ny Divay, hamakiany ny Mofo eo anatrehan'ny olona sy handraisany ny kapoaka amim-panajana, dia hanao izao Fivavahana Fanamasinana izao izy:</strong></p>",
+            "<p class='text-bold'><em>Rehefa namboarin'ny Presbytera mitsangana manatrika ny alitara ny Mofo sy ny Divay, hamakiany ny Mofo eo anatrehan'ny olona sy handraisany ny kapoaka amim-panajana, dia hanao izao Fivavahana Fanamasinana izao izy:</em></p>",
             "<p>VONINAHITRA ho Anao, Andriamanitra Tsitoha, Rainay any an-danitra ô, noho ny famindramponao lehibe tamin'ny nanomezanao an'i Jesoa Kristy Zanakao-lahy Tokana hiaritra fahafatesana tamin'ny Hazo fijaliana ho fanavotana anay; fa teo no nanaovany fanalamboady sy fanatitra ary onitra ampy sy tanteraka ary sahaza noho ny fahotan'izao tontolo izao tamin'ny nanolorany ny Tenany izay naterina indray mandeha; ary koa nanendry ny fahatsiarovana ny Nahafatesany soa indrindra Izy sady nandidy anay ao amin'ny Filazantsarany masina hampaharitra izany mandra-pihaviny indray.</p>",
             "<p>Tamin'ilay alina namadihana Azy dia * nandray Mofo Izy; ary rehefa nisaotra Izy dia ** novakiny, ary nomeny ny mpianany, ka nataony hoe: Raiso, hano, *** Ity no Tenako Izay omena ho anareo: Izao no ataovy ho fahatsiarovana Ahy.</p>",
             "<p>Ary toy izany koa rehefa vita ny sakafo dia **** nandray ny kapoaka Izy; ary rehefa nisaotra Izy, dia nomeny azy, ka nataony hoe: Misotroa amin'ity hianareo rehetra, fa ***** Ity no Rako, dia ny amin'ny Fanekena vaovao, izay alatsaka ho anareo sy ny maro ho famelan-keloka; Izao no ataovy ho fahatsiarovana Ahy, na oviana na oviana no misotro hianareo.</p>",
@@ -975,27 +988,27 @@
             "<p>Ary maniry tokoa izahay mpanomponao, Ray mamindra fo ô, mba horaisinao noho ny fahatsaranao izao fanati-piderana sy fisaorana izao. Ary mangataka aminao amim-panetrentena izahay, aoka ny fahamiendrehan'i Jesoa Kristy Zanakao sy ny Nahafatesany ary ny fitokianay ny Rany, no hahazoanay sy ny Eklesianao ny famelana ny helokay sy ny fahasoavana rehetra vokatry ny Nijaliany.</p>",
             "<p>Ary mifona aminao izahay, aoka anie izay rehetra mandray ity Komoniona Masina ity mba handray amim-pahamiendrehana ny Tena sy ny Ra soan'i Kristy, ary ho feno ny fahasoavanao sy ny fitahianao avy any an-danitra ka hatao tena iray amin'i Kristy.</p>",
             "<p>Ary dia aterinay sy atolotray amina'izao, Tompo ô, ny sainay sy ny fanahinay ary ny tenanay ho fanatitra mety sy masina ary velona. Ary na dia tsy miendrika hanatitra fanatitra aminao akory aza izahay, noho ny helokay maro samy hafa, mifona aminao izahay, raiso amin'ny fankasitrahana ity fanompoana adidinay ity; koa aza mandanja anay, fa mamelà ny fahadisoanay amin'ny alalan'i Jesoa Kristy Tomponay, Izay omem-boninahitra sy laza amin'ny firaisan'ny Fanahy Masina miaraka aminao, Ray any an-danitra ô, mandrakizay mandrakizay. Amena.</p>",
-            "<p class='text-center'><strong>Presbytera</strong></p>",
+            "<p class='text-center'><em>Presbytera</em></p>",
             "<p>Ary araka ny nandidian'i Jesoa Kristy sy nampianariny antsika, dia sahy isika hanao hoe:</p>",
             "<p>RAINAY Izay any an-danitra, Hohamasinina anie ny Anaranao; Ho tonga anie ny fanjakanao, Hatao anie ny sitraponao; Ety an-tany tahaka ny any an-danitra. Omeo anay anio izay hanina sahaza ho anay. Ary mamelà ny helokay, tahaka ny amelanay izay meloka aminay. Ary aza mitondra anay ho amin'ny fakam-panahy: Fa manafaha anay amin'ny ratsy. Fa Anao ny fanjakana sy ny hery, ary ny voninahitra, mandrakizay. Amena.</p>",
-            "<p class='text-center'><strong>Dia hataon'ny Presbytera sy ny olona hoe:</strong></p>",
+            "<p class='text-bold'><em>Dia hataon'ny Presbytera sy ny olona hoe:</em></p>",
             "<p>Zanak'ondrin'Andriamanitra ô, Izay manaisotra ny fahotan'izao tontolo izao, mamindrà fo aminay.</p>",
             "<p>Zanak'ondrin'Andriamanitra ô, Izay manaisotra ny fahotan'izao tontolo izao, mamindrà fo aminay.</p>",
             "<p>Zanak'ondrin'Andriamanitra ô, Izay manaisotra ny fahotan'izao tontolo izao, omeo anay ny fiadananao.</p>",
-            "<p><strong>Ary dia horaisin'ny Ministera aloha ny Komoniona, ary rehefa vita izany, dia hatolony ny Eveka sy ny Presbytera ary ny Diakona dia manaraka izany ny olona efa mandohalika milamina tsara, ary raha manolotra ny mofo eo an-tànan'ny olona tsirairay dia hataony hoe:</strong></p>",
+            "<p class='text-bold'><em>Ary dia horaisin'ny Ministera aloha ny Komoniona, ary rehefa vita izany, dia hatolony ny Eveka sy ny Presbytera ary ny Diakona dia manaraka izany ny olona efa mandohalika milamina tsara, ary raha manolotra ny mofo eo an-tànan'ny olona tsirairay dia hataony hoe:</em></p>",
             "<p>Ny Tenan'i Jesoa Kristy Tompontsika, Izay nomena ho anao, hitandrina ny tenanao sy ny fanahinao anie ho amin'ny fiainana mandrakizay. Raiso ka hano ity, ary hano ao am-ponao Izy amin'ny finoana sy ny fisaorana.</p>",
-            "<p><strong>Ary ny Ministera izay mitondra ny Kapoaka hisotroan'ny olona dia hanao amin'ny olona tsirairay hoe:</strong></p>",
+            "<p class='text-bold'><em>Ary ny Ministera izay mitondra ny Kapoaka hisotroan'ny olona dia hanao amin'ny olona tsirairay hoe:</em></p>",
             "<p>Ny Ran'i Jesoa Kristy Tompontsika Izay nalatsaka ho anao, hitandrina ny tenanao sy ny fanahinao anie ho amin'ny fiainana mandrakizay. Misotroa amin'ity, ho fahatsiarovana fa ny Ran'i Kristy dia nalatsaka ho anao, koa misaora.</p>",
-            "<p><em>Raha lany ny Mofo na ny Divay efa voahasina nefa mbola misy tsy nandray, dia hanamasina hafa indray ny Presbytera, miatombo-ka amin'ny teny hoe: Tamin'ilay alina, ka hatramin'ny hoe: Zanakao malala indrindra, raha ny mofo no hamasinina; ary amin'ny teny hoe: Rehefa vita ny sakafo, ka hatramin'ny hoe: Zanakao malala indrindra, raha ny Kapoaka no hamasinina.</em></p>",
-            "<p><strong>Ary rehefa nandray izy rehetra, dia hanatrika ny Alitara ny Ministera, ary hametraka amim-panajana eo amboniny ny ambin'ny voahasina, ary hanarona azy lamba fotsy, na handroso amin'ny fanasana ny kapoaka, araka izay heveriny ho mety.</strong></p>"
+            "<p class='text-bold'><em>Raha lany ny Mofo na ny Divay efa voahasina nefa mbola misy tsy nandray, dia hanamasina hafa indray ny Presbytera, miatombo-ka amin'ny teny hoe: Tamin'ilay alina, ka hatramin'ny hoe: Zanakao malala indrindra, raha ny mofo no hamasinina; ary amin'ny teny hoe: Rehefa vita ny sakafo, ka hatramin'ny hoe: Zanakao malala indrindra, raha ny Kapoaka no hamasinina.</em></p>",
+            "<p class='text-bold'><em>Ary rehefa nandray izy rehetra, dia hanatrika ny Alitara ny Ministera, ary hametraka amim-panajana eo amboniny ny ambin'ny voahasina, ary hanarona azy lamba fotsy, na handroso amin'ny fanasana ny kapoaka, araka izay heveriny ho mety.</em></p>"
           ]
         },
         {
           "subsection": "Vavaka Fisaorana Rehefa Vita Ny Komoniona",
           "content": [
-            "<p><em>Rehefa vita izany dia ataon'ny Presbytera hoe:</em></p>",
+            "<p class='text-bold'><em>Rehefa vita izany dia ataon'ny Presbytera hoe:</em></p>",
             "<p class='text-center'>Homba anareo anie ny Tompo</p>",
-            "<p class='text-center'><strong>Valiny</strong><br/>Ary homba ny fanahinao</p>",
+            "<p class='text-center'><em>Valiny</em><br/>Ary homba ny fanahinao</p>",
             "<p class='text-center'><strong>Aoka isika hivavaka</strong></p>",
             "<p>ANDRIAMANITRA Tsitoha sy mandrakizay ô, misaotra Anao tokoa izahay, izay efa nandray araka izay mety ity Sakramenta masina ity, fa efa sitrakao ny hamahana anay ny hanim-panahy, dia ny Tenan'i Jesoa Kristy Zanakao Mpamonjy anay sy ny Rany soa indrindra, ka mampahatoky anay amin'izany ny fitiavanao anay, sy ny fahatsaranao lehibe, ary ny fanaovanao anay ho sampana velona momba ny Tenan'ny Zanakao izay fiombonan'ny mino, sy ho mpandova araka ny fanantenana ny fanjakanao mandrakizay noho ny Nijalian'ny Zanakao malala sy ny Nahafatesany soa indrindra. Ary mangataka aminao amim-panetrentena izahay, Ray any an-danitra ô, hanampy anay amin'ny fahasoavanao mba haharetanay amin'izany fiombonana masina izany, ka hahefanay izay asa tsara rehetra nokasainao hataonay; amin'ny alalan'i Jesoa Kristy Tomponay, Izay omem-boninahitra sy laza miaraka aminao sy ny Fanahy Masina, mandrakizay, mandrakizay. Amena.</p>"
           ]
@@ -1014,18 +1027,18 @@
         {
           "subsection": "Kolekta Raha Sendra Tsy Misy Komoniona",
           "content": [
-            "<p><em>Ary raha sendra tsy misy Komoniona, ka efa vita ny fandatsahan-drakitra, dia mety raha atao ny anankiray na mihoatra noho izany amin'ireto kolekta ireto. Ary azo atao koa ireto, rehefa vita ny kolekta amin'ny Fivavahana Maraina sy Hariva, na amin'ny Komoniona na amin'ny Litany.</em></p>",
+            "<p class='text-bold'><em>Ary raha sendra tsy misy Komoniona, ka efa vita ny fandatsahan-drakitra, dia mety raha atao ny anankiray na mihoatra noho izany amin'ireto kolekta ireto. Ary azo atao koa ireto, rehefa vita ny kolekta amin'ny Fivavahana Maraina sy Hariva, na amin'ny Komoniona na amin'ny Litany.</em></p>",
             "<p>TOMPO ô, atreho amin'ny famindramponao ny fivavahanay, ary tariho làlana izahay mpanomponao, mba hahazoanay famonjena mandrakizay; ary aoka mba harovan'ny fanampianao mahasoa indrindra izahay amin'ny fiovaovana rehetra izay manjo anay amin'izao fiainana mandalo izao; amin'ny alalan'i Jesoa Kristy Tomponay. Amena.</p>",
             "<p>TOMPO Tsitoha sy Andriamanitra mandrakizay ô, mifona aminao izahay, aoka ho sitrakao hitondra sy hanamasina ary hanapaka ny fonay sy ny tenanay amin'ny làlan'ny lalàna sy amin'ny fankatoavanay ny didinao; mba harovan'ny herinao tsitoha ny tenanay sy ny fanahinay, ankehitriny sy mandrakizay; amin'ny alalan'i Jesoa Kristy Tomponay sady Mpamonjy anay. Amena.</p>",
             "<p>ANDRIAMANITRA Tsitoha ô, mifona aminao izahay, aoka ny teny izay efa ren'ny sofinay androany halatsaky ny fahasoavanao ao am-ponay, mba hahavokatra fitondran-tena tsara aminay ho lazanao sy ho voninahitry ny Anaranao; amin'ny alalan'i Jesoa Kristy Tomponay. Amena.</p>",
             "<p>TOMPO ô, aoka ny fitiavanao mahasoa indrindra no hialoha sy hampandroso anay mandrakariva; ka aoka izay rehetra atombokay no hotanterahinay ao aminao, mba ho lazanao sy ho voninahitrao, sy hahazoanay fiainana mandrakizay amin'ny farany, noho ny famindramponao; amin'ny alalan'i Jesoa Kristy Tomponay. Amena.</p>",
             "<p>ANDRIAMANITRA Tsitoha, loharanon'ny fahendrena rehetra ô, Hianao mahalala ny fahantranay na dia tsy mbola mangataka aza izahay, sy ny tsi-fahalalanay raha mangataka. Koa mifona aminao izahay, mamindrà fo amin'ny fahalemenay, ary aoka ho sitrakao hanome anay izay zavatra tsy sahinay angatahina noho ny tsi-fahamiendrehanay, ary izay tsy hainay angatahina noho ny tsi-fahalalanay; amin'ny alalan'i Jesoa Kristy Zanakao sady Tomponay. Amena.</p>",
             "<p>ANDRIAMANITRA Tsitoha ô, Hianao efa nilaza fa hihaino ny vavaka atao amin'ny Anaran'ny Zanakao. Koa mifona aminao izahay, atongilano ny sofinao hihaino ny vavaka sy ny fifonana izay vao nataonay; ary aoka izay rehetra nangatahinay tamin'ny finoana araka ny sitraponao mba ho azonay tokoa ho fampiononana anay sy ho fanehoana ny voninahitrao; amin'ny alalan'i Jesoa Kristy Tomponay. Amena.</p>",
-            "<p><em>Tsy hatao ny Komoniona Masina raha tsy misy hiara-mandray amin'ny Presbytera.</em></p>",
-            "<p><em>Ny amin'ny mofo sy ny divay, dia lafarina tsara no anaovana ny mofo, ary ranom-boaloboka no anaovana ny divay.</em></p>",
-            "<p><em>Raha misy tsy lany ny mofo sy ny divay voahasina, dia tsy azo entina mivoaka ny Fiangonana izany, fa ny Presbytera sy izay mpandray antsoiny no hihinana sy hisotro izany amim-panajana, rehefa vita ny Tso-drano; nefa kosa raha misy marary hampandraisina dia azo entina ihany.</em></p>",
-            "<p><em>Ny mpandray rehetra tokony handray in-telo isan-taona, raha dia kely indrindra, ary ny Andro Paska no tokony ho anankiray amin'izany.</em></p>",
-            "<p><em>Amin'ny Katedraly sy ny Kolejy izay misy Klerje maromaro dia samy tokony handrayny Komoniona Masina isan'Alahady izy ireo, raha tsy misy misakana.</em></p>"
+            "<p class='text-bold'><em>Tsy hatao ny Komoniona Masina raha tsy misy hiara-mandray amin'ny Presbytera.</em></p>",
+            "<p class='text-bold'><em>Ny amin'ny mofo sy ny divay, dia lafarina tsara no anaovana ny mofo, ary ranom-boaloboka no anaovana ny divay.</em></p>",
+            "<p class='text-bold'><em>Raha misy tsy lany ny mofo sy ny divay voahasina, dia tsy azo entina mivoaka ny Fiangonana izany, fa ny Presbytera sy izay mpandray antsoiny no hihinana sy hisotro izany amim-panajana, rehefa vita ny Tso-drano; nefa kosa raha misy marary hampandraisina dia azo entina ihany.</em></p>",
+            "<p class='text-bold'><em>Ny mpandray rehetra tokony handray in-telo isan-taona, raha dia kely indrindra, ary ny Andro Paska no tokony ho anankiray amin'izany.</em></p>",
+            "<p class='text-bold'><em>Amin'ny Katedraly sy ny Kolejy izay misy Klerje maromaro dia samy tokony handrayny Komoniona Masina isan'Alahady izy ireo, raha tsy misy misakana.</em></p>"
           ]
         }
       ]
