@@ -141,7 +141,7 @@ onBeforeUnmount(() => {
 const verseColumns = computed(() => {
   if (!props.song.verses || props.song.verses.length === 0) return 1;
 
-  if (viewportWidth.value < 900) {
+  if (viewportWidth.value < 700) {
     return 1;
   }
 
@@ -210,7 +210,7 @@ watch(
   display: block;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 700px) {
   .verses.multi-column {
     display: grid;
     grid-template-columns: repeat(var(--verse-columns), minmax(0, 1fr));
