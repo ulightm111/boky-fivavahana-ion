@@ -1,5 +1,5 @@
 <template>
-  <div class="lyrics-content">
+  <div class="lyrics-content" ref="lyricsContentRef">
     <div v-if="song.intro" class="note" id="intro">{{ song.intro }}</div>
     <hr v-if="song.intro" />
 
@@ -8,7 +8,14 @@
     </div>
 
     <template v-if="song.verses && song.verses.length > 0">
-      <div class="verses" :class="{ 'zigzag-layout': isZigzag }">
+      <div
+        class="verses"
+        :class="{
+          'zigzag-layout': isZigzag,
+          'multi-column': verseColumns > 1,
+        }"
+        :style="{ '--verse-columns': verseColumns }"
+      >
         <template v-for="(v, index) in song.verses" :key="index">
           <div
             class="verse chorus"
@@ -64,10 +71,19 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  ref,
+  watch,
+} from "vue";
 import { Song } from "@/stores/bookStore";
+import { useSettingsStore } from "@/stores/settingsStore";
+import { getVerseColumnCount } from "@/utils/songLayout";
 
-defineProps({
+const props = defineProps({
   song: {
     type: Object as PropType<Song>,
     required: true,
@@ -81,6 +97,64 @@ defineProps({
     default: true,
   },
 });
+
+const emit = defineEmits<{
+  "multi-column-change": [value: boolean];
+}>();
+
+const settings = useSettingsStore();
+const viewportWidth = ref(
+  typeof window !== "undefined" ? window.innerWidth : 0,
+);
+const activeFontSizePx = computed(() => (Number(settings.fontSize) / 100) * 16);
+let resizeFrameId: number | null = null;
+
+const updateViewportWidth = () => {
+  if (resizeFrameId !== null) return;
+
+  resizeFrameId = window.requestAnimationFrame(() => {
+    viewportWidth.value = window.innerWidth;
+    resizeFrameId = null;
+  });
+};
+
+watch(
+  () => settings.fontSize,
+  () => {
+    viewportWidth.value = window.innerWidth;
+  },
+  { immediate: true },
+);
+
+onMounted(() => {
+  viewportWidth.value = window.innerWidth;
+  window.addEventListener("resize", updateViewportWidth, { passive: true });
+});
+
+onBeforeUnmount(() => {
+  if (resizeFrameId !== null) {
+    cancelAnimationFrame(resizeFrameId);
+  }
+  window.removeEventListener("resize", updateViewportWidth);
+});
+
+const verseColumns = computed(() => {
+  if (!props.song.verses || props.song.verses.length === 0) return 1;
+
+  if (viewportWidth.value < 900) {
+    return 1;
+  }
+
+  return getVerseColumnCount(props.song.verses, activeFontSizePx.value);
+});
+
+watch(
+  verseColumns,
+  (value) => {
+    emit("multi-column-change", value > 1);
+  },
+  { immediate: true },
+);
 </script>
 
 <style scoped>
@@ -130,6 +204,27 @@ defineProps({
 
 .verses.zigzag-layout .even-verse {
   margin-left: 3em;
+}
+
+.verses.multi-column {
+  display: block;
+}
+
+@media (min-width: 900px) {
+  .verses.multi-column {
+    display: grid;
+    grid-template-columns: repeat(var(--verse-columns), minmax(0, 1fr));
+    gap: 0 1.5rem;
+    align-items: start;
+  }
+
+  .verses.multi-column .verse {
+    margin-left: 0;
+  }
+
+  .verses.zigzag-layout.multi-column .even-verse {
+    margin-left: 0;
+  }
 }
 
 .verse {

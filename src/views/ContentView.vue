@@ -50,6 +50,7 @@
         :song="itemObj"
         :is-hira="isHira"
         :is-zigzag="settings.lyricsZZStyle"
+        @multi-column-change="onSongMultiColumnChange"
       />
 
       <ion-fab
@@ -60,7 +61,11 @@
         class="zoom-fab"
       >
         <ion-fab-button
-          v-if="displayMode === 'song' && settings.showZigzagBtn"
+          v-if="
+            displayMode === 'song' &&
+            settings.showZigzagBtn &&
+            !isSongMultiColumn
+          "
           @click="toggleZigzag"
           class="translucent-btn"
           size="small"
@@ -409,7 +414,18 @@ onUnmounted(() => {
   isScrolling.value = false;
 });
 
+const isSongMultiColumn = ref(false);
+
+const onSongMultiColumnChange = (value: boolean) => {
+  isSongMultiColumn.value = value;
+
+  if (value && settings.lyricsZZStyle) {
+    settings.lyricsZZStyle = false;
+  }
+};
+
 const toggleZigzag = () => {
+  if (isSongMultiColumn.value) return;
   settings.lyricsZZStyle = !settings.lyricsZZStyle;
 };
 
