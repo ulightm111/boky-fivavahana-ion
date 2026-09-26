@@ -84,6 +84,11 @@ http://ionicframework.com/docs/theming/ */
   --note-text-color: #8e96a3;
 }
 
+ion-header ion-toolbar,
+ion-footer ion-toolbar {
+  padding-inline: max(2px, (100% - 900px) / 2);
+}
+
 ion-content {
   --background: var(--app-bg-color);
 }
@@ -92,6 +97,8 @@ ion-list {
   will-change: transform;
   border-radius: 12px !important;
   box-shadow: 0 2px 6px var(--ion-box-shadow-color);
+  max-width: 900px;
+  margin-inline: max(16px, (100% - 900px) / 2) !important;
 }
 ion-item {
   --border-radius: 8px;

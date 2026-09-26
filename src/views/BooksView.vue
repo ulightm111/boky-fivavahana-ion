@@ -96,6 +96,18 @@
           </ion-accordion>
         </ion-accordion-group>
       </div>
+
+      <ion-button
+        id="infoBtn"
+        expand="block"
+        color="secondary"
+        fill="outline"
+        shape="round"
+        @click="about"
+      >
+        <ion-icon :icon="informationCircle" slot="start" aria-hidden="true" />
+        Mombamomba</ion-button
+      >
     </ion-content>
     <app-footer />
   </ion-page>
@@ -113,6 +125,7 @@ import {
   IonIcon,
   IonAccordionGroup,
   IonAccordion,
+  IonButton,
   IonItem,
   IonLabel,
   IonList,
@@ -124,6 +137,7 @@ import { useBookStore } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import { getBookSvg, historyIcon } from "@/utils/svgIcons";
+import { informationCircle } from "ionicons/icons";
 
 const router = useIonRouter();
 const bookStore = useBookStore();
@@ -175,6 +189,10 @@ const onGlobalSearchSubmit = () => {
 const clearGlobalSearch = () => {
   globalSearchQuery.value = "";
 };
+
+const about = async () => {
+  router.push("/about");
+};
 </script>
 
 <style scoped>
@@ -182,11 +200,17 @@ const clearGlobalSearch = () => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 12px;
-  padding: 16px;
+  padding: 16px 0;
 }
 
 .history-panel {
   margin: 0 16px 12px;
+}
+
+.books-container,
+.history-panel {
+  max-width: 900px;
+  margin-inline: max(16px, (100% - 900px) / 2);
 }
 
 .history-panel ion-accordion-group {
@@ -296,5 +320,14 @@ ion-card-title {
 ion-card-content {
   font-size: 0.85em;
   color: var(--ion-color-medium);
+}
+
+#infoBtn {
+  margin-top: 24px;
+  margin-inline: max(16px, (100% - 900px) / 2);
+}
+
+#infoBtn ion-icon {
+  width: 1.6em;
 }
 </style>

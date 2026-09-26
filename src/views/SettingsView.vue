@@ -22,7 +22,7 @@
           >
             <ion-segment-button
               value="system"
-              @click="showThemeToast('Miova manaraka ny finday')"
+              @click="showThemeToast('Miova manaraka ny finday/solosaina')"
             >
               <ion-icon :icon="phonePortraitOutline"></ion-icon>
             </ion-segment-button>
@@ -193,17 +193,6 @@
           </ion-toggle>
         </ion-item>
       </ion-list>
-      <ion-button
-        id="infoBtn"
-        expand="block"
-        color="secondary"
-        fill="solid"
-        shape="round"
-        @click="about"
-      >
-        <ion-icon :icon="informationCircle" slot="start" aria-hidden="true" />
-        Mombamomba</ion-button
-      >
     </ion-content>
   </ion-page>
 </template>
@@ -222,9 +211,7 @@ import {
   IonRange,
   IonIcon,
   IonNote,
-  IonButton,
   toastController,
-  useIonRouter,
 } from "@ionic/vue";
 import {
   text,
@@ -241,13 +228,11 @@ import {
   sunnyOutline,
   moonOutline,
   flashOutline,
-  informationCircle,
 } from "ionicons/icons";
 import { useSettingsStore } from "@/stores/settingsStore";
 import AppHeader from "@/components/AppHeader.vue";
 
 const settings = useSettingsStore();
-const ionRouter = useIonRouter();
 
 const showThemeToast = async (message: string) => {
   const toast = await toastController.create({
@@ -258,10 +243,6 @@ const showThemeToast = async (message: string) => {
     color: "medium",
   });
   await toast.present();
-};
-
-const about = async () => {
-  ionRouter.push("/about");
 };
 </script>
 
@@ -285,9 +266,5 @@ ion-segment-button {
 
 .custom-range {
   padding: 0;
-}
-
-#infoBtn {
-  margin-inline: 16px;
 }
 </style>
