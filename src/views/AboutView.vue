@@ -314,7 +314,7 @@ const showToast = async (message: string, color = "dark") => {
 .apk-info {
   margin: 0;
   font-size: 1em;
-  color: var(--ion-color-text);
+  color: var(--ion-text-color);
 }
 
 .apk-info ion-icon {
@@ -334,5 +334,11 @@ const showToast = async (message: string, color = "dark") => {
 
 .button-group ion-button {
   flex: 1 1 140px;
+}
+
+ion-card,
+ion-list-header {
+  max-width: 900px;
+  margin-inline: max(16px, (100% - 900px) / 2);
 }
 </style>
