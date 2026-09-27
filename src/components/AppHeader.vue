@@ -111,7 +111,7 @@ ion-searchbar {
 ion-title {
   padding-left: 10px;
   padding-right: 0;
-  color: var(--ion-color-white);
+  color: var(--ion-color-primary-contrast, #ffffff);
 }
 
 .title {

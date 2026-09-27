@@ -61,6 +61,8 @@ http://ionicframework.com/docs/theming/ */
 
 :root {
   color-scheme: light dark;
+  --content-max-width: 900px;
+  --content-margin-inline: max(16px, (100% - var(--content-max-width)) / 2);
   --ion-color-primary: #0045b5;
   --ion-color-primary-rgb: 0, 69, 181;
   --ion-background-color: #fdfbf7;
@@ -84,9 +86,10 @@ http://ionicframework.com/docs/theming/ */
   --note-text-color: #8e96a3;
 }
 
+/* Global Layout Centering */
 ion-header ion-toolbar,
 ion-footer ion-toolbar {
-  padding-inline: max(2px, (100% - 900px) / 2);
+  padding-inline: max(2px, (100% - var(--content-max-width)) / 2);
 }
 
 ion-content {
@@ -97,31 +100,35 @@ ion-list {
   will-change: transform;
   border-radius: 12px !important;
   box-shadow: 0 2px 6px var(--ion-box-shadow-color);
-  max-width: 900px;
-  margin-inline: max(16px, (100% - 900px) / 2) !important;
+  max-width: var(--content-max-width);
+  margin-inline: var(--content-margin-inline) !important;
 }
+
 ion-item {
   --border-radius: 8px;
   --padding-top: 2px;
   --padding-bottom: 2px;
   --box-shadow: none;
 }
+
 ion-label {
   font-family: Tahoma, Roboto, sans-serif !important;
   font-size: 1.1em !important;
 }
 
+/* Lyrics Content */
 .lyrics-content {
   font-family: "Charis SIL", serif;
   text-align: justify;
   padding: 16px;
   margin: 12px;
-  max-width: 900px;
-  margin-inline: max(16px, (100% - 900px) / 2);
+  max-width: var(--content-max-width);
+  margin-inline: var(--content-margin-inline);
   border-radius: 10px;
   box-shadow: 0 2px 6px var(--ion-box-shadow-color);
   background: var(--ion-background-color);
 }
+
 em {
   font-style: normal;
 }
@@ -141,6 +148,7 @@ em {
   background: var(--ion-background-color);
 }
 
+/* Helper Utilities */
 .text-center {
   text-align: center;
 }
@@ -155,15 +163,18 @@ em {
   margin-left: 0.8em;
   margin-right: 1.6em;
 }
+
 .line-icon {
   color: var(--note-text-color);
   margin-right: 1em;
 }
+
 .song-label {
   display: grid !important;
   grid-template-columns: 2em 1.6em auto;
   align-items: center;
 }
+
 .song-id {
   font-weight: 600;
   text-align: right;

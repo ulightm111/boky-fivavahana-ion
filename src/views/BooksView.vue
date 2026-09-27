@@ -209,8 +209,8 @@ const about = async () => {
 
 .books-container,
 .history-panel {
-  max-width: 900px;
-  margin-inline: max(16px, (100% - 900px) / 2);
+  max-width: var(--content-max-width);
+  margin-inline: var(--content-margin-inline);
 }
 
 .history-panel ion-accordion-group {
@@ -324,7 +324,7 @@ ion-card-content {
 
 #infoBtn {
   margin-top: 24px;
-  margin-inline: max(16px, (100% - 900px) / 2);
+  margin-inline: var(--content-margin-inline);
 }
 
 #infoBtn ion-icon {

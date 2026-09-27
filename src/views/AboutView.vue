@@ -336,9 +336,11 @@ const showToast = async (message: string, color = "dark") => {
   flex: 1 1 140px;
 }
 
+.about-header,
 ion-card,
-ion-list-header {
-  max-width: 900px;
-  margin-inline: max(16px, (100% - 900px) / 2);
+ion-list-header,
+.version-section {
+  max-width: var(--content-max-width);
+  margin-inline: var(--content-margin-inline);
 }
 </style>
