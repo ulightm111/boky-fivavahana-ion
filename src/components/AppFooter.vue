@@ -88,7 +88,6 @@ import MainMenuModal from "./MainMenuModal.vue";
 defineProps({
   canGoPrev: { type: Boolean, default: false },
   canGoNext: { type: Boolean, default: false },
-  backButtonDefaultHref: { type: String, default: "/books" },
   showAutoscroll: { type: Boolean, default: false },
   isScrolling: { type: Boolean, default: false },
 });

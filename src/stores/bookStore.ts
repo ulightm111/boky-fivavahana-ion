@@ -433,16 +433,6 @@ export const useBookStore = defineStore("book", () => {
     return result;
   };
 
-  const pageSize = 50;
-
-  const hasMoreItems = (book: Book | null) => {
-    if (!book) return false;
-    let totalSongs: any[] = [];
-    if (isHiraBook(book)) totalSongs = hiraSongs.value;
-    else if (isHaaBook(book)) totalSongs = haaSongs.value;
-    else if (isSalamoBook(book)) totalSongs = salamoPsalms.value;
-    return (currentPage.value + 1) * pageSize < totalSongs.length;
-  };
 
   const performSearch = (query: string, scopeBookId: number | null = null) => {
     searchResults.value = [];
@@ -550,7 +540,6 @@ export const useBookStore = defineStore("book", () => {
     getFavoritePath,
     getBookData,
     getGroupedSongs,
-    hasMoreItems,
     isHiraBook,
     isHaaBook,
     isSalamoBook,

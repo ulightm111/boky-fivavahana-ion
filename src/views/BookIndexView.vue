@@ -345,12 +345,6 @@ const clearSectionSearch = () => {
 </script>
 
 <style scoped>
-.content-area {
-  padding: 16px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
 .song-section {
   overflow: visible;
 }

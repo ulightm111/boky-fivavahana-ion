@@ -1,5 +1,5 @@
 <template>
-  <div class="lyrics-content" ref="lyricsContentRef">
+  <div class="lyrics-content">
     <div v-if="song.intro" class="note" id="intro">{{ song.intro }}</div>
     <hr v-if="song.intro" />
 

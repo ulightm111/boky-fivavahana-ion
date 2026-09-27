@@ -58,14 +58,6 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  showBackButton: {
-    type: Boolean,
-    default: true,
-  },
-  backButtonDefaultHref: {
-    type: String,
-    default: "/books",
-  },
   showSearchbar: {
     type: Boolean,
     default: false,
