@@ -55,7 +55,11 @@ const formatContent = (item: { id: number; content: string }) => {
   text-indent: 0;
   margin-left: -2em;
 }
-:deep(p:not(.text-center)) {
+:deep(p:not(.center)) {
   text-indent: 2em;
+}
+:deep(t){
+  display: inline-block;
+  width: 2em;
 }
 </style>

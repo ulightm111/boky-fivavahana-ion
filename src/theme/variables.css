@@ -149,11 +149,11 @@ em {
 }
 
 /* Helper Utilities */
-.text-center {
+.center {
   text-align: center;
 }
 
-.text-bold {
+.bold {
   font-weight: bold;
 }
 
