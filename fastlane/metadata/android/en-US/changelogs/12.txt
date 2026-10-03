@@ -1,0 +1,4 @@
+- Multi-column on wide/landscape screen
+- Optimize layout for wide screen
+- Many typo fixes in: Litorjia Boky Fivavahana & Provinsialy
+- Code cleaning
