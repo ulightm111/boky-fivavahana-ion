@@ -65,6 +65,13 @@
         </template>
       </div>
 
+      <div class="favorites-panel">
+        <ion-item button @click="openFavorites">
+          <ion-icon :icon="starIcon" slot="start" color="secondary" />
+          <ion-label>Tiana</ion-label>
+        </ion-item>
+      </div>
+
       <div class="history-panel">
         <ion-accordion-group>
           <ion-accordion value="recent">
@@ -136,7 +143,7 @@ import { storeToRefs } from "pinia";
 import { useBookStore } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
-import { getBookSvg, historyIcon } from "@/utils/svgIcons";
+import { getBookSvg, historyIcon, starIcon } from "@/utils/svgIcons";
 import { informationCircle } from "ionicons/icons";
 
 const router = useIonRouter();
@@ -190,6 +197,10 @@ const clearGlobalSearch = () => {
   globalSearchQuery.value = "";
 };
 
+const openFavorites = () => {
+  router.push("/favorites");
+};
+
 const about = async () => {
   router.push("/about");
 };
@@ -204,16 +215,22 @@ const about = async () => {
   padding: 16px 0;
 }
 
+.favorites-panel {
+  margin: 0 16px 12px;
+}
+
 .history-panel {
   margin: 0 16px 12px;
 }
 
 .books-container,
+.favorites-panel,
 .history-panel {
   max-width: var(--content-max-width);
   margin-inline: var(--content-margin-inline);
 }
 
+.favorites-panel ion-item,
 .history-panel ion-accordion-group {
   border: 1px solid var(--ion-border-color);
   border-radius: 10px;
@@ -227,6 +244,7 @@ const about = async () => {
   padding: 0;
 }
 
+.favorites-panel ion-item,
 .history-panel ion-item {
   --min-height: 38px;
   --padding-top: 4px;
@@ -234,6 +252,12 @@ const about = async () => {
   --padding-start: 12px;
   --padding-end: 10px;
   font-size: 0.8rem;
+}
+
+.favorites-panel ion-item {
+  --border-width: 0;
+  --inner-border-width: 0;
+  --highlight-height: 0;
 }
 
 .history-panel ion-item[slot="header"] {
@@ -244,16 +268,22 @@ const about = async () => {
   font-size: 0.82rem;
 }
 
+.favorites-panel ion-icon,
 .history-panel ion-icon {
   width: 24px;
   height: 24px;
   margin-inline-end: 8px;
 }
 
+.favorites-panel ion-label,
 .history-panel ion-label {
   white-space: normal;
   margin: 6px 0;
   font-size: 0.8rem;
+}
+
+.favorites-panel ion-label {
+  font-weight: 600;
 }
 
 .history-book-icon {
