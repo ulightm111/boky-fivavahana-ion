@@ -198,7 +198,8 @@ const about = async () => {
 <style scoped>
 .books-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
   gap: 12px;
   padding: 16px 0;
 }
@@ -329,5 +330,13 @@ ion-card-content {
 
 #infoBtn ion-icon {
   width: 1.6em;
+}
+
+@media (max-width: 700px) {
+  .books-container {
+    grid-template-rows: none;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+  }
 }
 </style>
