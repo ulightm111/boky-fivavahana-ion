@@ -193,7 +193,7 @@ onMounted(async () => {
     const data = await response.json();
     currentVersion.value = data.tag_name || "unknown";
   } catch (e) {
-    currentVersion.value = "unknown";
+    currentVersion.value = "2.6.1";
   }
 });
 
