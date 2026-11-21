@@ -17,7 +17,14 @@
       </template>
     </app-header>
 
-    <ion-content ref="contentRef" :fullscreen="true" :style="contentStyle">
+    <ion-content
+      ref="contentRef"
+      :fullscreen="true"
+      :style="contentStyle"
+      @touchstart="handleTouchStart"
+      @touchend="handleTouchEnd"
+      @touchcancel="handleTouchCancel"
+    >
       <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
       <ion-list :inset="true" v-if="displayMode === 'subsections'">
         <ion-item
@@ -225,6 +232,48 @@ const canGoNext = computed(
 
 const contentRef = ref<any>(null);
 const isScrolling = ref(false);
+
+const swipeStart = ref<{ x: number; y: number } | null>(null);
+const SWIPE_THRESHOLD = 50;
+
+const handleTouchStart = (event: TouchEvent) => {
+  if (event.touches.length !== 1) {
+    swipeStart.value = null;
+    return;
+  }
+
+  const touch = event.touches[0];
+  swipeStart.value = { x: touch.clientX, y: touch.clientY };
+};
+
+const handleTouchEnd = (event: TouchEvent) => {
+  if (!swipeStart.value || event.changedTouches.length !== 1) {
+    swipeStart.value = null;
+    return;
+  }
+
+  const touch = event.changedTouches[0];
+  const deltaX = touch.clientX - swipeStart.value.x;
+  const deltaY = touch.clientY - swipeStart.value.y;
+  swipeStart.value = null;
+
+  if (
+    Math.abs(deltaX) < SWIPE_THRESHOLD ||
+    Math.abs(deltaX) <= Math.abs(deltaY)
+  ) {
+    return;
+  }
+
+  if (deltaX < 0) {
+    navigateNext();
+  } else {
+    navigatePrev();
+  }
+};
+
+const handleTouchCancel = () => {
+  swipeStart.value = null;
+};
 
 const recordCurrentContentVisit = async () => {
   const currentBook = book.value;
