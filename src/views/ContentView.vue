@@ -279,6 +279,8 @@ const previewSide = ref<"next" | "prev">("next");
 const previewItem = ref<any>(null);
 const previewHtml = ref<string[]>([]);
 const previewSubTitle = ref("");
+let swipeScrollElement: HTMLElement | null = null;
+let savedScrollTop = 0;
 
 const clearPreview = () => {
   previewMode.value = "";
@@ -300,6 +302,9 @@ const resetSwipeVisual = (commitDirection?: "forward" | "back") => {
       previewElement.value.style.transform = "";
     }
   } else {
+    if (swipeScrollElement) {
+      swipeScrollElement.scrollTop = savedScrollTop;
+    }
     el.style.transition = "transform 180ms cubic-bezier(0.4, 0, 0.2, 1)";
     el.style.transform = "translate3d(0, 0, 0)";
     if (previewElement.value) {
@@ -356,9 +361,25 @@ const showPreview = (direction: "forward" | "back") => {
     previewSubTitle.value = "";
     previewHtml.value = content.content || [];
   }
+
+  requestAnimationFrame(() => {
+    const preview =
+      previewElement.value ??
+      (document.querySelector(
+        ".ion-page:not(.ion-page-hidden) .swipe-preview",
+      ) as HTMLElement | null);
+
+    if (!preview) return;
+
+    preview.scrollTop = 0;
+    if (swipeScrollElement) {
+      swipeScrollElement.scrollTop = 0;
+    }
+    previewElement.value = preview;
+  });
 };
 
-const handleTouchStart = (event: TouchEvent) => {
+const handleTouchStart = async (event: TouchEvent) => {
   if (event.touches.length !== 1) {
     swipeStart.value = null;
     return;
@@ -367,6 +388,10 @@ const handleTouchStart = (event: TouchEvent) => {
   const touch = event.touches[0];
   swipeStart.value = { x: touch.clientX, y: touch.clientY };
   isHorizontalSwipe.value = false;
+
+  swipeScrollElement =
+    (await contentRef.value?.$el?.getScrollElement?.()) ?? null;
+  savedScrollTop = swipeScrollElement?.scrollTop ?? 0;
 };
 
 const handleTouchMove = (event: TouchEvent) => {
