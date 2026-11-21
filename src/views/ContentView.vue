@@ -22,10 +22,13 @@
       :fullscreen="true"
       :style="contentStyle"
       @touchstart="handleTouchStart"
+      @touchmove="handleTouchMove"
       @touchend="handleTouchEnd"
       @touchcancel="handleTouchCancel"
     >
-      <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
+      <div class="swipe-stage">
+        <div ref="swipeElement" class="swipe-current">
+          <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
       <ion-list :inset="true" v-if="displayMode === 'subsections'">
         <ion-item
           v-for="(sub, index) in itemObj.subsections"
@@ -52,13 +55,42 @@
       <psalm-content v-else-if="displayMode === 'psalm'" :psalm="itemObj" />
 
       <!-- Song -->
-      <song-content
-        v-else-if="displayMode === 'song'"
-        :song="itemObj"
-        :is-hira="isHira"
-        :is-zigzag="settings.lyricsZZStyle"
-        @multi-column-change="onSongMultiColumnChange"
-      />
+          <song-content
+            v-else-if="displayMode === 'song'"
+            :song="itemObj"
+            :is-hira="isHira"
+            :is-zigzag="settings.lyricsZZStyle"
+            @multi-column-change="onSongMultiColumnChange"
+          />
+        </div>
+
+        <div
+          v-if="previewMode"
+          ref="previewElement"
+          class="swipe-preview"
+          :class="previewSide"
+        >
+          <lit-content
+            v-if="previewMode === 'liturgia'"
+            :is-lit-p="isLitP"
+            :is-l-h-f="isLHF"
+            :title="previewSubTitle"
+            :items="previewItem?.items"
+            :htmlContent="previewHtml"
+          />
+          <psalm-content
+            v-else-if="previewMode === 'psalm'"
+            :psalm="previewItem"
+          />
+          <song-content
+            v-else-if="previewMode === 'song'"
+            :song="previewItem"
+            :is-hira="isHira"
+            :is-zigzag="settings.lyricsZZStyle"
+            @multi-column-change="onSongMultiColumnChange"
+          />
+        </div>
+      </div>
 
       <ion-fab
         v-if="displayMode != 'subsections'"
@@ -125,7 +157,7 @@ import {
   useIonRouter,
 } from "@ionic/vue";
 import { add, ellipse, remove } from "ionicons/icons";
-import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { useBookStore, FavoriteItem } from "@/stores/bookStore";
 import AppHeader from "@/components/AppHeader.vue";
@@ -234,7 +266,91 @@ const contentRef = ref<any>(null);
 const isScrolling = ref(false);
 
 const swipeStart = ref<{ x: number; y: number } | null>(null);
+const swipeElement = ref<HTMLElement | null>(null);
+const previewElement = ref<HTMLElement | null>(null);
+const isHorizontalSwipe = ref(false);
 const SWIPE_THRESHOLD = 50;
+
+const previewMode = ref<"liturgia" | "psalm" | "song" | "">("");
+const previewSide = ref<"next" | "prev">("next");
+const previewItem = ref<any>(null);
+const previewHtml = ref<string[]>([]);
+const previewSubTitle = ref("");
+
+const clearPreview = () => {
+  previewMode.value = "";
+  previewItem.value = null;
+  previewHtml.value = [];
+  previewSubTitle.value = "";
+};
+
+const resetSwipeVisual = (commitDirection?: "forward" | "back") => {
+  if (!swipeElement.value) return;
+
+  const el = swipeElement.value;
+  const width = el.clientWidth || window.innerWidth;
+  el.style.transition = "transform 180ms cubic-bezier(0.4, 0, 0.2, 1)";
+
+  if (commitDirection) {
+    el.style.transform = `translate3d(${commitDirection === "back" ? width : -width}px, 0, 0)`;
+    if (previewElement.value) {
+      previewElement.value.style.transition = "transform 180ms cubic-bezier(0.4, 0, 0.2, 1)";
+      previewElement.value.style.transform = "translate3d(0, 0, 0)";
+    }
+  } else {
+    el.style.transform = "translate3d(0, 0, 0)";
+    if (previewElement.value) {
+      previewElement.value.style.transition = "transform 180ms cubic-bezier(0.4, 0, 0.2, 1)";
+      previewElement.value.style.transform = "";
+    }
+  }
+
+  window.setTimeout(() => {
+    el.style.transition = "";
+    if (!commitDirection) el.style.transform = "";
+    if (previewElement.value) {
+      previewElement.value.style.transition = "";
+      if (!commitDirection) previewElement.value.style.transform = "";
+    }
+    if (!commitDirection) clearPreview();
+  }, 190);
+};
+
+const showPreview = (direction: "forward" | "back") => {
+  const index =
+    direction === "forward"
+      ? currentTitleIndex.value + 1
+      : currentTitleIndex.value - 1;
+  const item = currentTitlesList.value[index];
+  if (!item) {
+    clearPreview();
+    return;
+  }
+
+  const path = getItemPath(item);
+  const content = preloadedContent.get(path) ?? null;
+  if (!content) {
+    clearPreview();
+    return;
+  }
+
+  previewSide.value = direction === "forward" ? "next" : "prev";
+
+  if (item.type === "song") {
+    previewItem.value = content;
+    previewMode.value = isSalamo.value ? "psalm" : "song";
+  } else if (item.type === "subsection") {
+    previewItem.value = content;
+    previewMode.value = "liturgia";
+    previewSubTitle.value = content.subsection || "";
+    previewHtml.value = content.content || [];
+  } else if (item.type === "section") {
+    previewItem.value = content;
+    previewMode.value = "liturgia";
+    previewSubTitle.value = "";
+    previewHtml.value = content.content || [];
+  }
+};
 
 const handleTouchStart = (event: TouchEvent) => {
   if (event.touches.length !== 1) {
@@ -244,11 +360,62 @@ const handleTouchStart = (event: TouchEvent) => {
 
   const touch = event.touches[0];
   swipeStart.value = { x: touch.clientX, y: touch.clientY };
+  isHorizontalSwipe.value = false;
+  swipeElement.value = document.querySelector(
+    ".ion-page:not(.ion-page-hidden) .swipe-current",
+  ) as HTMLElement | null;
+};
+
+const handleTouchMove = (event: TouchEvent) => {
+  if (!swipeStart.value || event.touches.length !== 1) return;
+
+  const touch = event.touches[0];
+  const deltaX = touch.clientX - swipeStart.value.x;
+  const deltaY = touch.clientY - swipeStart.value.y;
+
+  if (!isHorizontalSwipe.value) {
+    if (Math.abs(deltaX) < 10) return;
+    if (Math.abs(deltaY) >= Math.abs(deltaX)) return;
+    isHorizontalSwipe.value = true;
+    showPreview(deltaX < 0 ? "forward" : "back");
+  }
+
+  event.preventDefault();
+
+  const canNavigate = deltaX < 0 ? canGoNext.value : canGoPrev.value;
+  const resistance = canNavigate ? 1 : 0.28;
+  const limitedDelta = deltaX * resistance;
+  const width = swipeElement.value?.clientWidth || window.innerWidth;
+
+  if (swipeElement.value) {
+    swipeElement.value.style.transition = "none";
+    swipeElement.value.style.transform = `translate3d(${limitedDelta}px, 0, 0)`;
+  }
+
+  if (previewMode.value) {
+    nextTick(() => {
+      if (!previewElement.value) {
+        previewElement.value = document.querySelector(
+          ".ion-page:not(.ion-page-hidden) .swipe-preview",
+        ) as HTMLElement | null;
+      }
+      if (!previewElement.value) return;
+
+      previewElement.value.style.transition = "none";
+      const previewOffset =
+        previewSide.value === "next"
+          ? width + limitedDelta
+          : -width + limitedDelta;
+      previewElement.value.style.transform = `translate3d(${previewOffset}px, 0, 0)`;
+    });
+  }
 };
 
 const handleTouchEnd = (event: TouchEvent) => {
   if (!swipeStart.value || event.changedTouches.length !== 1) {
     swipeStart.value = null;
+    isHorizontalSwipe.value = false;
+    resetSwipeVisual();
     return;
   }
 
@@ -258,22 +425,87 @@ const handleTouchEnd = (event: TouchEvent) => {
   swipeStart.value = null;
 
   if (
+    !isHorizontalSwipe.value ||
     Math.abs(deltaX) < SWIPE_THRESHOLD ||
     Math.abs(deltaX) <= Math.abs(deltaY)
   ) {
+    isHorizontalSwipe.value = false;
+    resetSwipeVisual();
     return;
   }
 
-  if (deltaX < 0) {
-    navigateNext();
-  } else {
-    navigatePrev();
+  const direction: "forward" | "back" = deltaX < 0 ? "forward" : "back";
+  const canNavigate = direction === "forward" ? canGoNext.value : canGoPrev.value;
+  if (!canNavigate) {
+    isHorizontalSwipe.value = false;
+    resetSwipeVisual();
+    return;
   }
+
+  isHorizontalSwipe.value = false;
+  resetSwipeVisual(direction);
+
+  window.setTimeout(() => {
+    if (direction === "forward") navigateNext();
+    else navigatePrev();
+  }, 120);
 };
 
 const handleTouchCancel = () => {
   swipeStart.value = null;
+  isHorizontalSwipe.value = false;
+  resetSwipeVisual();
 };
+
+const preloadedContent = new Map<string, any>();
+
+function getItemPath(item: any): string {
+  if (!item) return "";
+  if (item.type === "song") {
+    return `/books/${bookId.value}/song/${item.id}`;
+  }
+  if (item.type === "section") {
+    return `/books/${bookId.value}/section/${encodeURIComponent(item.id)}`;
+  }
+  if (item.type === "subsection") {
+    return `/books/${bookId.value}/section/${encodeURIComponent(item.section)}/subsection/${item.id}`;
+  }
+  return "";
+}
+
+function preloadAdjacentContent() {
+  const neighbors = [
+    currentTitleIndex.value > 0
+      ? currentTitlesList.value[currentTitleIndex.value - 1]
+      : null,
+    currentTitleIndex.value >= 0 &&
+    currentTitleIndex.value < currentTitlesList.value.length - 1
+      ? currentTitlesList.value[currentTitleIndex.value + 1]
+      : null,
+  ];
+
+  neighbors.forEach((item) => {
+    const path = getItemPath(item);
+    if (!path || preloadedContent.has(path)) return;
+
+    const data = bookStore.getBookData(book.value);
+    let content: any = null;
+
+    if (item?.type === "song") {
+      content = data.find((entry: any) => entry.id === item.id) ?? null;
+    } else if (item?.type === "section") {
+      content =
+        data.find((entry: any) => entry.section === item.id) ?? null;
+    } else if (item?.type === "subsection") {
+      const section = data.find(
+        (entry: any) => entry.section === item.section,
+      );
+      content = section?.subsections?.[item.id] ?? null;
+    }
+
+    if (content) preloadedContent.set(path, content);
+  });
+}
 
 const recordCurrentContentVisit = async () => {
   const currentBook = book.value;
@@ -323,6 +555,7 @@ const loadContent = async () => {
   if (!Array.isArray(data) || data.length === 0) return;
 
   // Reset per-load state first, so stale values do not linger.
+  clearPreview();
   itemObj.value = null;
   htmlContent.value = [];
   subTitleText.value = "";
@@ -346,6 +579,7 @@ const loadContent = async () => {
         type: "song",
       }));
       currentTitleIndex.value = songIndex;
+      preloadAdjacentContent();
     }
     await recordCurrentContentVisit();
     return;
@@ -376,6 +610,7 @@ const loadContent = async () => {
           section: sectionName,
         }));
         currentTitleIndex.value = idx;
+        preloadAdjacentContent();
       }
       await recordCurrentContentVisit();
       return;
@@ -398,6 +633,7 @@ const loadContent = async () => {
         type: "section",
       }));
       currentTitleIndex.value = sectionIndex;
+      preloadAdjacentContent();
     }
 
     await recordCurrentContentVisit();
@@ -539,6 +775,34 @@ const zoomOut = () => {
 </script>
 
 <style scoped>
+:deep(ion-content) {
+  touch-action: pan-y;
+}
+
+.swipe-stage {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.swipe-current {
+  position: relative;
+  min-height: 100%;
+  will-change: transform;
+}
+
+.swipe-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  min-height: 100%;
+  background: var(--ion-background-color, #fff);
+  will-change: transform;
+  overflow-y: auto;
+}
+
 .favorite-header-btn {
   --color: var(--ion-color-light);
   --padding-start: 4px;
