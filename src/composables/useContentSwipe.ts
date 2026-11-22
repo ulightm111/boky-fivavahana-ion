@@ -41,7 +41,9 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
     navigateNext,
   } = options;
 
-  const SWIPE_THRESHOLD = 50;
+  const SWIPE_THRESHOLD = 100;
+  const SWIPE_DETECTION_THRESHOLD = 24;
+  const HORIZONTAL_DOMINANCE_RATIO = 1.3;
   const swipeStart = ref<{ x: number; y: number } | null>(null);
   const swipeElement = ref<HTMLElement | null>(null);
   const previewElement = ref<HTMLElement | null>(null);
@@ -57,6 +59,22 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
   let pendingSwipeWidth = 0;
   let scrollElement: HTMLElement | null = null;
   const preloadedContent = new Map<string, any>();
+
+  const requestFrame = (callback: FrameRequestCallback): number => {
+    if (typeof window.requestAnimationFrame === "function") {
+      return window.requestAnimationFrame(callback);
+    }
+
+    return window.setTimeout(() => callback(Date.now()), 16);
+  };
+
+  const cancelFrame = (frameId: number) => {
+    if (typeof window.cancelAnimationFrame === "function") {
+      window.cancelAnimationFrame(frameId);
+    } else {
+      window.clearTimeout(frameId);
+    }
+  };
 
   onMounted(async () => {
     scrollElement =
@@ -153,7 +171,7 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
       previewHtml.value = content.content || [];
     }
 
-    requestAnimationFrame(() => {
+    requestFrame(() => {
       const preview =
         previewElement.value ??
         (document.querySelector(
@@ -168,38 +186,16 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
     });
   };
 
-  const resetSwipeVisual = (commitDirection?: "forward" | "back") => {
+  const resetSwipeVisual = () => {
     if (!swipeElement.value) return;
 
-    const el = swipeElement.value;
-
-    if (commitDirection) {
-      el.style.transition = "none";
-      el.style.transform = "";
-      if (previewElement.value) {
-        previewElement.value.style.transition = "none";
-        previewElement.value.style.transform = "";
-      }
-      return;
-    }
-
-    el.style.transition = "transform 180ms cubic-bezier(0.4, 0, 0.2, 1)";
-    el.style.transform = "translate3d(0, 0, 0)";
+    swipeElement.value.style.transition = "none";
+    swipeElement.value.style.transform = "";
     if (previewElement.value) {
-      previewElement.value.style.transition =
-        "transform 180ms cubic-bezier(0.4, 0, 0.2, 1)";
+      previewElement.value.style.transition = "none";
       previewElement.value.style.transform = "";
     }
-
-    window.setTimeout(() => {
-      el.style.transition = "";
-      el.style.transform = "";
-      if (previewElement.value) {
-        previewElement.value.style.transition = "";
-        previewElement.value.style.transform = "";
-      }
-      clearPreview();
-    }, 190);
+    clearPreview();
   };
 
   const handleTouchStart = (event: TouchEvent) => {
@@ -221,13 +217,15 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
     const deltaY = touch.clientY - swipeStart.value.y;
 
     if (!isHorizontalSwipe.value) {
-      if (Math.abs(deltaX) < 10) return;
-      if (Math.abs(deltaY) >= Math.abs(deltaX)) return;
+      if (Math.abs(deltaX) < SWIPE_DETECTION_THRESHOLD) return;
+      if (Math.abs(deltaX) <= Math.abs(deltaY) * HORIZONTAL_DOMINANCE_RATIO) {
+        return;
+      }
       isHorizontalSwipe.value = true;
       showPreview(deltaX < 0 ? "forward" : "back");
     }
 
-    event.preventDefault();
+    if (event.cancelable) event.preventDefault();
 
     const canNavigate = deltaX < 0 ? canGoNext.value : canGoPrev.value;
     pendingSwipeWidth = swipeElement.value?.clientWidth || window.innerWidth;
@@ -235,7 +233,7 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
 
     if (swipeFrame !== null) return;
 
-    swipeFrame = requestAnimationFrame(() => {
+    swipeFrame = requestFrame(() => {
       swipeFrame = null;
       if (!swipeStart.value) return;
 
@@ -288,7 +286,7 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
     }
 
     isHorizontalSwipe.value = false;
-    resetSwipeVisual(direction);
+    resetSwipeVisual();
 
     if (direction === "forward") navigateNext();
     else navigatePrev();
@@ -301,7 +299,7 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
   };
 
   onUnmounted(() => {
-    if (swipeFrame !== null) cancelAnimationFrame(swipeFrame);
+    if (swipeFrame !== null) cancelFrame(swipeFrame);
   });
 
   return {
