@@ -1,4 +1,10 @@
-import { onUnmounted, ref, type ComputedRef, type Ref } from "vue";
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+  type ComputedRef,
+  type Ref,
+} from "vue";
 
 interface SwipeItem {
   id: string | number;
@@ -49,10 +55,13 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
   let swipeFrame: number | null = null;
   let pendingSwipeDelta = 0;
   let pendingSwipeWidth = 0;
-  let swipeScrollElement: HTMLElement | null = null;
-  let savedScrollTop = 0;
-
+  let scrollElement: HTMLElement | null = null;
   const preloadedContent = new Map<string, any>();
+
+  onMounted(async () => {
+    scrollElement =
+      (await contentRef.value?.$el?.getScrollElement?.()) ?? null;
+  });
 
   const getItemPath = (item: SwipeItem | null): string => {
     if (!item) return "";
@@ -153,8 +162,8 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
 
       if (!preview) return;
 
+      preview.style.top = `${scrollElement?.scrollTop ?? 0}px`;
       preview.scrollTop = 0;
-      if (swipeScrollElement) swipeScrollElement.scrollTop = 0;
       previewElement.value = preview;
     });
   };
@@ -174,7 +183,6 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
       return;
     }
 
-    if (swipeScrollElement) swipeScrollElement.scrollTop = savedScrollTop;
     el.style.transition = "transform 180ms cubic-bezier(0.4, 0, 0.2, 1)";
     el.style.transform = "translate3d(0, 0, 0)";
     if (previewElement.value) {
@@ -194,7 +202,7 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
     }, 190);
   };
 
-  const handleTouchStart = async (event: TouchEvent) => {
+  const handleTouchStart = (event: TouchEvent) => {
     if (event.touches.length !== 1) {
       swipeStart.value = null;
       return;
@@ -203,9 +211,6 @@ export const useContentSwipe = (options: UseContentSwipeOptions) => {
     const touch = event.touches[0];
     swipeStart.value = { x: touch.clientX, y: touch.clientY };
     isHorizontalSwipe.value = false;
-    swipeScrollElement =
-      (await contentRef.value?.$el?.getScrollElement?.()) ?? null;
-    savedScrollTop = swipeScrollElement?.scrollTop ?? 0;
   };
 
   const handleTouchMove = (event: TouchEvent) => {
