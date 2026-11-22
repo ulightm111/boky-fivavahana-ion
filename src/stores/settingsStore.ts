@@ -4,6 +4,13 @@ import { Preferences } from "@capacitor/preferences";
 import { KeepAwake } from "@capacitor-community/keep-awake";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { EdgeToEdge } from "@capawesome/capacitor-android-edge-to-edge-support";
+import { registerPlugin } from "@capacitor/core";
+
+interface NavigationBarPlugin {
+  setColor(options: { color: string }): Promise<void>;
+}
+
+const NavigationBar = registerPlugin<NavigationBarPlugin>("NavigationBar");
 
 export const useSettingsStore = defineStore("settings", () => {
   const theme = ref<"light" | "dark" | "system">("light");
@@ -49,6 +56,7 @@ export const useSettingsStore = defineStore("settings", () => {
     const styles = getComputedStyle(document.body);
     const primaryColor = styles.getPropertyValue("--ion-color-primary").trim();
     await EdgeToEdge.setBackgroundColor({ color: primaryColor });
+    await NavigationBar.setColor({ color: primaryColor });
     await StatusBar.setBackgroundColor({ color: primaryColor });
     await StatusBar.setStyle({ style: Style.Dark });
   };
