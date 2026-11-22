@@ -1,6 +1,7 @@
 <template>
   <ion-page class="content-view-page">
     <app-header
+      v-if="!isFullScreen"
       :title="title"
       :subtitle="displayMode === 'psalm' ? '' : subtitle"
     >
@@ -26,7 +27,7 @@
       @touchend="handleTouchEnd"
       @touchcancel="handleTouchCancel"
     >
-      <div class="swipe-stage">
+      <div class="swipe-stage" @click="toggleFullScreen">
         <div ref="swipeElement" class="swipe-current">
           <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
           <ion-list :inset="true"           v-if="displayMode === 'subsections' && itemObj">
@@ -96,7 +97,7 @@
       </div>
 
       <ion-fab
-        v-if="displayMode != 'subsections'"
+        v-if="displayMode != 'subsections' && !isFullScreen"
         vertical="bottom"
         horizontal="end"
         slot="fixed"
@@ -135,6 +136,7 @@
       </ion-fab>
     </ion-content>
     <app-footer
+      v-if="!isFullScreen"
       @prev="navigatePrev"
       @next="navigateNext"
       @autoscroll="toggleAutoscroll"
@@ -268,6 +270,22 @@ const canGoNext = computed(
 
 const contentRef = ref<any>(null);
 const isScrolling = ref(false);
+const isFullScreen = ref(false);
+
+const toggleFullScreen = (event: MouseEvent) => {
+  if (displayMode.value === "subsections") return;
+
+  const target = event.target as HTMLElement;
+  if (
+    target.closest(
+      "a, button, ion-button, ion-item, input, textarea, select, [role='button']",
+    )
+  ) {
+    return;
+  }
+
+  isFullScreen.value = !isFullScreen.value;
+};
 
 const {
   swipeElement,
