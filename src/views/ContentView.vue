@@ -29,7 +29,7 @@
       <div class="swipe-stage">
         <div ref="swipeElement" class="swipe-current">
           <!-- Liturgia Subsections List (if we are at section level and it has subsections) -->
-          <ion-list :inset="true" v-if="displayMode === 'subsections'">
+          <ion-list :inset="true"           v-if="displayMode === 'subsections' && itemObj">
             <ion-item
               v-for="(sub, index) in itemObj.subsections"
               :key="index"
@@ -43,7 +43,7 @@
 
           <!-- Liturgy Section or liturgia subsection content -->
           <lit-content
-            v-else-if="displayMode === 'liturgia'"
+            v-else-if="displayMode === 'liturgia' && itemObj"
             :is-lit-p="isLitP"
             :is-l-h-f="isLHF"
             :title="subTitleText"
@@ -52,11 +52,14 @@
           />
 
           <!-- Psalm -->
-          <psalm-content v-else-if="displayMode === 'psalm'" :psalm="itemObj" />
+          <psalm-content
+            v-else-if="displayMode === 'psalm' && itemObj"
+            :psalm="itemObj"
+          />
 
           <!-- Song -->
           <song-content
-            v-else-if="displayMode === 'song'"
+            v-else-if="displayMode === 'song' && itemObj"
             :song="itemObj"
             :is-hira="isHira"
             :is-zigzag="settings.lyricsZZStyle"
@@ -71,7 +74,7 @@
           :class="previewSide"
         >
           <lit-content
-            v-if="previewMode === 'liturgia'"
+            v-if="previewMode === 'liturgia' && previewItem"
             :is-lit-p="isLitP"
             :is-l-h-f="isLHF"
             :title="previewSubTitle"
@@ -79,11 +82,11 @@
             :htmlContent="previewHtml"
           />
           <psalm-content
-            v-else-if="previewMode === 'psalm'"
+            v-else-if="previewMode === 'psalm' && previewItem"
             :psalm="previewItem"
           />
           <song-content
-            v-else-if="previewMode === 'song'"
+            v-else-if="previewMode === 'song' && previewItem"
             :song="previewItem"
             :is-hira="isHira"
             :is-zigzag="settings.lyricsZZStyle"
@@ -343,6 +346,7 @@ const loadContent = async () => {
 
   // Reset per-load state first, so stale values do not linger.
   clearPreview();
+  displayMode.value = "";
   itemObj.value = null;
   htmlContent.value = [];
   subTitleText.value = "";
